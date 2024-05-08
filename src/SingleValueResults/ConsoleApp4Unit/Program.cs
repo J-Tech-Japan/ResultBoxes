@@ -21,8 +21,8 @@ internal class Program
         // This will return value (UnitValue) result
         switch (SingleValueResult<UnitValue>.WrapTry(() => Print("Hello, World!")))
         {
-            case { Exception: not null } exception:
-                Console.WriteLine("Exception: " + exception.Exception.Message);
+            case { Exception: { } error }:
+                Console.WriteLine("Exception: " + error.Message);
                 break;
             case { Value: not null }:
                 Console.WriteLine("No Exception");
@@ -32,8 +32,8 @@ internal class Program
         // This will return exception result
         switch (SingleValueResult<UnitValue>.WrapTry(() => Print(string.Empty)))
         {
-            case { Exception: not null } exception:
-                Console.WriteLine("Exception: " + exception.Exception.Message);
+            case { Exception: { } error }:
+                Console.WriteLine("Exception: " + error.Message);
                 break;
             case { Value: not null }:
                 Console.WriteLine("No Exception");

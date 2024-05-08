@@ -13,8 +13,8 @@ internal class Program
         // This will return exception result
         switch (SingleValueResult<int>.WrapTry(() => Divide(10, 0)))
         {
-            case { Exception: not null } exception:
-                Console.WriteLine("Exception: " + exception.Exception.Message);
+            case { Exception: { } error }:
+                Console.WriteLine("Exception: " + error.Message);
                 break;
             case { Value: { } value }:
                 Console.WriteLine("Value: " + value);
@@ -24,8 +24,8 @@ internal class Program
         // This will return value result
         switch (SingleValueResult<int>.WrapTry(() => Divide(10, 2)))
         {
-            case { Exception: not null } exception:
-                Console.WriteLine("Exception: " + exception.Exception.Message);
+            case { Exception: { } error }:
+                Console.WriteLine("Exception: " + error.Message);
                 break;
             case { Value: { } value }:
                 Console.WriteLine("Value: " + value);

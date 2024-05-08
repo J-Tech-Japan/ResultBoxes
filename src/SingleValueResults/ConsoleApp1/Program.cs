@@ -14,7 +14,7 @@ internal class Program
         // use switch case to handle Result
         switch (Increment(100))
         {
-            case { Exception: not null } error:
+            case { Exception: { } error }:
                 Console.WriteLine($"Error: {error}");
                 break;
             // This will return value result
@@ -41,7 +41,7 @@ internal class Program
     private static string RunIncrement(int target) =>
         Increment(target) switch
         {
-            { Exception: not null } error => $"Error: {error}",
+            { Exception: { } error } => $"Error: {error}",
             { Value: { } value } => $"Value: {value}",
             _ => "Unknown"
         };
