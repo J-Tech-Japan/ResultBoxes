@@ -24,5 +24,5 @@ jobs:
         dotnet build SingleValueResults.sln -c Release
     - name: Pack SingleValueResults
       run: |
-        dotnet nuget push "src/SingleValueResults//SingleValueResults/bin/Release/SingleValueResults.${{ github.event.release.tag_name }}.nupkg" --api-key ${{secrets.NUGET_APIKEY}}  --source https://api.nuget.org/v3/index.json
+        dotnet nuget push "src/SingleValueResults/SingleValueResults/bin/Release/SingleValueResults.${{ github.event.release.tag_name }}.nupkg" --api-key ${{secrets.NUGET_APIKEY}}  --source https://api.nuget.org/v3/index.json
   
