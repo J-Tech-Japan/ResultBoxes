@@ -46,7 +46,7 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
                 new ResultValueNullException(
                     $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
         };
-    public async Task<TwoValuesResult<TValue, TValue2>> CombineValueAsync<TValue2>(
+    public async Task<TwoValuesResult<TValue, TValue2>> CombineValue<TValue2>(
         Func<Task<SingleValueResult<TValue2>>> secondValueFunc)
         where TValue2 : notnull
         => this switch
@@ -73,7 +73,7 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
                 new ResultValueNullException(
                     $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
         };
-    public async Task<TwoValuesResult<TValue, TValue2>> CombineValueAsyncWrapTry<TValue2>(
+    public async Task<TwoValuesResult<TValue, TValue2>> CombineValueWrapTry<TValue2>(
         Func<Task<TValue2>> secondValueFunc)
         where TValue2 : notnull
         => this switch
@@ -82,7 +82,7 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
                 Value,
                 default,
                 e.Exception),
-            { Value: not null } => await SingleValueResult<TValue2>.WrapTryAsync(secondValueFunc)
+            { Value: not null } => await SingleValueResult<TValue2>.WrapTry(secondValueFunc)
                 switch
                 {
                     { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
@@ -153,7 +153,7 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
                 default,
                 new ResultValueNullException("out of range"))
         };
-    public async Task<TwoValuesResult<TValue, TValue2>> CombineValueAsync<TValue2>(
+    public async Task<TwoValuesResult<TValue, TValue2>> CombineValue<TValue2>(
         Func<TValue, Task<SingleValueResult<TValue2>>> secondValueFunc)
         where TValue2 : notnull
         => this switch
@@ -203,7 +203,7 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
         }
     }
 
-    public static async Task<SingleValueResult<TValue>> WrapTryAsync(Func<Task<TValue>> func)
+    public static async Task<SingleValueResult<TValue>> WrapTry(Func<Task<TValue>> func)
     {
         try
         {
@@ -237,7 +237,7 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
                 _ => SingleValueResult<TValue2>.OutOfRange
             };
 
-    public async Task<SingleValueResult<TValue2>> RailwayAsync<TValue2>(
+    public async Task<SingleValueResult<TValue2>> Railway<TValue2>(
         Func<TValue, Task<SingleValueResult<TValue2>>> handleValueFunc)
         where TValue2 : notnull
         => this

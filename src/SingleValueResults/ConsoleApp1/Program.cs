@@ -25,7 +25,7 @@ internal class Program
         switch (Increment(1001))
         {
             // This will return exception result
-            case { Exception: not null } error:
+            case { Exception: { } error } :
                 Console.WriteLine($"Error: {error}");
                 break;
             case { Value: { } value }:
