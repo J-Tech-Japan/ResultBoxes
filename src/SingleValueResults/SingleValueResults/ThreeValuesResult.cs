@@ -22,16 +22,16 @@ public record ThreeValuesResult<TValue1, TValue2, TValue3>(
         throw new ResultsInvalidOperationException();
 
     public SingleValueResult<TValue4> Railway<TValue4>(
-        Func<TValue1, TValue2, TValue3, SingleValueResult<TValue4>> handleValueFunc) 
-        where TValue4 : notnull 
+        Func<TValue1, TValue2, TValue3, SingleValueResult<TValue4>> handleValueFunc)
+        where TValue4 : notnull
         => this
-        switch
-        {
-            { Exception: not null } e => e.Exception,
-            { Value1: { } value1, Value2: { } value2, Value3: { } value3 } => handleValueFunc(
-                value1,
-                value2,
-                value3),
-            _ => SingleValueResult<TValue4>.OutOfRange
-        };
+            switch
+            {
+                { Exception: not null } e => e.Exception,
+                { Value1: { } value1, Value2: { } value2, Value3: { } value3 } => handleValueFunc(
+                    value1,
+                    value2,
+                    value3),
+                _ => SingleValueResult<TValue4>.OutOfRange
+            };
 }

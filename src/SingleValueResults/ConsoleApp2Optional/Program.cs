@@ -21,8 +21,8 @@ internal class Program
         var result = ConvertStringToHalfLength(args[0]);
         switch (result)
         {
-            case { Exception: not null }:
-                Console.WriteLine("Exception: " + result.Exception.Message);
+            case { Exception: { } error }:
+                Console.WriteLine("Exception: " + error.Message);
                 break;
             case { Value : { HasValue: true } value }: // When OptionalValue has value
                 Console.WriteLine("Value: " + value.Value);

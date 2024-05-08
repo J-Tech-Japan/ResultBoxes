@@ -19,7 +19,7 @@ public static class FunctionDeclarations
         10 => throw new ApplicationException("10 is not allowed"),
         _ => target * 3
     };
-    public static SingleValueResult<int> Add(int target1, int target2) =>  target1 + target2;
+    public static SingleValueResult<int> Add(int target1, int target2) => target1 + target2;
     public static int AddWithThrowing(int target1, int target3) => target1 switch
     {
         > 100 => throw new ApplicationException("over 100 is not allowed"),
@@ -138,15 +138,24 @@ public static class FunctionDeclarations
             .CombineValueWrapTry(() => AddWithThrowing(target2, target3))
             .RailwayWrapTry(DivideWithThrowing);
 
-    public static Task<SingleValueResult<int>> RailwayCalc3Async(int target1, int target2, int target3)
+    public static Task<SingleValueResult<int>> RailwayCalc3Async(
+        int target1,
+        int target2,
+        int target3)
         => IncrementAsync(target1)
             .CombineValueAsync(() => AddAsync(target2, target3))
             .RailwayAsync(DivideAsync);
-    public static Task<SingleValueResult<int>> RailwayCalc3Async2(int target1, int target2, int target3)
+    public static Task<SingleValueResult<int>> RailwayCalc3Async2(
+        int target1,
+        int target2,
+        int target3)
         => Increment(target1)
             .CombineValueAsync(() => AddAsync(target2, target3))
             .Railway(Divide);
-    public static Task<SingleValueResult<int>> RailwayCalc3Async4(int target1, int target2, int target3)
+    public static Task<SingleValueResult<int>> RailwayCalc3Async4(
+        int target1,
+        int target2,
+        int target3)
         => Increment(target1)
             .CombineValueAsyncWrapTry(() => AddAsyncWithThrowing(target2, target3))
             .RailwayAsyncWrapTry(DivideAsyncWithThrowing);
@@ -155,16 +164,25 @@ public static class FunctionDeclarations
         => Increment(target1)
             .CombineValue(Add(target2, target3))
             .RailwayWrapTry(DivideWithThrowing);
-    public static Task<SingleValueResult<int>> RailwayCalc3Async5(int target1, int target2, int target3)
+    public static Task<SingleValueResult<int>> RailwayCalc3Async5(
+        int target1,
+        int target2,
+        int target3)
         => IncrementAsync(target1)
             .CombineValueAsyncWrapTry(() => AddAsyncWithThrowing(target2, target3))
             .RailwayAsync(DivideAsync);
 
-    public static Task<SingleValueResult<int>> Railway2Calc3Async6(int target1, int target2, int target3)
+    public static Task<SingleValueResult<int>> Railway2Calc3Async6(
+        int target1,
+        int target2,
+        int target3)
         => Increment(target1)
             .CombineValue(Add(target2, target3))
             .RailwayAsync(DivideAsync);
-    public static Task<SingleValueResult<int>> Railway2Calc3Async7(int target1, int target2, int target3)
+    public static Task<SingleValueResult<int>> Railway2Calc3Async7(
+        int target1,
+        int target2,
+        int target3)
         => Increment(target1)
             .CombineValue(Add(target2, target3))
             .RailwayAsyncWrapTry(DivideAsyncWithThrowing);

@@ -31,17 +31,18 @@ public record FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
 
     public SingleValueResult<TValue6> Railway<TValue6>(
         Func<TValue1, TValue2, TValue3, TValue4, TValue5, SingleValueResult<TValue6>>
-            handleValueFunc) 
+            handleValueFunc)
         where TValue6 : notnull
         =>
-        this
-            switch
-            {
-                { Exception: not null } e => e.Exception,
+            this
+                switch
                 {
-                    Value1: { } value1, Value2: { } value2, Value3: { } value3, Value4: { } value4,
-                    Value5: { } value5
-                } => handleValueFunc(value1, value2, value3, value4, value5),
-                _ => SingleValueResult<TValue6>.OutOfRange
-            };
+                    { Exception: not null } e => e.Exception,
+                    {
+                        Value1: { } value1, Value2: { } value2, Value3: { } value3,
+                        Value4: { } value4,
+                        Value5: { } value5
+                    } => handleValueFunc(value1, value2, value3, value4, value5),
+                    _ => SingleValueResult<TValue6>.OutOfRange
+                };
 }

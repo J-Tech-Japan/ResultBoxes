@@ -26,18 +26,18 @@ public record FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
         throw new ResultsInvalidOperationException();
 
     public SingleValueResult<TValue5> Railway<TValue5>(
-        Func<TValue1, TValue2, TValue3, TValue4, SingleValueResult<TValue5>> handleValueFunc) 
-        where TValue5 : notnull 
+        Func<TValue1, TValue2, TValue3, TValue4, SingleValueResult<TValue5>> handleValueFunc)
+        where TValue5 : notnull
         =>
-        this
-            switch
-            {
-                { Exception: not null } e => e.Exception,
+            this
+                switch
                 {
-                        Value1: { } value1, Value2: { } value2, Value3: { } value3,
-                        Value4: { } value4
-                    } =>
-                    handleValueFunc(value1, value2, value3, value4),
-                _ => SingleValueResult<TValue5>.OutOfRange
-            };
+                    { Exception: not null } e => e.Exception,
+                    {
+                            Value1: { } value1, Value2: { } value2, Value3: { } value3,
+                            Value4: { } value4
+                        } =>
+                        handleValueFunc(value1, value2, value3, value4),
+                    _ => SingleValueResult<TValue5>.OutOfRange
+                };
 }
