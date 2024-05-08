@@ -5,7 +5,7 @@ C# Results Library that focus on Railway Oriented Programming.
 # How can you install?
 
 ```sh
-dotnet add package SingleValueResults --version 0.1.0-alpha
+dotnet add package SingleValueResults --version 0.1.1-alpha
 ```
 
 # Why Result type?
