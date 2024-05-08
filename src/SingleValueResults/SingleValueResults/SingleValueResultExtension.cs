@@ -2,7 +2,7 @@ namespace SingleResults;
 
 public static class SingleValueResultExtension
 {
-    public static async Task<SingleValueResult<TValue2>> RailwayAsync<TValue1, TValue2>(
+    public static async Task<SingleValueResult<TValue2>> Railway<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
         Func<TValue1, Task<SingleValueResult<TValue2>>> handleValueFunc)
         where TValue1 : notnull
@@ -14,7 +14,7 @@ public static class SingleValueResultExtension
                 { Value: { } value } => await handleValueFunc(value),
                 _ => SingleValueResult<TValue2>.OutOfRange
             };
-    public static async Task<SingleValueResult<TValue2>> RailwayAsyncWrapTry<TValue1, TValue2>(
+    public static async Task<SingleValueResult<TValue2>> RailwayWrapTry<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
         Func<TValue1, Task<TValue2>> handleValueFunc)
         where TValue1 : notnull
@@ -23,11 +23,11 @@ public static class SingleValueResultExtension
             switch
             {
                 { Exception: not null } e => e.Exception,
-                { Value: { } value } => await SingleValueResult<TValue2>.WrapTryAsync(
+                { Value: { } value } => await SingleValueResult<TValue2>.WrapTry(
                     () => handleValueFunc(value)),
                 _ => SingleValueResult<TValue2>.OutOfRange
             };
-    public static async Task<SingleValueResult<TValue3>> RailwayAsync<TValue1, TValue2, TValue3>(
+    public static async Task<SingleValueResult<TValue3>> Railway<TValue1, TValue2, TValue3>(
         this Task<TwoValuesResult<TValue1, TValue2>> firstValue,
         Func<TValue1, TValue2, Task<SingleValueResult<TValue3>>> handleValueFunc)
         where TValue1 : notnull
@@ -43,7 +43,7 @@ public static class SingleValueResultExtension
                         value2),
                     _ => SingleValueResult<TValue3>.OutOfRange
                 };
-    public static async Task<SingleValueResult<TValue3>> RailwayAsyncWrapTry<TValue1, TValue2,
+    public static async Task<SingleValueResult<TValue3>> RailwayWrapTry<TValue1, TValue2,
         TValue3>(
         this Task<TwoValuesResult<TValue1, TValue2>> firstValue,
         Func<TValue1, TValue2, Task<TValue3>> handleValueFunc)
@@ -55,7 +55,7 @@ public static class SingleValueResultExtension
             {
                 { Exception: not null } e => e.Exception,
                 { Value1: { } value1, Value2: { } value2 } => await SingleValueResult<TValue3>
-                    .WrapTryAsync(
+                    .WrapTry(
                         () => handleValueFunc(value1, value2)),
                 _ => SingleValueResult<TValue3>.OutOfRange
             };
@@ -85,7 +85,7 @@ public static class SingleValueResultExtension
                 _ => SingleValueResult<TValue3>.OutOfRange
             };
 
-    public static async Task<TwoValuesResult<TValue1, TValue2>> CombineValueAsync<TValue1, TValue2>(
+    public static async Task<TwoValuesResult<TValue1, TValue2>> CombineValue<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValueTask,
         Func<Task<SingleValueResult<TValue2>>> secondValueFunc)
         where TValue1 : notnull
@@ -113,7 +113,7 @@ public static class SingleValueResultExtension
                 default,
                 new ResultValueNullException("out of range"))
         };
-    public static async Task<TwoValuesResult<TValue1, TValue2>> CombineValueAsyncWrapTry<TValue1,
+    public static async Task<TwoValuesResult<TValue1, TValue2>> CombineValueWrapTry<TValue1,
         TValue2>(
         this Task<SingleValueResult<TValue1>> firstValueTask,
         Func<Task<TValue2>> secondValueFunc)
@@ -125,7 +125,7 @@ public static class SingleValueResultExtension
                 e.Value,
                 default,
                 e.Exception),
-            { Value: { } firstValue } => await SingleValueResult<TValue2>.WrapTryAsync(
+            { Value: { } firstValue } => await SingleValueResult<TValue2>.WrapTry(
                     secondValueFunc)
                 switch
                 {

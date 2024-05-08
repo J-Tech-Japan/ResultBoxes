@@ -5,7 +5,7 @@ C# Results Library that focus on Railway Oriented Programming.
 # How can you install?
 
 ```sh
-dotnet add package SingleValueResults --version 0.1.1-alpha
+dotnet add package SingleValueResults --version 0.1.2-alpha
 ```
 
 # Why Result type?
@@ -59,7 +59,7 @@ internal class Program
         // use switch case to handle Result
         switch (Increment(100))
         {
-            case { Exception: { } error } :
+            case { Exception: { } error }:
                 Console.WriteLine($"Error: {error}");
                 break;
             // This will return value result
@@ -70,7 +70,7 @@ internal class Program
         switch (Increment(1001))
         {
             // This will return exception result
-            case { Exception: not null } error:
+            case { Exception: { } error } :
                 Console.WriteLine($"Error: {error}");
                 break;
             case { Value: { } value }:
@@ -237,3 +237,242 @@ internal class Program
     }
 }
 ```
+
+## 5. Railway Oriented Programming - Method Chain
+
+Railway Oriented Programming (ROP) is a functional programming pattern that facilitates error handling and is often used in languages that support functional programming concepts, like F#, Haskell, and others. The analogy of a railway is used to describe the flow of data through a series of functions, similar to how a train travels along tracks.
+
+SingleValueResults supports ROP by providing chain method to connect functions and simply write error handling code.
+
+Like example below, you can use `Railway(nextFunction)` to method chain continuous functions.
+If first method , in example `Increment` returns Exception, following functions `Double` and `Triple` will not executed, it will be just passing Exception that returned by `Increment`.
+If first method returns value, second method, in this case `Double` will be execute, and if all three method succeed, `Main` method receive the result value.
+If any methods returns Exception Result, it will return Exception to the `Main` function.
+
+```csharp
+class Program
+{
+    public static SingleValueResult<int> Increment(int target) => target switch
+    {
+        > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Increment)}"),
+        _ => target + 1
+    };
+    public static SingleValueResult<int> Double(int target) => target switch
+    {
+        > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Double)}"),
+        _ => target * 2
+    };
+    public static SingleValueResult<int> Triple(int target) => target switch
+    {
+        > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Triple)}"),
+        _ => target * 3
+    };
+
+    
+    static void Main(string[] args)
+    {
+        // Error: System.ApplicationException: 1001 is not allowed for Increment
+        switch (Increment(1001).Railway(Double).Railway(Triple))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        
+        // Error: System.ApplicationException: 1001 is not allowed for Double
+        switch (Increment(1000).Railway(Double).Railway(Triple))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        
+        // Error: System.ApplicationException: 1202 is not allowed for Triple
+        switch (Increment(600).Railway(Double).Railway(Triple))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        
+        // Value: 24
+        switch (Increment(3).Railway(Double).Railway(Triple))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+    }
+}
+```
+
+## 6. Railway Oriented Programming - Async Task Functions.
+
+Async method returns `Task<SingleValueResult<TValue>>`, but we provide async chaining methods as well.
+
+```csharp
+class Program
+{
+    public static Task<SingleValueResult<int>> IncrementAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(target switch
+            {
+                > 1000 => new ApplicationException($"{target} is not allowed for {nameof(IncrementAsync)}"),
+                _ => target + 1
+            });
+    public static Task<SingleValueResult<int>> DoubleAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(target switch
+        {
+            > 1000 => new ApplicationException($"{target} is not allowed for {nameof(DoubleAsync)}"),
+            _ => target * 2
+        });
+    public static Task<SingleValueResult<int>> TripleAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(target switch
+        {
+            > 1000 => new ApplicationException($"{target} is not allowed for {nameof(TripleAsync)}"),
+            _ => target * 3
+        });
+
+    static async Task Main(string[] args)
+    {
+        // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
+        switch (await IncrementAsync(1001).Railway(DoubleAsync).Railway(TripleAsync))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
+        switch (await IncrementAsync(1000).Railway(DoubleAsync).Railway(TripleAsync))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
+        switch (await IncrementAsync(600).Railway(DoubleAsync).Railway(TripleAsync))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        // Value: 24
+        switch (await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+    }
+}
+```
+
+ You can mix async functions with non-async functions as well.
+
+```csharp
+ class Program
+{
+    public static SingleValueResult<int> Increment(int target) => target switch
+    {
+        > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Increment)}"),
+        _ => target + 1
+    };
+    public static SingleValueResult<int> Double(int target) => target switch
+    {
+        > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Double)}"),
+        _ => target * 2
+    };
+    public static SingleValueResult<int> Triple(int target) => target switch
+    {
+        > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Triple)}"),
+        _ => target * 3
+    };
+    
+    public static Task<SingleValueResult<int>> IncrementAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(target switch
+        {
+            > 1000 => new ApplicationException($"{target} is not allowed for {nameof(IncrementAsync)}"),
+            _ => target + 1
+        });
+    public static Task<SingleValueResult<int>> DoubleAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(target switch
+        {
+            > 1000 => new ApplicationException($"{target} is not allowed for {nameof(DoubleAsync)}"),
+            _ => target * 2
+        });
+    public static Task<SingleValueResult<int>> TripleAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(target switch
+        {
+            > 1000 => new ApplicationException($"{target} is not allowed for {nameof(TripleAsync)}"),
+            _ => target * 3
+        });
+
+    static async Task Main(string[] args)
+    {
+        // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
+        switch (await Increment(1001).Railway(DoubleAsync).Railway(TripleAsync))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
+        switch (await IncrementAsync(1000).Railway(Double).Railway(TripleAsync))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
+        switch (await IncrementAsync(600).Railway(DoubleAsync).Railway(Triple))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+        // Value: 24
+        switch (await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync))
+        {
+            case { Exception: { } error }:
+                Console.WriteLine($"Error: {error}");
+                break;
+            case { Value: { } value }:
+                Console.WriteLine($"Value: {value}");
+                break;
+        }
+    }
+}
+```
+

@@ -24,7 +24,7 @@ public record TwoValuesResult<TValue1, TValue2>(
                 { Value1: { } value1, Value2: { } value2 } => handleValueFunc(value1, value2),
                 _ => SingleValueResult<TValue3>.OutOfRange
             };
-    public async Task<SingleValueResult<TValue3>> RailwayAsync<TValue3>(
+    public async Task<SingleValueResult<TValue3>> Railway<TValue3>(
         Func<TValue1, TValue2, Task<SingleValueResult<TValue3>>> handleValueFunc)
         where TValue3 : notnull
         => this
@@ -42,7 +42,7 @@ public record TwoValuesResult<TValue1, TValue2>(
             {
                 { Exception: not null } e => SingleValueResult<TValue3>.FromException(e.Exception),
                 { Value1: { } value1, Value2: { } value2 } => await SingleValueResult<TValue3>
-                    .WrapTryAsync(
+                    .WrapTry(
                         () => handleValueFunc(value1, value2)),
                 _ => SingleValueResult<TValue3>.OutOfRange
             };

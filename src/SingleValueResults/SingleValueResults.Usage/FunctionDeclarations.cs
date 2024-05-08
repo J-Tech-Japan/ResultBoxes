@@ -12,8 +12,16 @@ public static class FunctionDeclarations
         3 => throw new ApplicationException("3 is not allowed"),
         _ => target + 1
     };
-    public static SingleValueResult<int> Double(int target) => target * 2;
-    public static SingleValueResult<int> Triple(int target) => target * 3;
+    public static SingleValueResult<int> Double(int target) => target switch
+    {
+        > 1000 => new ArgumentOutOfRangeException(nameof(target)),
+        _ => target * 2
+    };
+    public static SingleValueResult<int> Triple(int target) => target switch
+    {
+        > 1000 => new ArgumentOutOfRangeException(nameof(target)),
+        _ => target * 3
+    };
     public static int TripleWithThrowing(int target) => target switch
     {
         10 => throw new ApplicationException("10 is not allowed"),
@@ -143,22 +151,22 @@ public static class FunctionDeclarations
         int target2,
         int target3)
         => IncrementAsync(target1)
-            .CombineValueAsync(() => AddAsync(target2, target3))
-            .RailwayAsync(DivideAsync);
+            .CombineValue(() => AddAsync(target2, target3))
+            .Railway(DivideAsync);
     public static Task<SingleValueResult<int>> RailwayCalc3Async2(
         int target1,
         int target2,
         int target3)
         => Increment(target1)
-            .CombineValueAsync(() => AddAsync(target2, target3))
+            .CombineValue(() => AddAsync(target2, target3))
             .Railway(Divide);
     public static Task<SingleValueResult<int>> RailwayCalc3Async4(
         int target1,
         int target2,
         int target3)
         => Increment(target1)
-            .CombineValueAsyncWrapTry(() => AddAsyncWithThrowing(target2, target3))
-            .RailwayAsyncWrapTry(DivideAsyncWithThrowing);
+            .CombineValueWrapTry(() => AddAsyncWithThrowing(target2, target3))
+            .RailwayWrapTry(DivideAsyncWithThrowing);
 
     public static SingleValueResult<int> RailwayCalc3Async3(int target1, int target2, int target3)
         => Increment(target1)
@@ -169,8 +177,8 @@ public static class FunctionDeclarations
         int target2,
         int target3)
         => IncrementAsync(target1)
-            .CombineValueAsyncWrapTry(() => AddAsyncWithThrowing(target2, target3))
-            .RailwayAsync(DivideAsync);
+            .CombineValueWrapTry(() => AddAsyncWithThrowing(target2, target3))
+            .Railway(DivideAsync);
 
     public static Task<SingleValueResult<int>> Railway2Calc3Async6(
         int target1,
@@ -178,7 +186,7 @@ public static class FunctionDeclarations
         int target3)
         => Increment(target1)
             .CombineValue(Add(target2, target3))
-            .RailwayAsync(DivideAsync);
+            .Railway(DivideAsync);
     public static Task<SingleValueResult<int>> Railway2Calc3Async7(
         int target1,
         int target2,
@@ -196,14 +204,14 @@ public static class FunctionDeclarations
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing);
 
-    public static Task<SingleValueResult<int>> RailwayAsync(int target1)
-        => IncrementAsync(target1).RailwayAsync(DoubleAsync).RailwayAsync(TripleAsync);
+    public static Task<SingleValueResult<int>> RailwayWithAsync(int target1)
+        => IncrementAsync(target1).Railway(DoubleAsync).Railway(TripleAsync);
     public static Task<SingleValueResult<int>> Railway2Async(int target1)
-        => Increment(target1).RailwayAsync(DoubleAsync).RailwayAsync(TripleAsync);
+        => Increment(target1).Railway(DoubleAsync).Railway(TripleAsync);
     public static Task<SingleValueResult<int>> Railway3Async(int target1)
-        => Increment(target1).RailwayAsync(DoubleAsync).Railway(Triple);
+        => Increment(target1).Railway(DoubleAsync).Railway(Triple);
     public static Task<SingleValueResult<int>> Railway4Async(int target1)
-        => SingleValueResult<int>.WrapTryAsync(() => IncrementAsyncWithThrowing(target1))
-            .RailwayAsyncWrapTry(DoubleAsyncWithThrowing)
-            .RailwayAsync(TripleAsync);
+        => SingleValueResult<int>.WrapTry(() => IncrementAsyncWithThrowing(target1))
+            .RailwayWrapTry(DoubleAsyncWithThrowing)
+            .Railway(TripleAsync);
 }

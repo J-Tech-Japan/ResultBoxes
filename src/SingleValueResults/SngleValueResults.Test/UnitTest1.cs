@@ -12,7 +12,7 @@ public class UnitTest1
     [Fact]
     public async Task RailwayAsyncSpec()
     {
-        var sut = await FunctionDeclarations.RailwayAsync(1);
+        var sut = await FunctionDeclarations.RailwayWithAsync(1);
 
         Assert.True(sut.IsSuccess);
         Assert.Equal(12, sut.Value);
