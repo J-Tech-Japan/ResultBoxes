@@ -5,6 +5,23 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>SingleResults</RootNamespace>
+        <LangVersion>preview</LangVersion>
+        <PackageId>SingleValueResults</PackageId>
+        <Version>0.1.0-alpha</Version>
+        <Authors>J-Tech Group</Authors>
+        <Company>J-Tech-Japan</Company>
+        <PackageDescription>SingleValueResults - C# Results Library that focus on Railway Programming.</PackageDescription>
+        <RepositoryUrl>https://github.com/J-Tech-Japan/SingleValueResults</RepositoryUrl>
+        <PackageVersion>0.1.0-alpha</PackageVersion>
+        <Description>Initial Alpha Release - Subjected to change names..</Description>
+        <AssemblyName>SingleValueResults</AssemblyName>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
+    <ItemGroup>
+    <None Include="..\..\..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 </Project>
