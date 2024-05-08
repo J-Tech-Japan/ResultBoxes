@@ -2,7 +2,11 @@ namespace SingleResults.Usage;
 
 public static class FunctionDeclarations
 {
-    public static SingleValueResult<int> Increment(int target) => target + 1;
+    public static SingleValueResult<int> Increment(int target) => target switch
+    {
+        > 1000 => new ArgumentOutOfRangeException(nameof(target)),
+        _ => target + 1
+    };
     public static int IncrementWithThrowing(int target) => target switch
     {
         3 => throw new ApplicationException("3 is not allowed"),
@@ -15,7 +19,7 @@ public static class FunctionDeclarations
         10 => throw new ApplicationException("10 is not allowed"),
         _ => target * 3
     };
-    public static SingleValueResult<int> Add(int target1, int target2) => target1 + target2;
+    public static SingleValueResult<int> Add(int target1, int target2) =>  target1 + target2;
     public static int AddWithThrowing(int target1, int target3) => target1 switch
     {
         > 100 => throw new ApplicationException("over 100 is not allowed"),

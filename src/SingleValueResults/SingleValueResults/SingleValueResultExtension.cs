@@ -4,7 +4,10 @@ public static class SingleValueResultExtension
 {
     public static async Task<SingleValueResult<TValue2>> RailwayAsync<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
-        Func<TValue1, Task<SingleValueResult<TValue2>>> handleValueFunc) => await firstValue
+        Func<TValue1, Task<SingleValueResult<TValue2>>> handleValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        => await firstValue
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -13,7 +16,10 @@ public static class SingleValueResultExtension
         };
     public static async Task<SingleValueResult<TValue2>> RailwayAsyncWrapTry<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
-        Func<TValue1, Task<TValue2>> handleValueFunc) => await firstValue
+        Func<TValue1, Task<TValue2>> handleValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        => await firstValue
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -23,7 +29,11 @@ public static class SingleValueResultExtension
         };
     public static async Task<SingleValueResult<TValue3>> RailwayAsync<TValue1, TValue2, TValue3>(
         this Task<TwoValuesResult<TValue1, TValue2>> firstValue,
-        Func<TValue1, TValue2, Task<SingleValueResult<TValue3>>> handleValueFunc) =>
+        Func<TValue1, TValue2, Task<SingleValueResult<TValue3>>> handleValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        where TValue3 : notnull 
+        =>
         await firstValue
             switch
             {
@@ -34,7 +44,11 @@ public static class SingleValueResultExtension
     public static async Task<SingleValueResult<TValue3>> RailwayAsyncWrapTry<TValue1, TValue2,
         TValue3>(
         this Task<TwoValuesResult<TValue1, TValue2>> firstValue,
-        Func<TValue1, TValue2, Task<TValue3>> handleValueFunc) => await firstValue
+        Func<TValue1, TValue2, Task<TValue3>> handleValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        where TValue3 : notnull 
+        => await firstValue
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -45,7 +59,10 @@ public static class SingleValueResultExtension
         };
     public static async Task<SingleValueResult<TValue2>> Railway<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
-        Func<TValue1, SingleValueResult<TValue2>> handleValueFunc) => await firstValue
+        Func<TValue1, SingleValueResult<TValue2>> handleValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        => await firstValue
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -54,7 +71,11 @@ public static class SingleValueResultExtension
         };
     public static async Task<SingleValueResult<TValue3>> Railway<TValue1, TValue2, TValue3>(
         this Task<TwoValuesResult<TValue1, TValue2>> firstValue,
-        Func<TValue1, TValue2, SingleValueResult<TValue3>> handleValueFunc) => await firstValue
+        Func<TValue1, TValue2, SingleValueResult<TValue3>> handleValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        where TValue3 : notnull
+        => await firstValue
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -64,7 +85,10 @@ public static class SingleValueResultExtension
 
     public static async Task<TwoValuesResult<TValue1, TValue2>> CombineValueAsync<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValueTask,
-        Func<Task<SingleValueResult<TValue2>>> secondValueFunc) => await firstValueTask switch
+        Func<Task<SingleValueResult<TValue2>>> secondValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        => await firstValueTask switch
     {
         { Exception: not null } e => new TwoValuesResult<TValue1, TValue2>(
             e.Value,
@@ -87,10 +111,12 @@ public static class SingleValueResultExtension
             default,
             new ResultValueNullException("out of range"))
     };
-    public static async Task<TwoValuesResult<TValue1, TValue2>> CombineValueAsyncWrapTry<TValue1,
-        TValue2>(
+    public static async Task<TwoValuesResult<TValue1, TValue2>> CombineValueAsyncWrapTry<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValueTask,
-        Func<Task<TValue2>> secondValueFunc) => await firstValueTask switch
+        Func<Task<TValue2>> secondValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        => await firstValueTask switch
     {
         { Exception: not null } e => new TwoValuesResult<TValue1, TValue2>(
             e.Value,

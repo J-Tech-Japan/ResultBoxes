@@ -22,7 +22,9 @@ public record ThreeValuesResult<TValue1, TValue2, TValue3>(
         throw new ResultsInvalidOperationException();
 
     public SingleValueResult<TValue4> Railway<TValue4>(
-        Func<TValue1, TValue2, TValue3, SingleValueResult<TValue4>> handleValueFunc) => this
+        Func<TValue1, TValue2, TValue3, SingleValueResult<TValue4>> handleValueFunc) 
+        where TValue4 : notnull 
+        => this
         switch
         {
             { Exception: not null } e => e.Exception,

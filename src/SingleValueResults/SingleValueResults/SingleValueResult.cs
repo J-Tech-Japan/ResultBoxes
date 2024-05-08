@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 namespace SingleResults;
 
-public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
+public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) where TValue : notnull
 {
 
     [JsonIgnore]
@@ -20,7 +20,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
         new(default, exception);
 
     public TwoValuesResult<TValue, TValue2> CombineValue<TValue2>(
-        SingleValueResult<TValue2> secondValue) => this switch
+        SingleValueResult<TValue2> secondValue) 
+        where TValue2 : notnull 
+        => this switch
     {
         { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
             Value,
@@ -45,7 +47,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
                 $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
     };
     public async Task<TwoValuesResult<TValue, TValue2>> CombineValueAsync<TValue2>(
-        Func<Task<SingleValueResult<TValue2>>> secondValueFunc) => this switch
+        Func<Task<SingleValueResult<TValue2>>> secondValueFunc) 
+        where TValue2 : notnull 
+        => this switch
     {
         { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
             Value,
@@ -70,7 +74,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
                 $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
     };
     public async Task<TwoValuesResult<TValue, TValue2>> CombineValueAsyncWrapTry<TValue2>(
-        Func<Task<TValue2>> secondValueFunc) => this switch
+        Func<Task<TValue2>> secondValueFunc)
+        where TValue2 : notnull 
+        => this switch
     {
         { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
             Value,
@@ -95,7 +101,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
                 $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
     };
     public TwoValuesResult<TValue, TValue2> CombineValueWrapTry<TValue2>(
-        Func<TValue2> secondValueFunc) => this switch
+        Func<TValue2> secondValueFunc)
+        where TValue2 : notnull 
+        => this switch
     {
         { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
             Value,
@@ -119,7 +127,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
             new ResultValueNullException("out of range"))
     };
     public TwoValuesResult<TValue, TValue2> CombineValue<TValue2>(
-        Func<TValue, SingleValueResult<TValue2>> secondValueFunc) => this switch
+        Func<TValue, SingleValueResult<TValue2>> secondValueFunc) 
+        where TValue2 : notnull 
+        => this switch
     {
         { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
             Value,
@@ -143,7 +153,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
             new ResultValueNullException("out of range"))
     };
     public async Task<TwoValuesResult<TValue, TValue2>> CombineValueAsync<TValue2>(
-        Func<TValue, Task<SingleValueResult<TValue2>>> secondValueFunc) => this switch
+        Func<TValue, Task<SingleValueResult<TValue2>>> secondValueFunc) 
+        where TValue2 : notnull 
+        => this switch
     {
         { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
             Value,
@@ -177,6 +189,19 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
             return e;
         }
     }
+    public static SingleValueResult<UnitValue> WrapTry(Action action)
+    {
+        try
+        {
+            action();
+            return new UnitValue();
+        }
+        catch (Exception e)
+        {
+            return e;
+        }
+    }
+
     public static async Task<SingleValueResult<TValue>> WrapTryAsync(Func<Task<TValue>> func)
     {
         try
@@ -201,7 +226,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
     }
 
     public SingleValueResult<TValue2> Railway<TValue2>(
-        Func<TValue, SingleValueResult<TValue2>> handleValueFunc) => this
+        Func<TValue, SingleValueResult<TValue2>> handleValueFunc) 
+        where TValue2 : notnull 
+        => this
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -210,7 +237,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
         };
 
     public async Task<SingleValueResult<TValue2>> RailwayAsync<TValue2>(
-        Func<TValue, Task<SingleValueResult<TValue2>>> handleValueFunc) => this
+        Func<TValue, Task<SingleValueResult<TValue2>>> handleValueFunc) 
+        where TValue2 : notnull 
+        => this
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -218,7 +247,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
             _ => SingleValueResult<TValue2>.OutOfRange
         };
 
-    public SingleValueResult<TValue2> RailwayWrapTry<TValue2>(Func<TValue, TValue2> handleValueFunc) =>
+    public SingleValueResult<TValue2> RailwayWrapTry<TValue2>(Func<TValue, TValue2> handleValueFunc) 
+        where TValue2 : notnull 
+        =>
         this switch
         {
             { Exception: not null } e => e.Exception,
@@ -228,7 +259,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
 
     public static SingleValueResult<TValue> Railway<TValue2>(
         Func<SingleValueResult<TValue2>> func,
-        Func<TValue2, SingleValueResult<TValue>> handleValueFunc) => func()
+        Func<TValue2, SingleValueResult<TValue>> handleValueFunc) 
+        where TValue2 : notnull 
+        => func()
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -237,7 +270,9 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
         };
     public static SingleValueResult<TValue> Railway<TValue2>(
         SingleValueResult<TValue2> firstValueResult,
-        Func<TValue2, SingleValueResult<TValue>> handleValueFunc) => firstValueResult
+        Func<TValue2, SingleValueResult<TValue>> handleValueFunc) 
+        where TValue2 : notnull 
+        => firstValueResult
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -248,7 +283,10 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
     public static SingleValueResult<TValue> Railway2Combine<TValue1, TValue2>(
         Func<SingleValueResult<TValue1>> func1,
         Func<SingleValueResult<TValue2>> func2,
-        Func<TValue1, TValue2, SingleValueResult<TValue>> handleValueFunc) => func1()
+        Func<TValue1, TValue2, SingleValueResult<TValue>> handleValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        => func1()
         switch
         {
             { Exception: not null } e => e.Exception,
@@ -260,10 +298,13 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception)
             },
             _ => OutOfRange
         };
-    public static SingleValueResult<TValue> Railway2Combine<TResult1Class, TResult2Class>(
-        SingleValueResult<TResult1Class> firstValue,
-        SingleValueResult<TResult2Class> secondValue,
-        Func<TResult1Class, TResult2Class, SingleValueResult<TValue>> handleValueFunc) => firstValue
+    public static SingleValueResult<TValue> Railway2Combine<TValue1, TValue2>(
+        SingleValueResult<TValue1> firstValue,
+        SingleValueResult<TValue2> secondValue,
+        Func<TValue1, TValue2, SingleValueResult<TValue>> handleValueFunc) 
+        where TValue1 : notnull 
+        where TValue2 : notnull 
+        => firstValue
         switch
         {
             { Exception: not null } e => e.Exception,

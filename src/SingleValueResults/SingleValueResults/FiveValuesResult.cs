@@ -31,7 +31,9 @@ public record FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
 
     public SingleValueResult<TValue6> Railway<TValue6>(
         Func<TValue1, TValue2, TValue3, TValue4, TValue5, SingleValueResult<TValue6>>
-            handleValueFunc) =>
+            handleValueFunc) 
+        where TValue6 : notnull
+        =>
         this
             switch
             {

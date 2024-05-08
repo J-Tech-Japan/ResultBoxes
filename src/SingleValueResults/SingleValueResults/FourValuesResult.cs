@@ -26,7 +26,9 @@ public record FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
         throw new ResultsInvalidOperationException();
 
     public SingleValueResult<TValue5> Railway<TValue5>(
-        Func<TValue1, TValue2, TValue3, TValue4, SingleValueResult<TValue5>> handleValueFunc) =>
+        Func<TValue1, TValue2, TValue3, TValue4, SingleValueResult<TValue5>> handleValueFunc) 
+        where TValue5 : notnull 
+        =>
         this
             switch
             {
