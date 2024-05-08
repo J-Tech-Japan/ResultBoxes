@@ -1,0 +1,28 @@
+name: nuget package release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: |
+        pushd ./src/SingleValueResults
+        dotnet restore SingleValueResults.sln
+    - name: Build with dotnet
+      run: |
+        pushd ./src/SingleValueResults
+        dotnet build SingleValueResults.sln -c Release
+    - name: Pack SingleValueResults
+      run: |
+        dotnet nuget push "src/SingleValueResults//SingleValueResults/bin/Release/SingleValueResults.${{ github.event.release.tag_name }}.nupkg" --api-key ${{secrets.NUGET_APIKEY}}  --source https://api.nuget.org/v3/index.json
+  
