@@ -476,3 +476,11 @@ class Program
 }
 ```
 
+## 7. Railway Oriented Programming - Combine Value
+
+We have cases that need to prepare 2 or more value and pass it to next function. One way to achieve this is, programmer make a wrapping function and gather two value in function and use railway to handle results. But SingleValueResults provide `CombineValue` methods, which follows first Result, run second function and instead of passing only last executed value, but both first value and second value together and pass it to third function.
+
+![CombineValue](./docs/images/CombineValue.png)
+
+We can do it with following code.
+
