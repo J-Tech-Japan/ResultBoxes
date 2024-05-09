@@ -33,7 +33,19 @@ first class support of the `Railway Oriented Programming` that introduced with S
 
 [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
 
+
+
+
 # Usage
+
+1. Simple Function and Use Result Function
+2. Don't use nullable value as Type of the Value
+3. Wrapping throwing function that returns value.
+4. Wrapping void function.
+5. Railway Oriented Programming - Method Chain
+6. Railway Oriented Programming - Async Task Functions.
+7. Railway Oriented Programming - Combine Value
+8. Railway Oriented Programming with Wrapping Function with Try.
 
 ## 1. Simple Function and Use Result Function
 
