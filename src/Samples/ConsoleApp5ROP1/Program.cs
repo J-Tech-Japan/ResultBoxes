@@ -1,7 +1,7 @@
 ﻿using SingleResults;
 namespace ConsoleApp5ROP1;
 
-class Program
+internal class Program
 {
     public static SingleValueResult<int> Increment(int target) => target switch
     {
@@ -19,8 +19,8 @@ class Program
         _ => target * 3
     };
 
-    
-    static void Main(string[] args)
+
+    private static void Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for Increment
         switch (Increment(1001).Railway(Double).Railway(Triple))
@@ -32,7 +32,7 @@ class Program
                 Console.WriteLine($"Value: {value}");
                 break;
         }
-        
+
         // Error: System.ApplicationException: 1001 is not allowed for Double
         switch (Increment(1000).Railway(Double).Railway(Triple))
         {
@@ -43,7 +43,7 @@ class Program
                 Console.WriteLine($"Value: {value}");
                 break;
         }
-        
+
         // Error: System.ApplicationException: 1202 is not allowed for Triple
         switch (Increment(600).Railway(Double).Railway(Triple))
         {
@@ -54,7 +54,7 @@ class Program
                 Console.WriteLine($"Value: {value}");
                 break;
         }
-        
+
         // Value: 24
         switch (Increment(3).Railway(Double).Railway(Triple))
         {

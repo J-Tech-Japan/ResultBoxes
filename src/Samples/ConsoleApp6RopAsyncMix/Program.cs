@@ -1,7 +1,7 @@
 ﻿using SingleResults;
 namespace ConsoleApp6RopAsyncMix;
 
-class Program
+internal class Program
 {
     public static SingleValueResult<int> Increment(int target) => target switch
     {
@@ -18,27 +18,33 @@ class Program
         > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Triple)}"),
         _ => target * 3
     };
-    
-    public static Task<SingleValueResult<int>> IncrementAsync(int target) =>
-        Task.FromResult<SingleValueResult<int>>(target switch
-        {
-            > 1000 => new ApplicationException($"{target} is not allowed for {nameof(IncrementAsync)}"),
-            _ => target + 1
-        });
-    public static Task<SingleValueResult<int>> DoubleAsync(int target) =>
-        Task.FromResult<SingleValueResult<int>>(target switch
-        {
-            > 1000 => new ApplicationException($"{target} is not allowed for {nameof(DoubleAsync)}"),
-            _ => target * 2
-        });
-    public static Task<SingleValueResult<int>> TripleAsync(int target) =>
-        Task.FromResult<SingleValueResult<int>>(target switch
-        {
-            > 1000 => new ApplicationException($"{target} is not allowed for {nameof(TripleAsync)}"),
-            _ => target * 3
-        });
 
-    static async Task Main(string[] args)
+    public static Task<SingleValueResult<int>> IncrementAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(
+            target switch
+            {
+                > 1000 => new ApplicationException(
+                    $"{target} is not allowed for {nameof(IncrementAsync)}"),
+                _ => target + 1
+            });
+    public static Task<SingleValueResult<int>> DoubleAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(
+            target switch
+            {
+                > 1000 => new ApplicationException(
+                    $"{target} is not allowed for {nameof(DoubleAsync)}"),
+                _ => target * 2
+            });
+    public static Task<SingleValueResult<int>> TripleAsync(int target) =>
+        Task.FromResult<SingleValueResult<int>>(
+            target switch
+            {
+                > 1000 => new ApplicationException(
+                    $"{target} is not allowed for {nameof(TripleAsync)}"),
+                _ => target * 3
+            });
+
+    private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
         switch (await Increment(1001).Railway(DoubleAsync).Railway(TripleAsync))
