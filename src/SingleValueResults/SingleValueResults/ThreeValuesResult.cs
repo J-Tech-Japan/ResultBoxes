@@ -34,4 +34,44 @@ public record ThreeValuesResult<TValue1, TValue2, TValue3>(
                     value3),
                 _ => SingleValueResult<TValue4>.OutOfRange
             };
+    public FourValuesResult<TValue1, TValue2, TValue3, TValue4> CombineValue<TValue4>(
+        SingleValueResult<TValue4> fourthValue)
+        where TValue4 : notnull
+        => this switch
+        {
+            { Exception: not null } e => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
+                Value1,
+                Value2,
+                Value3,
+                default,
+                e.Exception),
+            { Value1: not null, Value2: not null, Value3: not null } => fourthValue switch
+            {
+                { Exception: not null } e => new
+                    FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
+                        Value1,
+                        Value2,
+                        Value3,
+                        default,
+                        e.Exception),
+                { Value: not null } => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
+                    Value1,
+                    Value2,
+                    Value3,
+                    fourthValue.Value,
+                    null),
+                _ => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
+                    Value1,
+                    Value2,
+                    Value3,
+                    default,
+                    new ResultValueNullException("out of range"))
+            },
+            _ => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
+                Value1,
+                Value2,
+                Value3,
+                default,
+                new ResultValueNullException("out of range"))
+        };
 }
