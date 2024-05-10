@@ -146,7 +146,10 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
                     Value,
                     secondValue,
                     null),
-                _ => new TwoValuesResult<TValue, TValue2>(Value, default, null)
+                _ => new TwoValuesResult<TValue, TValue2>(
+                    Value,
+                    default,
+                    new ResultValueNullException("out of range"))
             },
             _ => new TwoValuesResult<TValue, TValue2>(
                 Value,
@@ -172,7 +175,10 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
                     Value,
                     secondValue,
                     null),
-                _ => new TwoValuesResult<TValue, TValue2>(Value, default, null)
+                _ => new TwoValuesResult<TValue, TValue2>(
+                    Value,
+                    default,
+                    new ResultValueNullException("out of range"))
             },
             _ => new TwoValuesResult<TValue, TValue2>(
                 Value,

@@ -33,9 +33,6 @@ first class support of the `Railway Oriented Programming` that introduced with S
 
 [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
 
-
-
-
 # Usage
 
 1. Simple Function and Use Result Function
@@ -49,7 +46,9 @@ first class support of the `Railway Oriented Programming` that introduced with S
 
 ## 1. Simple Function and Use Result Function
 
-Basic use for this library is use **[SingleValueResult<T>](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/ThreeValuesResult.cs)** for the return type of the functions.
+Basic use for this library is use *
+*[SingleValueResult<T>](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/ThreeValuesResult.cs)
+** for the return type of the functions.
 
 Then you can return value when success, and when you have any issue, you can **return** exception. (not throw.)
 
@@ -116,12 +115,19 @@ After `case { Value: { } value }:`, value is not null, because it was checked no
 
 ## 2. Don't use nullable value as Type of the Value
 
-C# has two different "nullable" types. [Nullable Value Types](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/nullable-value-types) and [Nullable Reference Types](https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references).
+C# has two different "nullable"
+types. [Nullable Value Types](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/nullable-value-types)
+and [Nullable Reference Types](https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references).
 
 `SingleValueResult<TValue>` has `where TValue: notnull` constraint. This is because if it allows null type, it will
-allow Value is null and Exception is null Result class. notnull prevent to use both **Nullable Value Types** and **Nullable Reference Types**. But for the **Nullable Value Types** only show warnings because it is wrapped with **Nullable** generic type.
+allow Value is null and Exception is null Result class. notnull prevent to use both **Nullable Value Types** and *
+*Nullable Reference Types**. But for the **Nullable Value Types** only show warnings because it is wrapped with *
+*Nullable** generic type.
 
-Many feature assume those value as irregular case and not working with it. How can you write value is null in some case? you can use **[OptionalValue](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/OptionalValue.cs)** type.
+Many feature assume those value as irregular case and not working with it. How can you write value is null in some case?
+you can use *
+*[OptionalValue](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/OptionalValue.cs)
+** type.
 
 ```csharp
 internal class Program
@@ -205,7 +211,9 @@ internal class Program
 ## 4. Wrapping void function.
 
 When a function does not return value, C# can use void as a return (type). But you can not use `SingleValueResult<void>`
-due to C# language definition. Instead, we made **[UnitValue](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/UnitValue.cs)** type, which means nothing inside but as a data class.
+due to C# language definition. Instead, we made *
+*[UnitValue](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/UnitValue.cs)
+** type, which means nothing inside but as a data class.
 UnitValue does not have any properties. You can wrap try with `WrapTry` void action, and it will
 return `SingleValueResult<UnitValue>` type.
 
@@ -506,7 +514,10 @@ executed value, but both first value and second value together and pass it to th
 
 ![CombineValue](./docs/images/CombineValue.png)
 
-We provide [TwoValuesResult](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/TwoValuesResult.cs), [ThreeValuesResult](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/ThreeValuesResult.cs), [FourValuesResult](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/FourValuesResult.cs) and [FiveValuesResult](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/FiveValuesResult.cs) so each time we use `CombineValue`, it stores last values and create new class.
+We
+provide [TwoValuesResult](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/TwoValuesResult.cs), [ThreeValuesResult](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/ThreeValuesResult.cs), [FourValuesResult](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/FourValuesResult.cs)
+and [FiveValuesResult](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/FiveValuesResult.cs)
+so each time we use `CombineValue`, it stores last values and create new class.
 
 We can do it with following code.
 

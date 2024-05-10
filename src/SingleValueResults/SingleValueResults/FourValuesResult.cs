@@ -40,4 +40,52 @@ public record FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
                         handleValueFunc(value1, value2, value3, value4),
                     _ => SingleValueResult<TValue5>.OutOfRange
                 };
+
+    public FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5> CombineValue<TValue5>(
+        SingleValueResult<TValue5> fifthValue)
+        where TValue5 : notnull
+        => this switch
+        {
+            { Exception: not null } e => new
+                FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
+                    Value1,
+                    Value2,
+                    Value3,
+                    Value4,
+                    default,
+                    e.Exception),
+            { Value1: not null, Value2: not null, Value3: not null } => fifthValue switch
+            {
+                { Exception: not null } e => new
+                    FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
+                        Value1,
+                        Value2,
+                        Value3,
+                        Value4,
+                        default,
+                        e.Exception),
+                { Value: not null } => new
+                    FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
+                        Value1,
+                        Value2,
+                        Value3,
+                        Value4,
+                        fifthValue.Value,
+                        null),
+                _ => new FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
+                    Value1,
+                    Value2,
+                    Value3,
+                    Value4,
+                    default,
+                    new ResultValueNullException("out of range"))
+            },
+            _ => new FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
+                Value1,
+                Value2,
+                Value3,
+                Value4,
+                default,
+                new ResultValueNullException("out of range"))
+        };
 }

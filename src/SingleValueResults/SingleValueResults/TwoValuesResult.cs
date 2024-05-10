@@ -81,7 +81,11 @@ public record TwoValuesResult<TValue1, TValue2>(
                     Value2,
                     thirdValue.Value,
                     null),
-                _ => new ThreeValuesResult<TValue1, TValue2, TValue3>(Value1, Value2, default, null)
+                _ => new ThreeValuesResult<TValue1, TValue2, TValue3>(
+                    Value1,
+                    Value2,
+                    default,
+                    new ResultValueNullException("out of range"))
             },
             _ => new ThreeValuesResult<TValue1, TValue2, TValue3>(
                 Value1,

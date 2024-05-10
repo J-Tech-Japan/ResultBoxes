@@ -9,7 +9,6 @@ internal class Program
         {
             case not null when string.IsNullOrEmpty(message):
                 throw new ApplicationException("message is empty");
-                break;
             default:
                 Console.WriteLine(message);
                 break;

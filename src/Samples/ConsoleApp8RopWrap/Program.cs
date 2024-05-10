@@ -77,7 +77,7 @@ internal class Program
                 Console.WriteLine($"Value3: {value3}");
                 break;
         }
-        
+
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error4: System.ApplicationException: 1202 is not allowed for Triple
