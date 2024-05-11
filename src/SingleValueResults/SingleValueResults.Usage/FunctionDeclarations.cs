@@ -141,6 +141,13 @@ public static class FunctionDeclarations
         => Increment(target1)
             .CombineValue(Add(target2, target3))
             .Railway(Divide);
+    
+    public static SingleValueResult<int> Railway2CalcG(int target1, int target2, int target3)
+        => Increment(target1)
+            .CombineValueG(Add(target2, target3))
+            .Railway(Divide);
+    
+    
     public static SingleValueResult<int> Railway2Calc4(int target1, int target2, int target3)
         => Increment(target1)
             .CombineValueWrapTry(() => AddWithThrowing(target2, target3))

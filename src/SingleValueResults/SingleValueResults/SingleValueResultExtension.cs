@@ -2,6 +2,22 @@ namespace SingleResults;
 
 public static class SingleValueResultExtension
 {
+    public static SingleValueResult<TValue3> Railway<TValue1, TValue2, TValue3>(
+        this SingleValueResult<TwoValues<TValue1, TValue2>> firstValue,
+        Func<TValue1, TValue2, SingleValueResult<TValue3>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        => firstValue
+            switch
+            {
+                { Exception: not null } e => e.Exception,
+                { Value: { Value1: {} value1, Value2:{} value2 }  } => handleValueFunc(value1, value2),
+                _ => SingleValueResult<TValue3>.OutOfRange
+            };
+
+    
+    
     public static async Task<SingleValueResult<TValue2>> Railway<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
         Func<TValue1, Task<SingleValueResult<TValue2>>> handleValueFunc)
