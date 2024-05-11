@@ -39,6 +39,8 @@ public static class FunctionDeclarations
             (_, 0) => new ApplicationException("can not divide by 0"),
             _ => numerator / denominator
         };
+    public static SingleValueResult<int> DivideConverter(TwoValues<int, int> values) =>
+        Divide(values.Value1, values.Value2);
     public static int DivideWithThrowing(int numerator, int denominator) =>
         denominator == 0
             ? throw new ApplicationException("can not divide by 0")
@@ -141,13 +143,15 @@ public static class FunctionDeclarations
         => Increment(target1)
             .CombineValue(Add(target2, target3))
             .Railway(Divide);
-    
+
     public static SingleValueResult<int> Railway2CalcG(int target1, int target2, int target3)
         => Increment(target1)
             .CombineValueG(Add(target2, target3))
-            .Railway(Divide);
-    
-    
+            .Railway(DivideConverter);
+    // .Railway(Divide);
+    // .Railway((values) => Divide(values.Value1, values.Value2));
+
+
     public static SingleValueResult<int> Railway2Calc4(int target1, int target2, int target3)
         => Increment(target1)
             .CombineValueWrapTry(() => AddWithThrowing(target2, target3))

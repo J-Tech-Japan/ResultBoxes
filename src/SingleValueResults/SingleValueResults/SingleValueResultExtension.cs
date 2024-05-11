@@ -12,12 +12,14 @@ public static class SingleValueResultExtension
             switch
             {
                 { Exception: not null } e => e.Exception,
-                { Value: { Value1: {} value1, Value2:{} value2 }  } => handleValueFunc(value1, value2),
+                { Value: { Value1: { } value1, Value2: { } value2 } } => handleValueFunc(
+                    value1,
+                    value2),
                 _ => SingleValueResult<TValue3>.OutOfRange
             };
 
-    
-    
+
+
     public static async Task<SingleValueResult<TValue2>> Railway<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
         Func<TValue1, Task<SingleValueResult<TValue2>>> handleValueFunc)

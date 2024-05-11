@@ -1,8 +1,6 @@
 using System.Text.Json.Serialization;
 namespace SingleResults;
 
-public record TwoValues<TValue1, TValue2>(TValue1? Value1, TValue2? Value2) where TValue1: notnull where TValue2: notnull;
-
 public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) where TValue : notnull
 {
 
@@ -53,17 +51,23 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
         where TValue2 : notnull
         => this switch
         {
-            { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(new(Value, default),e.Exception),
+            { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
+                default,
+                e.Exception),
             { Value: not null } => secondValue switch
             {
                 { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
-                    new(Value,
-                    default),
+                    default,
                     e.Exception),
-                { Value: not null } => new SingleValueResult<TwoValues<TValue, TValue2>>(new(Value, secondValue.Value), null),
-                _ => new SingleValueResult<TwoValues<TValue, TValue2>>(new(Value, default), null)
+                { Value: not null } => new SingleValueResult<TwoValues<TValue, TValue2>>(
+                    new TwoValues<TValue, TValue2>(Value, secondValue.Value),
+                    null),
+                _ => new SingleValueResult<TwoValues<TValue, TValue2>>(default, null)
             },
-            _ => new SingleValueResult<TwoValues<TValue, TValue2>>(new(Value, default), new ResultValueNullException($"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
+            _ => new SingleValueResult<TwoValues<TValue, TValue2>>(
+                default,
+                new ResultValueNullException(
+                    $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
         };
     public async Task<TwoValuesResult<TValue, TValue2>> CombineValue<TValue2>(
         Func<Task<SingleValueResult<TValue2>>> secondValueFunc)
