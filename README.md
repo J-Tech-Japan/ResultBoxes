@@ -46,9 +46,7 @@ first class support of the `Railway Oriented Programming` that introduced with S
 
 ## 1. Simple Function and Use Result Function
 
-Basic use for this library is use *
-*[SingleValueResult<T>](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/ThreeValuesResult.cs)
-** for the return type of the functions.
+Basic use for this library is use [SingleValueResult<T>](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/ThreeValuesResult.cs) for the return type of the functions.
 
 Then you can return value when success, and when you have any issue, you can **return** exception. (not throw.)
 
@@ -125,9 +123,7 @@ allow Value is null and Exception is null Result class. notnull prevent to use b
 *Nullable** generic type.
 
 Many feature assume those value as irregular case and not working with it. How can you write value is null in some case?
-you can use *
-*[OptionalValue](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/OptionalValue.cs)
-** type.
+you can use [OptionalValue](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/OptionalValue.cs) type.
 
 ```csharp
 internal class Program
@@ -211,9 +207,7 @@ internal class Program
 ## 4. Wrapping void function.
 
 When a function does not return value, C# can use void as a return (type). But you can not use `SingleValueResult<void>`
-due to C# language definition. Instead, we made *
-*[UnitValue](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/UnitValue.cs)
-** type, which means nothing inside but as a data class.
+due to C# language definition. Instead, we made [UnitValue](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/UnitValue.cs) type, which means nothing inside but as a data class.
 UnitValue does not have any properties. You can wrap try with `WrapTry` void action, and it will
 return `SingleValueResult<UnitValue>` type.
 
