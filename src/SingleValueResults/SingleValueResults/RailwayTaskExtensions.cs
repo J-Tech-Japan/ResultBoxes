@@ -1,9 +1,7 @@
 namespace SingleResults;
 
-public static class SingleValueResultExtension
+public static class RailwayTaskExtensions
 {
-
-
     public static async Task<SingleValueResult<TValue2>> Railway<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
         Func<TValue1, Task<SingleValueResult<TValue2>>> handleValueFunc)
@@ -16,18 +14,30 @@ public static class SingleValueResultExtension
                 { Value: { } value } => await handleValueFunc(value),
                 _ => SingleValueResult<TValue2>.OutOfRange
             };
-    public static async Task<SingleValueResult<TValue2>> RailwayWrapTry<TValue1, TValue2>(
+    public static async Task<SingleValueResult<TValue2>> Railway<TValue1, TValue2>(
         this Task<SingleValueResult<TValue1>> firstValue,
-        Func<TValue1, Task<TValue2>> handleValueFunc)
+        Func<TValue1, SingleValueResult<TValue2>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         => await firstValue
             switch
             {
                 { Exception: not null } e => e.Exception,
-                { Value: { } value } => await SingleValueResult<TValue2>.WrapTry(
-                    () => handleValueFunc(value)),
+                { Value: { } value } => handleValueFunc(value),
                 _ => SingleValueResult<TValue2>.OutOfRange
+            };
+    public static async Task<SingleValueResult<TValue3>> Railway<TValue1, TValue2, TValue3>(
+        this Task<SingleValueResult<TwoValues<TValue1, TValue2>>> firstValue,
+        Func<TValue1, TValue2, SingleValueResult<TValue3>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        => await firstValue
+            switch
+            {
+                { Exception: not null } e => e.Exception,
+                { Value: { } values } => handleValueFunc(values.Value1, values.Value2),
+                _ => SingleValueResult<TValue3>.OutOfRange
             };
     public static async Task<SingleValueResult<TValue4>>
         Railway<TValue1, TValue2, TValue3, TValue4>(
@@ -102,61 +112,4 @@ public static class SingleValueResultExtension
                         value5),
                     _ => SingleValueResult<TValue6>.OutOfRange
                 };
-
-    public static async Task<SingleValueResult<TValue2>> Railway<TValue1, TValue2>(
-        this Task<SingleValueResult<TValue1>> firstValue,
-        Func<TValue1, SingleValueResult<TValue2>> handleValueFunc)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        => await firstValue
-            switch
-            {
-                { Exception: not null } e => e.Exception,
-                { Value: { } value } => handleValueFunc(value),
-                _ => SingleValueResult<TValue2>.OutOfRange
-            };
-    public static async Task<SingleValueResult<TValue3>> Railway<TValue1, TValue2, TValue3>(
-        this Task<SingleValueResult<TwoValues<TValue1, TValue2>>> firstValue,
-        Func<TValue1, TValue2, SingleValueResult<TValue3>> handleValueFunc)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        where TValue3 : notnull
-        => await firstValue
-            switch
-            {
-                { Exception: not null } e => e.Exception,
-                { Value: { } values } => handleValueFunc(values.Value1, values.Value2),
-                _ => SingleValueResult<TValue3>.OutOfRange
-            };
-
-    
-
-    
-    public static async Task<SingleValueResult<TwoValues<TValue1, TValue2>>> CombineValueWrapTry<TValue1,
-        TValue2>(
-        this Task<SingleValueResult<TValue1>> firstValueTask,
-        Func<Task<TValue2>> secondValueFunc)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        => await firstValueTask switch
-        {
-            { Exception: not null } e => new SingleValueResult<TwoValues<TValue1, TValue2>>(
-                default,
-                e.Exception),
-            { Value: { } firstValue } => await SingleValueResult<TValue2>.WrapTry(
-                    secondValueFunc)
-                switch
-                {
-                    { Exception: not null } e => new SingleValueResult<TwoValues<TValue1, TValue2>>(
-                        default,
-                        e.Exception),
-                    { Value: { } secondValue } => new SingleValueResult<TwoValues<TValue1, TValue2>>(
-                       new(firstValue, secondValue),
-                        null),
-                    _ => new SingleValueResult<TwoValues<TValue1, TValue2>>(default, null)
-                },
-            _ => new SingleValueResult<TwoValues<TValue1, TValue2>>(
-                default,
-                new ResultValueNullException("out of range"))
-        };
 }
