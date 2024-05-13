@@ -23,23 +23,7 @@ internal class Program
 
     private static void Main(string[] args)
     {
-        // Pattern 1 : Use Railway2Combine static method
-        // calculate answer = (23 + 1) / (2 + 4) = 4
-        // Value1: 4
-        switch (SingleValueResult<int>.Railway2Combine(
-            Increment(23),
-            Add(2, 4),
-            Divide))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception1: " + error.Message);
-                break;
-            case { Value: var value }:
-                Console.WriteLine("Value1: " + value);
-                break;
-        }
-
-        // Pattern 2 : Use CombineValue method chain
+        // Pattern 1 : Use CombineValue method chain
         // calculate answer = (29 + 1) / (1 + 9) = 3
         // Value: 3
         switch (Increment(29)
@@ -54,7 +38,7 @@ internal class Program
                 break;
         }
 
-        // Pattern 3 : Error in Increment method (target > 1000)
+        // Pattern 2 : Error in Increment method (target > 1000)
         // Exception3: 2000 can not use for the Increment. It should be under or equal 1000
         switch (Increment(2000)
             .CombineValue(Add(1, 9))

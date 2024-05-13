@@ -109,31 +109,6 @@ public static class FunctionDeclarations
                 { Value: { } value2 } => Divide(value1, value2)
             }
         };
-    public static SingleValueResult<int> RailwayCalc(int target1, int target2, int target3)
-        => SingleValueResult<int>.Railway(
-            () => Increment(target1),
-            value1 => SingleValueResult<int>.Railway(
-                () => Add(value1, target2),
-                value2 => Divide(value2, target3)));
-    public static SingleValueResult<int> RailwayCalc2(int target1, int target2, int target3)
-        => SingleValueResult<int>.Railway(
-            Increment(target1),
-            value1 => SingleValueResult<int>.Railway(
-                () => Add(value1, target2),
-                value2 => Divide(value2, target3)));
-
-
-    public static SingleValueResult<int> Railway2Calc(int target1, int target2, int target3)
-        => SingleValueResult<int>.Railway2Combine(
-            () => Increment(target1),
-            () => Add(target2, target3),
-            Divide);
-    public static SingleValueResult<int> Railway2Calc2(int target1, int target2, int target3)
-        => SingleValueResult<int>.Railway2Combine(
-            Increment(target1),
-            Add(target2, target3),
-            Divide);
-
 
     public static SingleValueResult<int> RailwayCalc3(int target1, int target2, int target3)
         => Increment(target1)
