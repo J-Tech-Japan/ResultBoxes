@@ -19,48 +19,22 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
     public static implicit operator SingleValueResult<TValue>(Exception exception) =>
         new(default, exception);
 
-    public TwoValuesResult<TValue, TValue2> CombineValue<TValue2>(
-        SingleValueResult<TValue2> secondValue)
-        where TValue2 : notnull
-        => this switch
-        {
-            { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                Value,
-                default,
-                e.Exception),
-            { Value: not null } => secondValue switch
-            {
-                { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                    Value,
-                    default,
-                    e.Exception),
-                { Value: not null } => new TwoValuesResult<TValue, TValue2>(
-                    Value,
-                    secondValue.Value,
-                    null),
-                _ => new TwoValuesResult<TValue, TValue2>(Value, default, null)
-            },
-            _ => new TwoValuesResult<TValue, TValue2>(
-                Value,
-                default,
-                new ResultValueNullException(
-                    $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
-        };
-    public SingleValueResult<TwoValues<TValue, TValue2>> CombineValueG<TValue2>(
-        SingleValueResult<TValue2> secondValue)
+    public async Task<SingleValueResult<TwoValues<TValue, TValue2>>> CombineValue<TValue2>(
+        Func<Task<SingleValueResult<TValue2>>> secondValueFunc)
         where TValue2 : notnull
         => this switch
         {
             { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 e.Exception),
-            { Value: not null } => secondValue switch
+            { Value: not null } => await secondValueFunc() switch
             {
                 { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                     default,
                     e.Exception),
-                { Value: not null } => new SingleValueResult<TwoValues<TValue, TValue2>>(
-                    new TwoValues<TValue, TValue2>(Value, secondValue.Value),
+                { Value: { } secondValue } => new SingleValueResult<TwoValues<TValue, TValue2>>(
+                    new( Value,
+                    secondValue),
                     null),
                 _ => new SingleValueResult<TwoValues<TValue, TValue2>>(default, null)
             },
@@ -69,142 +43,97 @@ public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) whe
                 new ResultValueNullException(
                     $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
         };
-    public async Task<TwoValuesResult<TValue, TValue2>> CombineValue<TValue2>(
-        Func<Task<SingleValueResult<TValue2>>> secondValueFunc)
-        where TValue2 : notnull
-        => this switch
-        {
-            { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                Value,
-                default,
-                e.Exception),
-            { Value: not null } => await secondValueFunc() switch
-            {
-                { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                    Value,
-                    default,
-                    e.Exception),
-                { Value: { } secondValue } => new TwoValuesResult<TValue, TValue2>(
-                    Value,
-                    secondValue,
-                    null),
-                _ => new TwoValuesResult<TValue, TValue2>(Value, default, null)
-            },
-            _ => new TwoValuesResult<TValue, TValue2>(
-                Value,
-                default,
-                new ResultValueNullException(
-                    $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
-        };
-    public async Task<TwoValuesResult<TValue, TValue2>> CombineValueWrapTry<TValue2>(
+    public async Task<SingleValueResult<TwoValues<TValue, TValue2>>> CombineValueWrapTry<TValue2>(
         Func<Task<TValue2>> secondValueFunc)
         where TValue2 : notnull
         => this switch
         {
-            { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                Value,
+            { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 e.Exception),
             { Value: not null } => await SingleValueResult<TValue2>.WrapTry(secondValueFunc)
                 switch
                 {
-                    { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                        Value,
+                    { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                         default,
                         e.Exception),
-                    { Value: { } secondValue } => new TwoValuesResult<TValue, TValue2>(
-                        Value,
-                        secondValue,
+                    { Value: { } secondValue } => new SingleValueResult<TwoValues<TValue, TValue2>>(
+                        new(Value, secondValue),
                         null),
-                    _ => new TwoValuesResult<TValue, TValue2>(Value, default, null)
+                    _ => new SingleValueResult<TwoValues<TValue, TValue2>>( default, null)
                 },
-            _ => new TwoValuesResult<TValue, TValue2>(
-                Value,
+            _ => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 new ResultValueNullException(
                     $"out of range for {nameof(TValue)} combine to {nameof(TValue2)}"))
         };
-    public TwoValuesResult<TValue, TValue2> CombineValueWrapTry<TValue2>(
+    public SingleValueResult<TwoValues<TValue, TValue2>> CombineValueWrapTry<TValue2>(
         Func<TValue2> secondValueFunc)
         where TValue2 : notnull
         => this switch
         {
-            { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                Value,
+            { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 e.Exception),
             { Value: not null } => SingleValueResult<TValue2>.WrapTry(secondValueFunc) switch
             {
-                { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                    Value,
+                { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                     default,
                     e.Exception),
-                { Value: { } secondValue } => new TwoValuesResult<TValue, TValue2>(
-                    Value,
-                    secondValue,
+                { Value: { } secondValue } => new SingleValueResult<TwoValues<TValue, TValue2>>(
+                    new(Value, secondValue),
                     null),
-                _ => new TwoValuesResult<TValue, TValue2>(Value, default, null)
+                _ => new SingleValueResult<TwoValues<TValue, TValue2>>(default, null)
             },
-            _ => new TwoValuesResult<TValue, TValue2>(
-                Value,
+            _ => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 new ResultValueNullException("out of range"))
         };
-    public TwoValuesResult<TValue, TValue2> CombineValue<TValue2>(
+    public SingleValueResult<TwoValues<TValue, TValue2>> CombineValue<TValue2>(
         Func<TValue, SingleValueResult<TValue2>> secondValueFunc)
         where TValue2 : notnull
         => this switch
         {
-            { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                Value,
+            { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 e.Exception),
             { Value: { } value } => secondValueFunc(value) switch
             {
-                { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                    Value,
+                { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                     default,
                     e.Exception),
-                { Value: { } secondValue } => new TwoValuesResult<TValue, TValue2>(
-                    Value,
-                    secondValue,
+                { Value: { } secondValue } => new SingleValueResult<TwoValues<TValue, TValue2>>(
+                    new( Value, secondValue),
                     null),
-                _ => new TwoValuesResult<TValue, TValue2>(
-                    Value,
+                _ => new SingleValueResult<TwoValues<TValue, TValue2>>(
                     default,
                     new ResultValueNullException("out of range"))
             },
-            _ => new TwoValuesResult<TValue, TValue2>(
-                Value,
+            _ => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 new ResultValueNullException("out of range"))
         };
-    public async Task<TwoValuesResult<TValue, TValue2>> CombineValue<TValue2>(
+    public async Task<SingleValueResult<TwoValues<TValue, TValue2>>> CombineValue<TValue2>(
         Func<TValue, Task<SingleValueResult<TValue2>>> secondValueFunc)
         where TValue2 : notnull
         => this switch
         {
-            { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                Value,
+            { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 e.Exception),
             { Value: { } value } => await secondValueFunc(value) switch
             {
-                { Exception: not null } e => new TwoValuesResult<TValue, TValue2>(
-                    Value,
+                { Exception: not null } e => new SingleValueResult<TwoValues<TValue, TValue2>>(
                     default,
                     e.Exception),
-                { Value: { } secondValue } => new TwoValuesResult<TValue, TValue2>(
-                    Value,
-                    secondValue,
+                { Value: { } secondValue } => new SingleValueResult<TwoValues<TValue, TValue2>>(
+                    new (Value, secondValue),
                     null),
-                _ => new TwoValuesResult<TValue, TValue2>(
-                    Value,
+                _ => new SingleValueResult<TwoValues<TValue, TValue2>>(
                     default,
                     new ResultValueNullException("out of range"))
             },
-            _ => new TwoValuesResult<TValue, TValue2>(
-                Value,
+            _ => new SingleValueResult<TwoValues<TValue, TValue2>>(
                 default,
                 new ResultValueNullException("out of range"))
         };

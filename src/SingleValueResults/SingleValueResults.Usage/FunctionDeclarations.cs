@@ -146,8 +146,10 @@ public static class FunctionDeclarations
 
     public static SingleValueResult<int> Railway2CalcG(int target1, int target2, int target3)
         => Increment(target1)
-            .CombineValueG(Add(target2, target3))
-            .Railway(DivideConverter);
+            .CombineValue(Add(target2, target3))
+        .Railway(DivideConverter);
+        // .Railway(TwoValues.ToFunc<int,int,int>(Divide));
+    // .Railway(TwoValues<int,int>.ToFunc(Divide))
     // .Railway(Divide);
     // .Railway((values) => Divide(values.Value1, values.Value2));
 
@@ -204,7 +206,7 @@ public static class FunctionDeclarations
         int target3)
         => Increment(target1)
             .CombineValue(Add(target2, target3))
-            .RailwayAsyncWrapTry(DivideAsyncWithThrowing);
+            .RailwayWrapTry(DivideAsyncWithThrowing);
 
     public static SingleValueResult<int> RailwayInstance(int target1)
         => Increment(target1)

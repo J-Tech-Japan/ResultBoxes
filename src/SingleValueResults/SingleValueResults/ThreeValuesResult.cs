@@ -74,4 +74,5 @@ public record ThreeValuesResult<TValue1, TValue2, TValue3>(
                 default,
                 new ResultValueNullException("out of range"))
         };
+    
 }
