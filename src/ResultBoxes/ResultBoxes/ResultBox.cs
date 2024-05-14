@@ -43,6 +43,15 @@ public record ResultBox<TValue>(TValue? Value, Exception? Exception) where TValu
             { Value: { } value } => await valueFunc(value),
             _ => new ResultValueNullException()
         };
+    public ResultBox<TValueResult> HandleResult<TValueResult>(
+        Func<ResultBox<TValue>, ResultBox<TValueResult>> valueFunc)
+        where TValueResult : notnull =>
+        this switch
+        {
+            { Exception: { } error } => error,
+            { Value: not null } value => valueFunc(value),
+            _ => new ResultValueNullException()
+        };
     public async Task<ResultBox<TValueResult>> HandleResultAsync<TValueResult>(
         Func<ResultBox<TValue>, Task<ResultBox<TValueResult>>> valueFunc)
         where TValueResult : notnull =>
@@ -112,32 +121,5 @@ public record ResultBox<TValue>(TValue? Value, Exception? Exception) where TValu
             return e;
         }
     }
-}
-public static class ResultBoxTaskHandleExtensions
-{
-    public static async Task<ResultBox<TValueResult>> Handle<TValue, TValueResult>(
-        this Task<ResultBox<TValue>> task,
-        Func<TValue, TValueResult> valueFunc) where TValue : notnull where TValueResult : notnull =>
-        (await task).Handle(valueFunc);
-
-    public static async Task<ResultBox<TValueResult>> Handle<TValue, TValueResult>(
-        this Task<ResultBox<TValue>> task,
-        Func<TValue, ResultBox<TValueResult>> valueFunc)
-        where TValue : notnull where TValueResult : notnull =>
-        (await task).Handle(valueFunc);
-
-    public static async Task<ResultBox<TValueResult>> HandleAsync<TValue, TValueResult>(
-        this Task<ResultBox<TValue>> task,
-        Func<TValue, Task<ResultBox<TValueResult>>> valueFunc)
-        where TValue : notnull where TValueResult : notnull =>
-        await (await task).HandleAsync(valueFunc);
-    public static async Task<ResultBox<TValueResult>> HandleResultAsync<TValue, TValueResult>(
-        this Task<ResultBox<TValue>> task,
-        Func<ResultBox<TValue>, Task<ResultBox<TValueResult>>> valueFunc) where TValue : notnull
-        where TValueResult : notnull => await (await task).HandleResultAsync(valueFunc);
-    public static async Task<ResultBox<TValueResult>> HandleAsync<TValue, TValueResult>(
-        this Task<ResultBox<TValue>> task,
-        Func<TValue, Task<TValueResult>> valueFunc)
-        where TValue : notnull where TValueResult : notnull =>
-        await (await task).HandleAsync(valueFunc);
+    public TValue Unwrap() => Value ?? throw (Exception ?? new ResultsInvalidOperationException());
 }

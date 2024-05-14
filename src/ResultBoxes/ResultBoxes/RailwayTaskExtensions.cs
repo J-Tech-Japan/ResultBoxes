@@ -7,40 +7,15 @@ public static class RailwayTaskExtensions
         Func<TValue1, Task<ResultBox<TValue2>>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await firstValue
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } value } => await handleValueFunc(value),
-                _ => ResultBox<TValue2>.OutOfRange
-            };
+        => await firstValue.HandleAsync(async value => await handleValueFunc(value));
+
     public static async Task<ResultBox<TValue2>> Railway<TValue1, TValue2>(
         this Task<ResultBox<TValue1>> firstValue,
         Func<TValue1, ResultBox<TValue2>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await firstValue
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } value } => handleValueFunc(value),
-                _ => ResultBox<TValue2>.OutOfRange
-            };
+        => await firstValue.HandleAsync(value => Task.FromResult(handleValueFunc(value)));
 
-    public static async Task<ResultBox<TValue3>> RailwayWrapTry<TValue1, TValue2, TValue3>(
-        this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
-        Func<TValue1, TValue2, Task<TValue3>> handleValueFunc)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        where TValue3 : notnull
-        => await firstValue
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } values } => await ResultBox<TValue3>
-                    .WrapTry(() => values.Call(handleValueFunc)),
-                _ => ResultBox<TValue3>.OutOfRange
-            };
 
     public static async Task<ResultBox<TValueReturn>> Railway<TValue1, TValue2, TValue3,
         TValueReturn>(
@@ -50,29 +25,15 @@ public static class RailwayTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValueReturn : notnull
-        => await current
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } values } => values.Call(handleValueFunc),
-                _ => ResultBox<TValueReturn>.OutOfRange
-            };
-
+        => await current.HandleAsync(values => Task.FromResult(values.Call(handleValueFunc)));
 
     public static async Task<ResultBox<TValue3>> Railway<TValue1, TValue2, TValue3>(
-        this ResultBox<TwoValues<TValue1, TValue2>> firstValue,
+        this ResultBox<TwoValues<TValue1, TValue2>> current,
         Func<TValue1, TValue2, Task<ResultBox<TValue3>>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        =>
-            firstValue
-                switch
-                {
-                    { Exception: { } error } => error,
-                    { Value: { } values } => await values.Call(handleValueFunc),
-                    _ => ResultBox<TValue3>.OutOfRange
-                };
+        => await current.HandleAsync(async values => await values.Call(handleValueFunc));
 
     public static async Task<ResultBox<TValue3>> Railway<TValue1, TValue2, TValue3>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
@@ -80,15 +41,7 @@ public static class RailwayTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        =>
-            await firstValue
-                switch
-                {
-                    { Exception: { } error } => error,
-                    { Value: { } values } => await values.Call(handleValueFunc),
-                    _ => ResultBox<TValue3>.OutOfRange
-                };
-
+        => await (await firstValue).HandleAsync(async values => await values.Call(handleValueFunc));
 
     public static async Task<ResultBox<TValue3>> Railway<TValue1, TValue2, TValue3>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
@@ -96,13 +49,8 @@ public static class RailwayTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await firstValue
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } values } => values.Call(handleValueFunc),
-                _ => ResultBox<TValue3>.OutOfRange
-            };
+        => await (await firstValue).HandleAsync(values => Task.FromResult(values.Call(handleValueFunc)));
+    
     public static async Task<ResultBox<TValue4>>
         Railway<TValue1, TValue2, TValue3, TValue4>(
             this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> firstValue,
@@ -111,14 +59,7 @@ public static class RailwayTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        =>
-            await firstValue
-                switch
-                {
-                    { Exception: { } error } => error,
-                    { Value: { } values } => await values.Call(handleValueFunc),
-                    _ => ResultBox<TValue4>.OutOfRange
-                };
+        => await (await firstValue).HandleAsync(async values => await values.Call(handleValueFunc));
 
     public static async Task<ResultBox<TValue5>> Railway<TValue1, TValue2, TValue3, TValue4,
         TValue5>(
@@ -129,14 +70,7 @@ public static class RailwayTaskExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        =>
-            await firstValue
-                switch
-                {
-                    { Exception: { } error } => error,
-                    { Value: { } values } => await values.Call(handleValueFunc),
-                    _ => ResultBox<TValue5>.OutOfRange
-                };
+        => await (await firstValue).HandleAsync(async values => await values.Call(handleValueFunc));
 
     public static async Task<ResultBox<TValue6>> Railway<TValue1, TValue2, TValue3, TValue4,
         TValue5, TValue6>(
@@ -149,12 +83,5 @@ public static class RailwayTaskExtensions
         where TValue4 : notnull
         where TValue5 : notnull
         where TValue6 : notnull
-        =>
-            await firstValue
-                switch
-                {
-                    { Exception: { } error } => error,
-                    { Value: { } values } => await values.Call(handleValueFunc),
-                    _ => ResultBox<TValue6>.OutOfRange
-                };
+        => await (await firstValue).HandleAsync(async values => await values.Call(handleValueFunc));
 }

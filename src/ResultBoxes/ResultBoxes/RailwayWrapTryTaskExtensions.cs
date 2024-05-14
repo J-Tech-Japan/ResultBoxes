@@ -30,4 +30,20 @@ public static class RailwayWrapTryTaskExtensions
                     () => handleValueFunc(value)),
                 _ => ResultBox<TValue2>.OutOfRange
             };
+    
+    public static async Task<ResultBox<TValue3>> RailwayWrapTry<TValue1, TValue2, TValue3>(
+        this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
+        Func<TValue1, TValue2, Task<TValue3>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        => await firstValue
+            switch
+            {
+                { Exception: { } error } => error,
+                { Value: { } values } => await ResultBox<TValue3>
+                    .WrapTry(() => values.Call(handleValueFunc)),
+                _ => ResultBox<TValue3>.OutOfRange
+            };
+
 }
