@@ -30,7 +30,7 @@ public static class CombineTaskExtensions
                 new ResultValueNullException("out of range"))
         };
 
-    public static async Task<ThreeValuesResult<TValue1, TValue2, TValue3>> CombineValue<TValue1,
+    public static async Task<SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>> CombineValue<TValue1,
         TValue2, TValue3>(
         this Task<SingleValueResult<TwoValues<TValue1, TValue2>>> firstValueTask,
         Func<Task<SingleValueResult<TValue3>>> secondValueFunc)
@@ -39,39 +39,21 @@ public static class CombineTaskExtensions
         where TValue3 : notnull
         => await firstValueTask switch
         {
-            { Exception: not null } e => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                default,
-                default,
-                default,
-                e.Exception),
+            { Exception: not null } e => SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>.FromException(e.Exception),
             { Value: { } values } => await secondValueFunc() switch
             {
-                { Exception: not null } e => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                    default,
-                    default,
-                    default,
-                    e.Exception),
-                { Value: { } thirdValue } => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                    values.Value1,
-                    values.Value2,
-                    thirdValue,
+                { Exception: not null } e => SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>.FromException(e.Exception),
+                { Value: { } thirdValue } => new SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>(
+                    new( values.Value1, values.Value2, thirdValue),
                     null),
-                _ => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                    default,
-                    default,
-                    default,
-                    new ResultValueNullException("out of range"))
+                _ => SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>.OutOfRange
             },
-            var first => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                default,
-                default,
-                default,
-                new ResultValueNullException("out of range"))
+            var first => SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>.OutOfRange
         };
 
     public static async Task<FourValuesResult<TValue1, TValue2, TValue3, TValue4>> CombineValue<
         TValue1, TValue2, TValue3, TValue4>(
-        this Task<ThreeValuesResult<TValue1, TValue2, TValue3>> firstValueTask,
+        this Task<SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>> firstValueTask,
         Func<Task<SingleValueResult<TValue4>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
@@ -80,39 +62,39 @@ public static class CombineTaskExtensions
         => await firstValueTask switch
         {
             { Exception: not null } e => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                e.Value1,
-                e.Value2,
-                e.Value3,
+                default,
+                default,
+                default,
                 default,
                 e.Exception),
-            { Value1: { } firstValue, Value2: { } secondValue, Value3: { } thirdValue } =>
+            { Value: { } values } =>
                 await secondValueFunc() switch
                 {
                     { Exception: not null } e => new
                         FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                            firstValue,
-                            secondValue,
-                            thirdValue,
+                            default,
+                            default,
+                            default,
                             default,
                             e.Exception),
                     { Value: { } fourthValue } => new
                         FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                            firstValue,
-                            secondValue,
-                            thirdValue,
+                            values.Value1,
+                            values.Value2,
+                            values.Value3,
                             fourthValue,
                             null),
                     _ => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                        firstValue,
-                        secondValue,
-                        thirdValue,
+                        default,
+                        default,
+                        default,
                         default,
                         new ResultValueNullException("out of range"))
                 },
             var first => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                first.Value1,
-                first.Value2,
-                first.Value3,
+                default,
+                default,
+                default,
                 default,
                 new ResultValueNullException("out of range"))
         };

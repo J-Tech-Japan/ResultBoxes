@@ -3,7 +3,52 @@ namespace SingleResults;
 public static class CombineExtensions
 {
 
-    public static ThreeValuesResult<TValue1, TValue2, TValue3> CombineValue<TValue1, TValue2,
+    public static FourValuesResult<TValue1, TValue2, TValue3,TValue4> CombineValue<TValue1, TValue2, TValue3, TValue4>(
+        this SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>> values,
+        SingleValueResult<TValue4> fourthValue)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        => values switch
+        {
+            { Exception: not null } e => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
+                default,
+                default,
+                default,
+                default,
+                e.Exception),
+            { Value: { } value } => fourthValue switch
+            {
+                { Exception: not null } e => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
+                    default,
+                    default,
+                    default,
+                    default,
+                    e.Exception),
+                { Value: not null } => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
+                        value.Value1,
+                        value.Value2,
+                        value.Value3,
+                        fourthValue.Value,
+                    null),
+                _ => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
+                    default,
+                    default,
+                    default,
+                    default,
+                    new ResultValueNullException("out of range"))
+            },
+            _ => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
+                default,
+                default,
+                default,
+                default,
+                new ResultValueNullException("out of range"))
+        };
+
+    
+    public static SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>> CombineValue<TValue1, TValue2,
         TValue3>(
         this SingleValueResult<TwoValues<TValue1, TValue2>> values,
         SingleValueResult<TValue3> thirdValue)
@@ -12,32 +57,24 @@ public static class CombineExtensions
         where TValue3 : notnull
         => values switch
         {
-            { Exception: not null } e => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                default,
-                default,
+            { Exception: not null } e => new SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>(
                 default,
                 e.Exception),
             { Value: { } value } => thirdValue switch
             {
-                { Exception: not null } e => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                    default,
-                    default,
+                { Exception: not null } e => new SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>(
                     default,
                     e.Exception),
-                { Value: not null } => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                    value.Value1,
+                { Value: not null } => new SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>(
+                    new(value.Value1,
                     value.Value2,
-                    thirdValue.Value,
+                    thirdValue.Value),
                     null),
-                _ => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                    default,
-                    default,
+                _ => new SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>(
                     default,
                     new ResultValueNullException("out of range"))
             },
-            _ => new ThreeValuesResult<TValue1, TValue2, TValue3>(
-                default,
-                default,
+            _ => new SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>(
                 default,
                 new ResultValueNullException("out of range"))
         };

@@ -26,6 +26,25 @@ public static class RailwayTaskExtensions
                 { Value: { } value } => handleValueFunc(value),
                 _ => SingleValueResult<TValue2>.OutOfRange
             };
+    
+    public static async Task<SingleValueResult<TValueReturn>> Railway<TValue1, TValue2, TValue3, TValueReturn>(
+        this Task<SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>> firstValue,
+        Func<TValue1, TValue2, SingleValueResult<TValueReturn>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+    where TValueReturn : notnull
+        => await firstValue
+            switch
+            {
+                { Exception: not null } e => e.Exception,
+                { Value: { } values } => handleValueFunc(values.Value1, values.Value2),
+                _ => SingleValueResult<TValueReturn>.OutOfRange
+            };
+
+    
+    
+    
     public static async Task<SingleValueResult<TValue3>> Railway<TValue1, TValue2, TValue3>(
         this Task<SingleValueResult<TwoValues<TValue1, TValue2>>> firstValue,
         Func<TValue1, TValue2, SingleValueResult<TValue3>> handleValueFunc)
@@ -41,7 +60,7 @@ public static class RailwayTaskExtensions
             };
     public static async Task<SingleValueResult<TValue4>>
         Railway<TValue1, TValue2, TValue3, TValue4>(
-            this Task<ThreeValuesResult<TValue1, TValue2, TValue3>> firstValue,
+            this Task<SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>> firstValue,
             Func<TValue1, TValue2, TValue3, Task<SingleValueResult<TValue4>>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
@@ -52,11 +71,11 @@ public static class RailwayTaskExtensions
                 switch
                 {
                     { Exception: not null } e => e.Exception,
-                    { Value1: { } value1, Value2: { } value2, Value3: { } value3 } => await
+                    { Value: { } values } => await
                         handleValueFunc(
-                            value1,
-                            value2,
-                            value3),
+                            values.Value1,
+                            values.Value2,
+                            values.Value3),
                     _ => SingleValueResult<TValue4>.OutOfRange
                 };
 
