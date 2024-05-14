@@ -11,7 +11,8 @@ public static class CombineWrapTryExtensions
         => current switch
         {
             { Exception: { } error } => error,
-            { Value: not null } => (await ResultBox<TValue2>.WrapTry(secondValueFunc)).Handle(current.Append),
+            { Value: not null } => (await ResultBox<TValue2>.WrapTry(secondValueFunc)).Handle(
+                current.Append),
             _ => new ResultValueNullException()
         };
     public static ResultBox<TwoValues<TValue, TValue2>>
