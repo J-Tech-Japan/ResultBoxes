@@ -10,11 +10,11 @@ public static class CombineWrapTryExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: { } error }  => error,
+            { Exception: { } error } => error,
             { Value: not null } => await ResultBox<TValue2>.WrapTry(secondValueFunc)
                 switch
                 {
-                    { Exception: { } error }  => error,
+                    { Exception: { } error } => error,
                     { Value: { } secondValue } => current.Append(secondValue),
                     _ => new ResultValueNullException()
                 },
@@ -28,10 +28,10 @@ public static class CombineWrapTryExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: { } error }  => error,
+            { Exception: { } error } => error,
             { Value: not null } => ResultBox<TValue2>.WrapTry(secondValueFunc) switch
             {
-                { Exception: { } error }  => error,
+                { Exception: { } error } => error,
                 { Value: { } secondValue } => current.Append(secondValue),
                 _ => new ResultValueNullException()
             },

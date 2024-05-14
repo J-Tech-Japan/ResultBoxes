@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ResultBoxes.Usage\ResultBoxes.Usage.csproj" />
+        <ProjectReference Include="..\ResultBoxes.Usage\ResultBoxes.Usage.csproj"/>
     </ItemGroup>
 
 </Project>

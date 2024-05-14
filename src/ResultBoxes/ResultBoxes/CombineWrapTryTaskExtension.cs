@@ -11,11 +11,11 @@ public static class CombineWrapTryTaskExtension
         where TValue2 : notnull
         => await firstValueTask switch
         {
-            { Exception: { } error }  => error,
-            { Value: { } } current => await ResultBox<TValue2>.WrapTry(secondValueFunc)
+            { Exception: { } error } => error,
+            { Value: not null } current => await ResultBox<TValue2>.WrapTry(secondValueFunc)
                 switch
                 {
-                    { Exception: { } error }  => error,
+                    { Exception: { } error } => error,
                     { Value: { } secondValue } => current.Append(secondValue),
                     _ => new ResultValueNullException()
                 },

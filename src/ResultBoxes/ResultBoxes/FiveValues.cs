@@ -12,9 +12,22 @@ public record FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>(
     where TValue4 : notnull
     where TValue5 : notnull
 {
-    public ResultBox<TValue6> Call<TValue6>(Func<TValue1, TValue2, TValue3, TValue4,TValue5, ResultBox<TValue6>> addingFunc) where TValue6 : notnull
+    public ResultBox<TValue6> Call<TValue6>(
+        Func<TValue1, TValue2, TValue3, TValue4, TValue5, ResultBox<TValue6>> addingFunc)
+        where TValue6 : notnull
         => addingFunc(Value1, Value2, Value3, Value4, Value5);
 
-    public Task<ResultBox<TValue6>> Call<TValue6>(Func<TValue1, TValue2, TValue3, TValue4,TValue5, Task<ResultBox<TValue6>>> addingFunc) where TValue6 : notnull
+    public Task<ResultBox<TValue6>> Call<TValue6>(
+        Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task<ResultBox<TValue6>>> addingFunc)
+        where TValue6 : notnull
+        => addingFunc(Value1, Value2, Value3, Value4, Value5);
+    public TValue6 Call<TValue6>(
+        Func<TValue1, TValue2, TValue3, TValue4, TValue5, TValue6> addingFunc)
+        where TValue6 : notnull
+        => addingFunc(Value1, Value2, Value3, Value4, Value5);
+
+    public Task<TValue6> Call<TValue6>(
+        Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task<TValue6>> addingFunc)
+        where TValue6 : notnull
         => addingFunc(Value1, Value2, Value3, Value4, Value5);
 }
