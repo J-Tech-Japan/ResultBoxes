@@ -1,20 +1,20 @@
-﻿using SingleResults;
+﻿using ResultBoxes;
 namespace ConsoleApp7RopCombine;
 
 internal class Program
 {
-    public static SingleValueResult<int> Increment(int target) => target switch
+    public static ResultBox<int> Increment(int target) => target switch
     {
         > 1000 => new ApplicationException(
             $"{target} can not use for the {nameof(Increment)}. It should be under or equal 1000"),
         _ => target + 1
     };
-    public static SingleValueResult<int> Add(int target1, int target2) => target1 switch
+    public static ResultBox<int> Add(int target1, int target2) => target1 switch
     {
         > 100 => new ApplicationException($"over 100 is not allowed for {nameof(Add)}"),
         _ => target1 + target2
     };
-    public static SingleValueResult<int> Divide(int numerator, int denominator) =>
+    public static ResultBox<int> Divide(int numerator, int denominator) =>
         (numerator, denominator) switch
         {
             (_, 0) => new ApplicationException("can not divide by 0"),

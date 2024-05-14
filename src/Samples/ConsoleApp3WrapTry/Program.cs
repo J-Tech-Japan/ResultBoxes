@@ -1,4 +1,4 @@
-﻿using SingleResults;
+﻿using ResultBoxes;
 namespace ConsoleApp3WrapTry;
 
 internal class Program
@@ -11,7 +11,7 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return exception result
-        switch (SingleValueResult<int>.WrapTry(() => Divide(10, 0)))
+        switch (ResultBox<int>.WrapTry(() => Divide(10, 0)))
         {
             case { Exception: { } error }:
                 Console.WriteLine("Exception: " + error.Message);
@@ -22,7 +22,7 @@ internal class Program
         }
 
         // This will return value result
-        switch (SingleValueResult<int>.WrapTry(() => Divide(10, 2)))
+        switch (ResultBox<int>.WrapTry(() => Divide(10, 2)))
         {
             case { Exception: { } error }:
                 Console.WriteLine("Exception: " + error.Message);

@@ -1,9 +1,9 @@
-﻿using SingleResults;
+﻿using ResultBoxes;
 namespace ConsoleApp1;
 
 internal class Program
 {
-    public static SingleValueResult<int> Increment(int target) => target switch
+    public static ResultBox<int> Increment(int target) => target switch
     {
         > 1000 => new ArgumentOutOfRangeException(nameof(target)),
         _ => target + 1

@@ -1,19 +1,19 @@
-﻿using SingleResults;
+﻿using ResultBoxes;
 namespace ConsoleApp5ROP1;
 
 internal class Program
 {
-    public static SingleValueResult<int> Increment(int target) => target switch
+    public static ResultBox<int> Increment(int target) => target switch
     {
         > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Increment)}"),
         _ => target + 1
     };
-    public static SingleValueResult<int> Double(int target) => target switch
+    public static ResultBox<int> Double(int target) => target switch
     {
         > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Double)}"),
         _ => target * 2
     };
-    public static SingleValueResult<int> Triple(int target) => target switch
+    public static ResultBox<int> Triple(int target) => target switch
     {
         > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Triple)}"),
         _ => target * 3

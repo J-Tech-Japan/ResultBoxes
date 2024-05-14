@@ -1,11 +1,11 @@
-# SingleValueResults
+# ResultBoxes
 
 C# Results Library that focus on Railway Oriented Programming.
 
 # How can you install?
 
 ```sh
-dotnet add package SingleValueResults
+dotnet add package ResultBoxes
 ```
 
 # Why Result type?
@@ -28,7 +28,7 @@ There is of course pros and cons of result type.
 - C# is not pure functional language.
 - Complex for someone not used to.
 
-This SingleValueResult try to be simple Result type, that fully use lately introduced pattern matching feature. And
+This ResultBoxes try to be simple Result type, that fully use lately introduced pattern matching feature. And
 first class support of the `Railway Oriented Programming` that introduced with Scott Wlaschin with following article.
 
 [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
@@ -47,19 +47,19 @@ first class support of the `Railway Oriented Programming` that introduced with S
 ## 1. Simple Function and Use Result Function
 
 Basic use for this library is
-use [SingleValueResult<T>](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/ThreeValuesResult.cs)
+use [ResultBox<T>](https://github.com/J-Tech-Japan/SingleValueResults/blob/main/src/SingleValueResults/SingleValueResults/ThreeValuesResult.cs)
 for the return type of the functions.
 
 Then you can return value when success, and when you have any issue, you can **return** exception. (not throw.)
 
 Like example below, you can either return **Value itself** or **Exception**, and implicit operation can convert it
-to `SingleValueResult<T>` class in code.
+to `ResultBox<T>` class in code.
 
 ```csharp
 
 internal class Program
 {
-    public static SingleValueResult<int> Increment(int target) => target switch
+    public static ResultBox<int> Increment(int target) => target switch
     {
         > 1000 => new ArgumentOutOfRangeException(nameof(target)),
         _ => target + 1

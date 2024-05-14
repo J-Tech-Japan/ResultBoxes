@@ -1,3 +1,3 @@
-namespace SingleResults;
+namespace ResultBoxes;
 
 public record UnitValue;

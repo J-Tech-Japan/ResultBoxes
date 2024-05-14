@@ -1,9 +1,9 @@
-namespace SingleResults;
+namespace ResultBoxes;
 
 public static class RailwayWrapTryExtensions
 {
-    public static SingleValueResult<TValue3> RailwayWrapTry<TValue1, TValue2, TValue3>(
-        this SingleValueResult<TwoValues<TValue1, TValue2>> firstValue,
+    public static ResultBox<TValue3> RailwayWrapTry<TValue1, TValue2, TValue3>(
+        this ResultBox<TwoValues<TValue1, TValue2>> firstValue,
         Func<TValue1, TValue2, TValue3> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
@@ -12,14 +12,14 @@ public static class RailwayWrapTryExtensions
             switch
             {
                 { Exception: not null } e => e.Exception,
-                { Value: { } values } => SingleValueResult<TValue3>
+                { Value: { } values } => ResultBox<TValue3>
                     .WrapTry(
                         () => handleValueFunc(values.Value1, values.Value2)),
-                _ => SingleValueResult<TValue3>.OutOfRange
+                _ => ResultBox<TValue3>.OutOfRange
             };
 
-    public static SingleValueResult<TValue2> RailwayWrapTry<TValue, TValue2>(
-        this SingleValueResult<TValue> current,
+    public static ResultBox<TValue2> RailwayWrapTry<TValue, TValue2>(
+        this ResultBox<TValue> current,
         Func<TValue, TValue2> handleValueFunc)
         where TValue : notnull
         where TValue2 : notnull
@@ -27,8 +27,8 @@ public static class RailwayWrapTryExtensions
             current switch
             {
                 { Exception: not null } e => e.Exception,
-                { Value: { } value } => SingleValueResult<TValue2>.WrapTry(
+                { Value: { } value } => ResultBox<TValue2>.WrapTry(
                     () => handleValueFunc(value)),
-                _ => SingleValueResult<TValue2>.OutOfRange
+                _ => ResultBox<TValue2>.OutOfRange
             };
 }
