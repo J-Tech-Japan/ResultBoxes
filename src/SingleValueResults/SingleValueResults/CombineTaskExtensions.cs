@@ -51,7 +51,7 @@ public static class CombineTaskExtensions
             var first => SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>.OutOfRange
         };
 
-    public static async Task<FourValuesResult<TValue1, TValue2, TValue3, TValue4>> CombineValue<
+    public static async Task<SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>>> CombineValue<
         TValue1, TValue2, TValue3, TValue4>(
         this Task<SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>> firstValueTask,
         Func<Task<SingleValueResult<TValue4>>> secondValueFunc)
@@ -61,48 +61,28 @@ public static class CombineTaskExtensions
         where TValue4 : notnull
         => await firstValueTask switch
         {
-            { Exception: not null } e => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                default,
-                default,
-                default,
-                default,
-                e.Exception),
+            { Exception: not null } e => SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>>.FromException(e.Exception),
             { Value: { } values } =>
                 await secondValueFunc() switch
                 {
-                    { Exception: not null } e => new
-                        FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                            default,
-                            default,
-                            default,
-                            default,
-                            e.Exception),
+                    { Exception: not null } e => 
+                        SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>>.FromException(e.Exception),
                     { Value: { } fourthValue } => new
-                        FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                            values.Value1,
+                        SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>>(
+                            new(values.Value1,
                             values.Value2,
                             values.Value3,
-                            fourthValue,
+                            fourthValue),
                             null),
-                    _ => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                        default,
-                        default,
-                        default,
-                        default,
-                        new ResultValueNullException("out of range"))
+                    _ => SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>>.OutOfRange
                 },
-            var first => new FourValuesResult<TValue1, TValue2, TValue3, TValue4>(
-                default,
-                default,
-                default,
-                default,
-                new ResultValueNullException("out of range"))
+            _ => SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>>.OutOfRange
         };
 
-    public static async Task<FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>>
+    public static async Task<SingleValueResult<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
         CombineValue<
             TValue1, TValue2, TValue3, TValue4, TValue5>(
-            this Task<FourValuesResult<TValue1, TValue2, TValue3, TValue4>> currentValuesTask,
+            this Task<SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>>> currentValuesTask,
             Func<Task<SingleValueResult<TValue5>>> fifthValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
@@ -111,50 +91,25 @@ public static class CombineTaskExtensions
         where TValue5 : notnull
         => await currentValuesTask switch
         {
-            { Exception: not null } e => new
-                FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
-                    e.Value1,
-                    e.Value2,
-                    e.Value3,
-                    e.Value4,
-                    default,
+            { Exception: not null } e => 
+                SingleValueResult<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.FromException(
                     e.Exception),
-            {
-                    Value1: { } firstValue, Value2: { } secondValue, Value3: { } thirdValue,
-                    Value4: { } fourthValue
-                } =>
+            { Value: { } values } =>
                 await fifthValueFunc() switch
                 {
-                    { Exception: not null } e => new
-                        FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
-                            firstValue,
-                            secondValue,
-                            thirdValue,
-                            fourthValue,
-                            default,
+                    { Exception: not null } e => 
+                        SingleValueResult<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.FromException(
                             e.Exception),
                     { Value: { } fifthValue } => new
-                        FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
-                            firstValue,
-                            secondValue,
-                            thirdValue,
-                            fourthValue,
-                            fifthValue,
+                        SingleValueResult<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>(
+                            new(values.Value1,
+                            values.Value2,
+                            values.Value3,
+                            values.Value4,
+                            fifthValue),
                             null),
-                    _ => new FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
-                        firstValue,
-                        secondValue,
-                        thirdValue,
-                        fourthValue,
-                        default,
-                        new ResultValueNullException("out of range"))
+                    _ => SingleValueResult<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.OutOfRange
                 },
-            var first => new FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>(
-                first.Value1,
-                first.Value2,
-                first.Value3,
-                first.Value4,
-                default,
-                new ResultValueNullException("out of range"))
+            var first => SingleValueResult<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.OutOfRange
         };
 }

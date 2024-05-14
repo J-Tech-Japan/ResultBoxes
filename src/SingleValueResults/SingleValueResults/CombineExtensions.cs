@@ -2,8 +2,35 @@ namespace SingleResults;
 
 public static class CombineExtensions
 {
+    public static SingleValueResult<FiveValues< TValue1, TValue2, TValue3,TValue4, TValue5>> CombineValue<TValue1, TValue2, TValue3, TValue4, TValue5>(
+        this SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>> values,
+        SingleValueResult<TValue5> addingValue)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        where TValue5 : notnull
+        => values switch
+        {
+            { Exception: not null } e => SingleValueResult<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>.FromException(
+                e.Exception),
+            { Value: { } value } => addingValue switch
+            {
+                { Exception: not null } e => SingleValueResult<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>.FromException(
+                    e.Exception),
+                { Value: { } value5 } => new SingleValueResult<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>(
+                    new (value.Value1,
+                        value.Value2,
+                        value.Value3,
+                        value.Value4,
+                        addingValue.Value),
+                    null),
+                _ => SingleValueResult<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>.OutOfRange
+            },
+            _ => SingleValueResult<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>.OutOfRange
+        };
 
-    public static FourValuesResult<TValue1, TValue2, TValue3,TValue4> CombineValue<TValue1, TValue2, TValue3, TValue4>(
+    public static SingleValueResult<FourValues< TValue1, TValue2, TValue3,TValue4>> CombineValue<TValue1, TValue2, TValue3, TValue4>(
         this SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>> values,
         SingleValueResult<TValue4> fourthValue)
         where TValue1 : notnull
@@ -12,42 +39,22 @@ public static class CombineExtensions
         where TValue4 : notnull
         => values switch
         {
-            { Exception: not null } e => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
-                default,
-                default,
-                default,
-                default,
+            { Exception: not null } e => SingleValueResult<FourValues< TValue1, TValue2, TValue3,TValue4>>.FromException(
                 e.Exception),
             { Value: { } value } => fourthValue switch
             {
-                { Exception: not null } e => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
-                    default,
-                    default,
-                    default,
-                    default,
+                { Exception: not null } e => SingleValueResult<FourValues< TValue1, TValue2, TValue3,TValue4>>.FromException(
                     e.Exception),
-                { Value: not null } => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
-                        value.Value1,
+                { Value: not null } => new SingleValueResult<FourValues<TValue1, TValue2, TValue3, TValue4>>(
+                        new (value.Value1,
                         value.Value2,
                         value.Value3,
-                        fourthValue.Value,
+                        fourthValue.Value),
                     null),
-                _ => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
-                    default,
-                    default,
-                    default,
-                    default,
-                    new ResultValueNullException("out of range"))
+                _ => SingleValueResult<FourValues< TValue1, TValue2, TValue3,TValue4>>.OutOfRange
             },
-            _ => new FourValuesResult<TValue1, TValue2, TValue3,TValue4>(
-                default,
-                default,
-                default,
-                default,
-                new ResultValueNullException("out of range"))
+            _ => SingleValueResult<FourValues< TValue1, TValue2, TValue3,TValue4>>.OutOfRange
         };
-
-    
     public static SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>> CombineValue<TValue1, TValue2,
         TValue3>(
         this SingleValueResult<TwoValues<TValue1, TValue2>> values,

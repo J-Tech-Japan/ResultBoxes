@@ -27,6 +27,22 @@ public static class RailwayTaskExtensions
                 _ => SingleValueResult<TValue2>.OutOfRange
             };
     
+    public static async Task<SingleValueResult<TValue3>> RailwayWrapTry<TValue1, TValue2, TValue3>(
+        this Task<SingleValueResult<TwoValues<TValue1, TValue2>>> firstValue,
+        Func<TValue1, TValue2, Task<TValue3>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        => await firstValue
+            switch
+            {
+                { Exception: not null } e => e.Exception,
+                { Value: { } values } => await SingleValueResult<TValue3>
+                    .WrapTry(
+                        () => handleValueFunc(values.Value1, values.Value2)),
+                _ => SingleValueResult<TValue3>.OutOfRange
+            };
+
     public static async Task<SingleValueResult<TValueReturn>> Railway<TValue1, TValue2, TValue3, TValueReturn>(
         this Task<SingleValueResult<ThreeValues<TValue1, TValue2, TValue3>>> firstValue,
         Func<TValue1, TValue2, SingleValueResult<TValueReturn>> handleValueFunc)
@@ -43,7 +59,40 @@ public static class RailwayTaskExtensions
             };
 
     
-    
+    public static async Task<SingleValueResult<TValue3>> Railway<TValue1, TValue2, TValue3>(
+        this SingleValueResult<TwoValues<TValue1, TValue2>> firstValue,
+        Func<TValue1, TValue2, Task<SingleValueResult<TValue3>>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        =>
+            firstValue
+                switch
+                {
+                    { Exception: not null } e => e.Exception,
+                    { Value: { } values } => await handleValueFunc(
+                        values.Value1,
+                        values.Value2),
+                    _ => SingleValueResult<TValue3>.OutOfRange
+                };
+
+    public static async Task<SingleValueResult<TValue3>> Railway<TValue1, TValue2, TValue3>(
+        this Task<SingleValueResult<TwoValues<TValue1, TValue2>>> firstValue,
+        Func<TValue1, TValue2, Task<SingleValueResult<TValue3>>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        =>
+            await firstValue
+                switch
+                {
+                    { Exception: not null } e => e.Exception,
+                    { Value: { } values } => await handleValueFunc(
+                        values.Value1,
+                        values.Value2),
+                    _ => SingleValueResult<TValue3>.OutOfRange
+                };
+
     
     public static async Task<SingleValueResult<TValue3>> Railway<TValue1, TValue2, TValue3>(
         this Task<SingleValueResult<TwoValues<TValue1, TValue2>>> firstValue,
@@ -81,7 +130,7 @@ public static class RailwayTaskExtensions
 
     public static async Task<SingleValueResult<TValue5>> Railway<TValue1, TValue2, TValue3, TValue4,
         TValue5>(
-        this Task<FourValuesResult<TValue1, TValue2, TValue3, TValue4>> firstValue,
+        this Task<SingleValueResult<FourValues< TValue1, TValue2, TValue3, TValue4>>> firstValue,
         Func<TValue1, TValue2, TValue3, TValue4, Task<SingleValueResult<TValue5>>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
@@ -94,19 +143,18 @@ public static class RailwayTaskExtensions
                 {
                     { Exception: not null } e => e.Exception,
                     {
-                        Value1: { } value1, Value2: { } value2, Value3: { } value3,
-                        Value4: { } value4
+                        Value: { } values
                     } => await handleValueFunc(
-                        value1,
-                        value2,
-                        value3,
-                        value4),
+                        values.Value1,
+                        values.Value2,
+                        values.Value3,
+                        values.Value4),
                     _ => SingleValueResult<TValue5>.OutOfRange
                 };
 
     public static async Task<SingleValueResult<TValue6>> Railway<TValue1, TValue2, TValue3, TValue4,
         TValue5, TValue6>(
-        this Task<FiveValuesResult<TValue1, TValue2, TValue3, TValue4, TValue5>> firstValue,
+        this Task<SingleValueResult<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> firstValue,
         Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task<SingleValueResult<TValue6>>>
             handleValueFunc)
         where TValue1 : notnull
@@ -121,14 +169,13 @@ public static class RailwayTaskExtensions
                 {
                     { Exception: not null } e => e.Exception,
                     {
-                        Value1: { } value1, Value2: { } value2, Value3: { } value3,
-                        Value4: { } value4, Value5: { } value5
+                        Value: { } values
                     } => await handleValueFunc(
-                        value1,
-                        value2,
-                        value3,
-                        value4,
-                        value5),
+                        values.Value1,
+                        values.Value2,
+                        values.Value3,
+                        values.Value4,
+                        values.Value5),
                     _ => SingleValueResult<TValue6>.OutOfRange
                 };
 }

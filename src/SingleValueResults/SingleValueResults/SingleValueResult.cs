@@ -1,6 +1,26 @@
 using System.Text.Json.Serialization;
 namespace SingleResults;
+// Result
 
+// J-Tech-Japan / ResultBoxes　△
+// BoxResult 
+// ResultBox　△
+
+// UnionValueResult
+// UnionResult 
+// UnionTypeResult 
+
+// ValueResult
+// ResultValue　△
+
+// ResultType
+// TypedResult　△
+
+// PatternResult　△
+// ResultPattern
+
+// MatchResult
+// ResultMatch
 public record SingleValueResult<TValue>(TValue? Value, Exception? Exception) where TValue : notnull
 {
 
