@@ -10,15 +10,11 @@ public static class CombineWrapTryExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: not null } => await ResultBox<TValue2>.WrapTry(secondValueFunc)
                 switch
                 {
-                    { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                        default,
-                        e.Exception),
+                    { Exception: { } error }  => error,
                     { Value: { } secondValue } => new
                         ResultBox<TwoValues<TValue1, TValue2>>(
                             new TwoValues<TValue1, TValue2>(current.Value, secondValue),
@@ -38,14 +34,10 @@ public static class CombineWrapTryExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue, TValue2>>(
-                default,
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: not null } => ResultBox<TValue2>.WrapTry(secondValueFunc) switch
             {
-                { Exception: not null } e => new ResultBox<TwoValues<TValue, TValue2>>(
-                    default,
-                    e.Exception),
+                { Exception: { } error }  => error,
                 { Value: { } secondValue } => new ResultBox<TwoValues<TValue, TValue2>>(
                     new TwoValues<TValue, TValue2>(current.Value, secondValue),
                     null),

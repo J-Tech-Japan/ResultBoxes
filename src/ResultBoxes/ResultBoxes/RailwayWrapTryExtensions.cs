@@ -11,7 +11,7 @@ public static class RailwayWrapTryExtensions
         => firstValue
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } values } => ResultBox<TValue3>
                     .WrapTry(
                         () => handleValueFunc(values.Value1, values.Value2)),
@@ -26,7 +26,7 @@ public static class RailwayWrapTryExtensions
         =>
             current switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } value } => ResultBox<TValue2>.WrapTry(
                     () => handleValueFunc(value)),
                 _ => ResultBox<TValue2>.OutOfRange

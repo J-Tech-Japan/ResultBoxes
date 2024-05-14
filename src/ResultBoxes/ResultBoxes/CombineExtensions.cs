@@ -59,13 +59,11 @@ public static class CombineExtensions
         where TValue3 : notnull
         => values switch
         {
-            { Exception: not null } e => new ResultBox<ThreeValues<TValue1, TValue2, TValue3>>(
-                default,
-                e.Exception),
+            { Exception: { } error } => error,
             { Value: { } value } => thirdValue switch
             {
-                { Exception: not null } e => e.Exception,
-                { Value: not null } => new ThreeValues<TValue1,TValue2,TValue3>(value.Value1, value.Value2, thirdValue.Value),
+                { Exception: { } error }  => error,
+                { Value: { } addingValue } => value.Append(addingValue),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -79,14 +77,10 @@ public static class CombineExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: not null } => secondValue switch
             {
-                { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    default,
-                    e.Exception),
+                { Exception: { } error }  => error,
                 { Value: not null } => new ResultBox<TwoValues<TValue1, TValue2>>(
                     new TwoValues<TValue1, TValue2>(current.Value, secondValue.Value),
                     null),
@@ -109,12 +103,10 @@ public static class CombineExtensions
         where TValue5 : notnull
         => current switch
         {
-            { Exception: not null } e => ResultBox<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>.FromException(
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: { } value } => addingFunc(current.Value.Value1, current.Value.Value2,current.Value.Value3,current.Value.Value4) switch
             {
-                { Exception: not null } e => ResultBox<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>.FromException(
-                    e.Exception),
+                { Exception: { } error } => error,
                 { Value: { } value5 } => new ResultBox<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>(
                     new (value.Value1,
                         value.Value2,
@@ -136,12 +128,10 @@ public static class CombineExtensions
         where TValue4 : notnull
         => current switch
         {
-            { Exception: not null } e => ResultBox<FourValues< TValue1, TValue2, TValue3,TValue4>>.FromException(
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: { } value } => addingFunc(value.Value1,value.Value2,value.Value3) switch
             {
-                { Exception: not null } e => ResultBox<FourValues< TValue1, TValue2, TValue3,TValue4>>.FromException(
-                    e.Exception),
+                { Exception: { } error }  => error,
                 { Value: {} addingValue } => new ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>(
                         new (value.Value1,
                         value.Value2,
@@ -161,19 +151,11 @@ public static class CombineExtensions
         where TValue3 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<ThreeValues<TValue1, TValue2, TValue3>>(
-                default,
-                e.Exception),
+            { Exception: { } error } => error,
             { Value: { } value } => addingFunc(value.Value1,value.Value2) switch
             {
-                { Exception: not null } e => new ResultBox<ThreeValues<TValue1, TValue2, TValue3>>(
-                    default,
-                    e.Exception),
-                { Value: { } addingValue } => new ResultBox<ThreeValues<TValue1, TValue2, TValue3>>(
-                    new(value.Value1,
-                    value.Value2,
-                    addingValue),
-                    null),
+                { Exception: { } error }  => error,
+                { Value: { } addingValue } => value.Append(addingValue),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -185,14 +167,10 @@ public static class CombineExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: { } value } => secondValueFunc(value) switch
             {
-                { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    default,
-                    e.Exception),
+                { Exception: { } error }  => error,
                 { Value: { } secondValue } => new ResultBox<TwoValues<TValue1, TValue2>>(
                     new TwoValues<TValue1, TValue2>(current.Value, secondValue),
                     null),
@@ -212,14 +190,10 @@ public static class CombineExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: not null } => await secondValueFunc() switch
             {
-                { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    default,
-                    e.Exception),
+                { Exception: { } error }  => error,
                 { Value: { } secondValue } => new ResultBox<TwoValues<TValue1, TValue2>>(
                     new TwoValues<TValue1, TValue2>(
                         current.Value,
@@ -241,14 +215,10 @@ public static class CombineExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue, TValue2>>(
-                default,
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: { } value } => await secondValueFunc(value) switch
             {
-                { Exception: not null } e => new ResultBox<TwoValues<TValue, TValue2>>(
-                    default,
-                    e.Exception),
+                { Exception: { } error }  => error,
                 { Value: { } secondValue } => new ResultBox<TwoValues<TValue, TValue2>>(
                     new TwoValues<TValue, TValue2>(current.Value, secondValue),
                     null),

@@ -14,7 +14,7 @@ public static class RailwayExtensions
         => current
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } value } => handleValueFunc( value.Value1, value.Value2, value.Value3, value.Value4, value.Value5),
                 _ => ResultBox<TValueResult>.OutOfRange
             };
@@ -30,7 +30,7 @@ public static class RailwayExtensions
         => current
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } value } => handleValueFunc( value.Value1, value.Value2, value.Value3, value.Value4),
                 _ => ResultBox<TValueResult>.OutOfRange
             };
@@ -45,7 +45,7 @@ public static class RailwayExtensions
         => current
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } value } => handleValueFunc( value.Value1, value.Value2, value.Value3),
                 _ => ResultBox<TValueResult>.OutOfRange
             };
@@ -59,7 +59,7 @@ public static class RailwayExtensions
         => firstValue
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { Value1: { } value1, Value2: { } value2 } } => handleValueFunc(
                     value1,
                     value2),
@@ -74,7 +74,7 @@ public static class RailwayExtensions
         => current
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } value } => handleValueFunc(value),
                 _ => ResultBox<TValue2>.OutOfRange
             };
@@ -87,7 +87,7 @@ public static class RailwayExtensions
         => current
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } value } => await handleValueFunc(value),
                 _ => ResultBox<TValue2>.OutOfRange
             };

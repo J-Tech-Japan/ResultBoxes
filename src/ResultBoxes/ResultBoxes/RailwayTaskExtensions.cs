@@ -10,7 +10,7 @@ public static class RailwayTaskExtensions
         => await firstValue
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } value } => await handleValueFunc(value),
                 _ => ResultBox<TValue2>.OutOfRange
             };
@@ -22,7 +22,7 @@ public static class RailwayTaskExtensions
         => await firstValue
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } value } => handleValueFunc(value),
                 _ => ResultBox<TValue2>.OutOfRange
             };
@@ -36,7 +36,7 @@ public static class RailwayTaskExtensions
         => await firstValue
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } values } => await ResultBox<TValue3>
                     .WrapTry(
                         () => handleValueFunc(values.Value1, values.Value2)),
@@ -53,7 +53,7 @@ public static class RailwayTaskExtensions
         => await firstValue
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } values } => handleValueFunc(values.Value1, values.Value2),
                 _ => ResultBox<TValueReturn>.OutOfRange
             };
@@ -69,7 +69,7 @@ public static class RailwayTaskExtensions
             firstValue
                 switch
                 {
-                    { Exception: not null } e => e.Exception,
+                    { Exception: { } error }  => error,
                     { Value: { } values } => await handleValueFunc(
                         values.Value1,
                         values.Value2),
@@ -86,7 +86,7 @@ public static class RailwayTaskExtensions
             await firstValue
                 switch
                 {
-                    { Exception: not null } e => e.Exception,
+                    { Exception: { } error }  => error,
                     { Value: { } values } => await handleValueFunc(
                         values.Value1,
                         values.Value2),
@@ -103,7 +103,7 @@ public static class RailwayTaskExtensions
         => await firstValue
             switch
             {
-                { Exception: not null } e => e.Exception,
+                { Exception: { } error }  => error,
                 { Value: { } values } => handleValueFunc(values.Value1, values.Value2),
                 _ => ResultBox<TValue3>.OutOfRange
             };
@@ -119,7 +119,7 @@ public static class RailwayTaskExtensions
             await firstValue
                 switch
                 {
-                    { Exception: not null } e => e.Exception,
+                    { Exception: { } error }  => error,
                     { Value: { } values } => await
                         handleValueFunc(
                             values.Value1,
@@ -141,10 +141,8 @@ public static class RailwayTaskExtensions
             await firstValue
                 switch
                 {
-                    { Exception: not null } e => e.Exception,
-                    {
-                        Value: { } values
-                    } => await handleValueFunc(
+                    { Exception: { } error }  => error,
+                    { Value: { } values } => await handleValueFunc(
                         values.Value1,
                         values.Value2,
                         values.Value3,
@@ -167,7 +165,7 @@ public static class RailwayTaskExtensions
             await firstValue
                 switch
                 {
-                    { Exception: not null } e => e.Exception,
+                    { Exception: { } error }  => error,
                     {
                         Value: { } values
                     } => await handleValueFunc(

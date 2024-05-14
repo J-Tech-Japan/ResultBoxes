@@ -11,16 +11,12 @@ public static class CombineWrapTryTaskExtension
         where TValue2 : notnull
         => await firstValueTask switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                e.Exception),
+            { Exception: { } error }  => error,
             { Value: { } firstValue } => await ResultBox<TValue2>.WrapTry(
                     secondValueFunc)
                 switch
                 {
-                    { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                        default,
-                        e.Exception),
+                    { Exception: { } error }  => error,
                     { Value: { } secondValue } => new
                         ResultBox<TwoValues<TValue1, TValue2>>(
                             new TwoValues<TValue1, TValue2>(firstValue, secondValue),
