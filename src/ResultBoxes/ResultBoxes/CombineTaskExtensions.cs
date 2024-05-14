@@ -4,26 +4,20 @@ public static class CombineTaskExtensions
 {
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineValue<TValue1,
         TValue2>(
-        this Task<ResultBox<TValue1>> firstValueTask,
+        this Task<ResultBox<TValue1>> currentTask,
         Func<Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await firstValueTask switch
+        => await currentTask switch
         {
             { Exception: { } error }  => error,
-            { Value: { } firstValue } => await secondValueFunc() switch
+            { Value: { } } current => await secondValueFunc() switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } secondValue } => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    new TwoValues<TValue1, TValue2>(firstValue, secondValue),
-                    null),
-                _ => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    default,
-                    new ResultValueNullException("out of range"))
+                { Value: { } secondValue } => current.Append(secondValue),
+                _ => new ResultValueNullException()
             },
-            _ => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                new ResultValueNullException("out of range"))
+            _ => new ResultValueNullException()
         };
 
     public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> CombineValue<TValue1,
@@ -42,7 +36,7 @@ public static class CombineTaskExtensions
                 { Value: { } thirdValue } => values.Append(thirdValue),
                 _ => ResultBox<ThreeValues<TValue1, TValue2, TValue3>>.OutOfRange
             },
-            var first => ResultBox<ThreeValues<TValue1, TValue2, TValue3>>.OutOfRange
+            _ => new ResultValueNullException()
         };
 
     public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> CombineValue<
@@ -67,9 +61,9 @@ public static class CombineTaskExtensions
                             values.Value3,
                             fourthValue),
                             null),
-                    _ => ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>.OutOfRange
+                    _ => new ResultValueNullException()
                 },
-            _ => ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>.OutOfRange
+            _ => new ResultValueNullException()
         };
 
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
@@ -89,16 +83,9 @@ public static class CombineTaskExtensions
                 await fifthValueFunc() switch
                 {
                     { Exception: { } error }  => error,
-                    { Value: { } fifthValue } => new
-                        ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>(
-                            new(values.Value1,
-                            values.Value2,
-                            values.Value3,
-                            values.Value4,
-                            fifthValue),
-                            null),
-                    _ => ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.OutOfRange
+                    { Value: { } fifthValue } => values.Append(fifthValue),
+                    _ => new ResultValueNullException()
                 },
-            var first => ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.OutOfRange
+            _ => new ResultValueNullException()
         };
 }

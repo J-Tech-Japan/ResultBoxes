@@ -18,11 +18,7 @@ public static class CombineExtensions
             { Value: { } value } => addingValue switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } value5 } => new FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>(value.Value1,
-                        value.Value2,
-                        value.Value3,
-                        value.Value4,
-                        addingValue.Value),
+                { Value: { } value5 } => value.Append(value5),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -41,11 +37,7 @@ public static class CombineExtensions
             { Value: { } value } => fourthValue switch
             {
                 { Exception: { } error } => error,
-                { Value: not null } => new FourValues<TValue1, TValue2, TValue3, TValue4>(
-                        value.Value1,
-                        value.Value2,
-                        value.Value3,
-                        fourthValue.Value),
+                { Value: { } toAppend } => value.Append(toAppend),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -81,9 +73,7 @@ public static class CombineExtensions
             { Value: not null } => secondValue switch
             {
                 { Exception: { } error }  => error,
-                { Value: not null } => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    new TwoValues<TValue1, TValue2>(current.Value, secondValue.Value),
-                    null),
+                { Value: { } addingValue } => current.Append(addingValue),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -107,13 +97,7 @@ public static class CombineExtensions
             { Value: { } value } => addingFunc(current.Value.Value1, current.Value.Value2,current.Value.Value3,current.Value.Value4) switch
             {
                 { Exception: { } error } => error,
-                { Value: { } value5 } => new ResultBox<FiveValues< TValue1, TValue2, TValue3,TValue4,TValue5>>(
-                    new (value.Value1,
-                        value.Value2,
-                        value.Value3,
-                        value.Value4,
-                        value5),
-                    null),
+                { Value: { } value5 } => value.Append(value5),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -132,12 +116,7 @@ public static class CombineExtensions
             { Value: { } value } => addingFunc(value.Value1,value.Value2,value.Value3) switch
             {
                 { Exception: { } error }  => error,
-                { Value: {} addingValue } => new ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>(
-                        new (value.Value1,
-                        value.Value2,
-                        value.Value3,
-                        addingValue),
-                    null),
+                { Value: {} addingValue } => value.Append(addingValue),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -171,9 +150,7 @@ public static class CombineExtensions
             { Value: { } value } => secondValueFunc(value) switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } secondValue } => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    new TwoValues<TValue1, TValue2>(current.Value, secondValue),
-                    null),
+                { Value: { } secondValue } => current.Append(secondValue),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -194,11 +171,7 @@ public static class CombineExtensions
             { Value: not null } => await secondValueFunc() switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } secondValue } => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    new TwoValues<TValue1, TValue2>(
-                        current.Value,
-                        secondValue),
-                    null),
+                { Value: { } secondValue } => current.Append(secondValue),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()
@@ -219,9 +192,7 @@ public static class CombineExtensions
             { Value: { } value } => await secondValueFunc(value) switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } secondValue } => new ResultBox<TwoValues<TValue, TValue2>>(
-                    new TwoValues<TValue, TValue2>(current.Value, secondValue),
-                    null),
+                { Value: { } secondValue } => current.Append(secondValue),
                 _ => new ResultValueNullException()
             },
             _ => new ResultValueNullException()

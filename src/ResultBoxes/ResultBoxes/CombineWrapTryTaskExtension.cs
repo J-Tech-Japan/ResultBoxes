@@ -12,19 +12,13 @@ public static class CombineWrapTryTaskExtension
         => await firstValueTask switch
         {
             { Exception: { } error }  => error,
-            { Value: { } firstValue } => await ResultBox<TValue2>.WrapTry(
-                    secondValueFunc)
+            { Value: { } } current => await ResultBox<TValue2>.WrapTry(secondValueFunc)
                 switch
                 {
                     { Exception: { } error }  => error,
-                    { Value: { } secondValue } => new
-                        ResultBox<TwoValues<TValue1, TValue2>>(
-                            new TwoValues<TValue1, TValue2>(firstValue, secondValue),
-                            null),
-                    _ => new ResultBox<TwoValues<TValue1, TValue2>>(default, null)
+                    { Value: { } secondValue } => current.Append(secondValue),
+                    _ => new ResultValueNullException()
                 },
-            _ => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                new ResultValueNullException("out of range"))
+            _ => new ResultValueNullException()
         };
 }

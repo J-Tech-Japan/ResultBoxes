@@ -15,16 +15,10 @@ public static class CombineWrapTryExtensions
                 switch
                 {
                     { Exception: { } error }  => error,
-                    { Value: { } secondValue } => new
-                        ResultBox<TwoValues<TValue1, TValue2>>(
-                            new TwoValues<TValue1, TValue2>(current.Value, secondValue),
-                            null),
-                    _ => new ResultBox<TwoValues<TValue1, TValue2>>(default, null)
+                    { Value: { } secondValue } => current.Append(secondValue),
+                    _ => new ResultValueNullException()
                 },
-            _ => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                new ResultValueNullException(
-                    $"out of range for {nameof(TValue1)} combine to {nameof(TValue2)}"))
+            _ => new ResultValueNullException()
         };
     public static ResultBox<TwoValues<TValue, TValue2>>
         CombineValueWrapTry<TValue, TValue2>(
@@ -38,13 +32,9 @@ public static class CombineWrapTryExtensions
             { Value: not null } => ResultBox<TValue2>.WrapTry(secondValueFunc) switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } secondValue } => new ResultBox<TwoValues<TValue, TValue2>>(
-                    new TwoValues<TValue, TValue2>(current.Value, secondValue),
-                    null),
-                _ => new ResultBox<TwoValues<TValue, TValue2>>(default, null)
+                { Value: { } secondValue } => current.Append(secondValue),
+                _ => new ResultValueNullException()
             },
-            _ => new ResultBox<TwoValues<TValue, TValue2>>(
-                default,
-                new ResultValueNullException("out of range"))
+            _ => new ResultValueNullException()
         };
 }
