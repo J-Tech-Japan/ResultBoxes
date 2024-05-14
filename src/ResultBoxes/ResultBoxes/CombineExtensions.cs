@@ -36,23 +36,13 @@ public static class CombineExtensions
     public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> CombineValue<
         TValue1, TValue2, TValue3, TValue4, TValue5>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> values,
-        ResultBox<TValue5> addingValue)
+        ResultBox<TValue5> addingResult)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => values switch
-        {
-            { Exception: { } error } e => error,
-            { Value: { } value } => addingValue switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } value5 } => value.Append(value5),
-                _ => new ResultValueNullException()
-            },
-            _ => new ResultValueNullException()
-        };
+        => values.Handle(value => addingResult.Handle(value.Append));
 
     public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> CombineValue<TValue1,
         TValue2, TValue3, TValue4>(
@@ -62,12 +52,7 @@ public static class CombineExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => values switch
-        {
-            { Exception: { } error } => error,
-            { Value: { } value } => addingResult.Handle(toAppend => value.Append(toAppend)),
-            _ => new ResultValueNullException()
-        };
+        => values.Handle(value => addingResult.Handle(value.Append));
     public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> CombineValue<TValue1, TValue2,
         TValue3>(
         this ResultBox<TwoValues<TValue1, TValue2>> values,
@@ -75,12 +60,7 @@ public static class CombineExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => values switch
-        {
-            { Exception: { } error } => error,
-            { Value: { } value } => addingResult.Handle(addingValue => value.Append(addingValue)),
-            _ => new ResultValueNullException()
-        };
+        => values.Handle(value => addingResult.Handle(value.Append));
 
 
     public static ResultBox<TwoValues<TValue1, TValue2>> CombineValue<TValue1, TValue2>(
@@ -88,12 +68,7 @@ public static class CombineExtensions
         ResultBox<TValue2> secondValue)
         where TValue1 : notnull
         where TValue2 : notnull
-        => current switch
-        {
-            { Exception: { } error } => error,
-            { Value: not null } => secondValue.Handle(current.Append),
-            _ => new ResultValueNullException()
-        };
+        => current.Handle(_ => secondValue.Handle(current.Append));
     #endregion
 
     #region Combine with values func returns ResultBox<>
@@ -106,13 +81,7 @@ public static class CombineExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => current switch
-        {
-            { Exception: { } error } => error,
-            { Value: { } value } => value.Call(addingFunc)
-                .Handle(addingValue => value.Append(addingValue)),
-            _ => new ResultValueNullException()
-        };
+        => current.Handle(value => value.Call(addingFunc).Handle(value.Append));
 
     public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> CombineValue<TValue1,
         TValue2, TValue3, TValue4>(
@@ -122,13 +91,7 @@ public static class CombineExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => current switch
-        {
-            { Exception: { } error } => error,
-            { Value: { } value } => value.Call(addingFunc)
-                .Handle(addingValue => value.Append(addingValue)),
-            _ => new ResultValueNullException()
-        };
+        => current.Handle(value => value.Call(addingFunc).Handle(value.Append));
     public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> CombineValue<TValue1, TValue2,
         TValue3>(
         this ResultBox<TwoValues<TValue1, TValue2>> current,
@@ -136,23 +99,12 @@ public static class CombineExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => current switch
-        {
-            { Exception: { } error } => error,
-            { Value: { } value } => value.Call(addingFunc)
-                .Handle(addingValue => value.Append(addingValue)),
-            _ => new ResultValueNullException()
-        };
+        => current.Handle(value => value.Call(addingFunc).Handle(value.Append));
     public static ResultBox<TwoValues<TValue1, TValue2>> CombineValue<TValue1, TValue2>(
         this ResultBox<TValue1> current,
         Func<TValue1, ResultBox<TValue2>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => current switch
-        {
-            { Exception: { } error } => error,
-            { Value: { } value } => secondValueFunc(value).Handle(current.Append),
-            _ => new ResultValueNullException()
-        };
+        => current.Handle(value => secondValueFunc(value).Handle(current.Append));
     #endregion
 }
