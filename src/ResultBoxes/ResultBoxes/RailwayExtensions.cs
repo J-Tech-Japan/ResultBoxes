@@ -15,7 +15,7 @@ public static class RailwayExtensions
             switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } value } => handleValueFunc( value.Value1, value.Value2, value.Value3, value.Value4, value.Value5),
+                { Value: { } value } => value.Call(handleValueFunc),
                 _ => ResultBox<TValueResult>.OutOfRange
             };
 
@@ -31,7 +31,7 @@ public static class RailwayExtensions
             switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } value } => handleValueFunc( value.Value1, value.Value2, value.Value3, value.Value4),
+                { Value: { } value } => value.Call(handleValueFunc),
                 _ => ResultBox<TValueResult>.OutOfRange
             };
 
@@ -46,7 +46,7 @@ public static class RailwayExtensions
             switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } value } => handleValueFunc( value.Value1, value.Value2, value.Value3),
+                { Value: { } value } => value.Call(handleValueFunc),
                 _ => ResultBox<TValueResult>.OutOfRange
             };
 
@@ -60,9 +60,7 @@ public static class RailwayExtensions
             switch
             {
                 { Exception: { } error }  => error,
-                { Value: { Value1: { } value1, Value2: { } value2 } } => handleValueFunc(
-                    value1,
-                    value2),
+                { Value: { } values } => values.Call(handleValueFunc),
                 _ => ResultBox<TValue3>.OutOfRange
             };
 

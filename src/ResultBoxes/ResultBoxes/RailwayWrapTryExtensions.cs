@@ -14,7 +14,7 @@ public static class RailwayWrapTryExtensions
                 { Exception: { } error }  => error,
                 { Value: { } values } => ResultBox<TValue3>
                     .WrapTry(
-                        () => handleValueFunc(values.Value1, values.Value2)),
+                        () => values.Call(handleValueFunc)),
                 _ => ResultBox<TValue3>.OutOfRange
             };
 

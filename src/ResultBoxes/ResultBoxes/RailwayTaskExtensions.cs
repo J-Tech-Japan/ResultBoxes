@@ -38,23 +38,22 @@ public static class RailwayTaskExtensions
             {
                 { Exception: { } error }  => error,
                 { Value: { } values } => await ResultBox<TValue3>
-                    .WrapTry(
-                        () => handleValueFunc(values.Value1, values.Value2)),
+                    .WrapTry(() => values.Call(handleValueFunc)),
                 _ => ResultBox<TValue3>.OutOfRange
             };
 
     public static async Task<ResultBox<TValueReturn>> Railway<TValue1, TValue2, TValue3, TValueReturn>(
-        this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> firstValue,
-        Func<TValue1, TValue2, ResultBox<TValueReturn>> handleValueFunc)
+        this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> current,
+        Func<TValue1, TValue2, TValue3, ResultBox<TValueReturn>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
     where TValueReturn : notnull
-        => await firstValue
+        => await current
             switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } values } => handleValueFunc(values.Value1, values.Value2),
+                { Value: { } values } => values.Call(handleValueFunc),
                 _ => ResultBox<TValueReturn>.OutOfRange
             };
 
@@ -70,9 +69,7 @@ public static class RailwayTaskExtensions
                 switch
                 {
                     { Exception: { } error }  => error,
-                    { Value: { } values } => await handleValueFunc(
-                        values.Value1,
-                        values.Value2),
+                    { Value: { } values } => await values.Call(handleValueFunc),
                     _ => ResultBox<TValue3>.OutOfRange
                 };
 
@@ -87,9 +84,7 @@ public static class RailwayTaskExtensions
                 switch
                 {
                     { Exception: { } error }  => error,
-                    { Value: { } values } => await handleValueFunc(
-                        values.Value1,
-                        values.Value2),
+                    { Value: { } values } => await values.Call(handleValueFunc),
                     _ => ResultBox<TValue3>.OutOfRange
                 };
 
@@ -104,7 +99,7 @@ public static class RailwayTaskExtensions
             switch
             {
                 { Exception: { } error }  => error,
-                { Value: { } values } => handleValueFunc(values.Value1, values.Value2),
+                { Value: { } values } => values.Call(handleValueFunc),
                 _ => ResultBox<TValue3>.OutOfRange
             };
     public static async Task<ResultBox<TValue4>>
@@ -120,16 +115,11 @@ public static class RailwayTaskExtensions
                 switch
                 {
                     { Exception: { } error }  => error,
-                    { Value: { } values } => await
-                        handleValueFunc(
-                            values.Value1,
-                            values.Value2,
-                            values.Value3),
+                    { Value: { } values } => await values.Call(handleValueFunc),
                     _ => ResultBox<TValue4>.OutOfRange
                 };
 
-    public static async Task<ResultBox<TValue5>> Railway<TValue1, TValue2, TValue3, TValue4,
-        TValue5>(
+    public static async Task<ResultBox<TValue5>> Railway<TValue1, TValue2, TValue3, TValue4, TValue5>(
         this Task<ResultBox<FourValues< TValue1, TValue2, TValue3, TValue4>>> firstValue,
         Func<TValue1, TValue2, TValue3, TValue4, Task<ResultBox<TValue5>>> handleValueFunc)
         where TValue1 : notnull
@@ -142,11 +132,7 @@ public static class RailwayTaskExtensions
                 switch
                 {
                     { Exception: { } error }  => error,
-                    { Value: { } values } => await handleValueFunc(
-                        values.Value1,
-                        values.Value2,
-                        values.Value3,
-                        values.Value4),
+                    { Value: { } values } => await values.Call(handleValueFunc),
                     _ => ResultBox<TValue5>.OutOfRange
                 };
 
@@ -166,14 +152,7 @@ public static class RailwayTaskExtensions
                 switch
                 {
                     { Exception: { } error }  => error,
-                    {
-                        Value: { } values
-                    } => await handleValueFunc(
-                        values.Value1,
-                        values.Value2,
-                        values.Value3,
-                        values.Value4,
-                        values.Value5),
+                    { Value: { } values } => await values.Call(handleValueFunc),
                     _ => ResultBox<TValue6>.OutOfRange
                 };
 }

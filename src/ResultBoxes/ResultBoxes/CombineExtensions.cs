@@ -94,7 +94,7 @@ public static class CombineExtensions
         => current switch
         {
             { Exception: { } error }  => error,
-            { Value: { } value } => addingFunc(current.Value.Value1, current.Value.Value2,current.Value.Value3,current.Value.Value4) switch
+            { Value: { } value } => value.Call(addingFunc) switch
             {
                 { Exception: { } error } => error,
                 { Value: { } value5 } => value.Append(value5),
@@ -113,7 +113,7 @@ public static class CombineExtensions
         => current switch
         {
             { Exception: { } error }  => error,
-            { Value: { } value } => addingFunc(value.Value1,value.Value2,value.Value3) switch
+            { Value: { } value } => value.Call(addingFunc) switch
             {
                 { Exception: { } error }  => error,
                 { Value: {} addingValue } => value.Append(addingValue),
