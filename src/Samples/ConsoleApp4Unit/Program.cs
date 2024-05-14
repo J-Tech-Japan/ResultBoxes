@@ -14,7 +14,6 @@ internal class Program
                 break;
         }
     }
-
     private static void Main(string[] args)
     {
         // This will return value (UnitValue) result
@@ -27,7 +26,6 @@ internal class Program
                 Console.WriteLine("No Exception");
                 break;
         }
-
         // This will return exception result
         switch (ResultBox<UnitValue>.WrapTry(() => Print(string.Empty)))
         {

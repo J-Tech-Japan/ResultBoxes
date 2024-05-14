@@ -18,8 +18,6 @@ internal class Program
         > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Triple)}"),
         _ => target * 3
     };
-
-
     private static void Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for Increment
