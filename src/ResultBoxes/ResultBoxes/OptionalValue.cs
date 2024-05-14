@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-namespace SingleResults;
+namespace ResultBoxes;
 
 public record OptionalValue<TValue>(TValue? Value)
 {

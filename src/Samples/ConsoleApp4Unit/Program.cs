@@ -1,4 +1,4 @@
-﻿using SingleResults;
+﻿using ResultBoxes;
 namespace ConsoleApp4Unit;
 
 internal class Program
@@ -18,7 +18,7 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return value (UnitValue) result
-        switch (SingleValueResult<UnitValue>.WrapTry(() => Print("Hello, World!")))
+        switch (ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!")))
         {
             case { Exception: { } error }:
                 Console.WriteLine("Exception: " + error.Message);
@@ -29,7 +29,7 @@ internal class Program
         }
 
         // This will return exception result
-        switch (SingleValueResult<UnitValue>.WrapTry(() => Print(string.Empty)))
+        switch (ResultBox<UnitValue>.WrapTry(() => Print(string.Empty)))
         {
             case { Exception: { } error }:
                 Console.WriteLine("Exception: " + error.Message);

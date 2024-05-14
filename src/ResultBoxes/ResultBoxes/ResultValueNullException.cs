@@ -1,4 +1,4 @@
-namespace SingleResults;
+namespace ResultBoxes;
 
 public class ResultValueNullException(string? msg = null)
     : Exception(msg ?? "result value is null");

@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingleValueResults", "SingleValueResults\SingleValueResults.csproj", "{B3EE4B5F-D9C0-475A-A962-091E7C449C06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultBoxes", "ResultBoxes\ResultBoxes.csproj", "{B3EE4B5F-D9C0-475A-A962-091E7C449C06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingleValueResults.Usage", "SingleValueResults.Usage\SingleValueResults.Usage.csproj", "{8AE0E82A-0C9E-4789-987F-0A73567F6AD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultBoxes.Usage", "ResultBoxes.Usage\ResultBoxes.Usage.csproj", "{8AE0E82A-0C9E-4789-987F-0A73567F6AD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SngleValueResults.Test", "SngleValueResults.Test\SngleValueResults.Test.csproj", "{0BFBD222-391B-4434-A65E-E22B4F946D47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultBoxes.Test", "ResultBoxes.Test\ResultBoxes.Test.csproj", "{0BFBD222-391B-4434-A65E-E22B4F946D47}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{609DB6FA-6214-4181-AE85-ACBEBAC62694}"
 EndProject

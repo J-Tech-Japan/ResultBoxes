@@ -1,9 +1,9 @@
-﻿using SingleResults;
+﻿using ResultBoxes;
 namespace ConsoleApp2Optional;
 
 internal class Program
 {
-    public static SingleValueResult<OptionalValue<string>> ConvertStringToHalfLength(string input)
+    public static ResultBox<OptionalValue<string>> ConvertStringToHalfLength(string input)
         => input.Length switch
         {
             0 => new ApplicationException("Input string is empty"), // Exception

@@ -1,9 +1,9 @@
-﻿using SingleResults;
+﻿using ResultBoxes;
 namespace ConsoleApp8RopWrap;
 
 internal class Program
 {
-    public static SingleValueResult<int> Increment(int target) => target switch
+    public static ResultBox<int> Increment(int target) => target switch
     {
         > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Increment)}"),
         _ => target + 1
@@ -14,12 +14,12 @@ internal class Program
             $"{target} is not allowed for {nameof(Increment)}"),
         _ => target + 1
     };
-    public static SingleValueResult<int> Double(int target) => target switch
+    public static ResultBox<int> Double(int target) => target switch
     {
         > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Double)}"),
         _ => target * 2
     };
-    public static SingleValueResult<int> Triple(int target) => target switch
+    public static ResultBox<int> Triple(int target) => target switch
     {
         > 1000 => new ApplicationException($"{target} is not allowed for {nameof(Triple)}"),
         _ => target * 3
@@ -36,7 +36,7 @@ internal class Program
         // WrapTry is used to catch exceptions and return them as error
         // Calculate (1 + 1) * 2 * 3 = 12
         // Value1: 12
-        switch (SingleValueResult<int>.WrapTry(() => IncrementWithThrowing(1))
+        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing))
         {
@@ -51,7 +51,7 @@ internal class Program
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error2: System.ApplicationException: 2000 is not allowed for Increment
-        switch (SingleValueResult<int>.WrapTry(() => IncrementWithThrowing(2000))
+        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing))
         {
@@ -66,7 +66,7 @@ internal class Program
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error3: System.ApplicationException: 1001 is not allowed for Double
-        switch (SingleValueResult<int>.WrapTry(() => IncrementWithThrowing(1000))
+        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing))
         {
@@ -81,7 +81,7 @@ internal class Program
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error4: System.ApplicationException: 1202 is not allowed for Triple
-        switch (SingleValueResult<int>.WrapTry(() => IncrementWithThrowing(600))
+        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing))
         {
