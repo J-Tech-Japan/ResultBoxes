@@ -518,14 +518,15 @@ executed value, but both first value and second value together and pass it to th
 ![CombineValue](./docs/images/CombineValue.png)
 
 We
-provide 
+provide
 [TwoValues](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/TwoValues.cs),
-[ThreeValues](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/ThreeValues.cs), 
+[ThreeValues](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/ThreeValues.cs),
 [FourValuesResult](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/FourValues.cs)
 and [FiveValues](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/FiveValues.cs)
 
 Those record class has keep multiple values and can be used in `CombineValue` method.
-When you use `CombineValue` method, it will still use `ResultBox<T>` class, but value type will be `TwoValues<T1, T2>`, `ThreeValues<T1, T2, T3>`, `FourValues<T1, T2, T3, T4>`, `FiveValues<T1, T2, T3, T4, T5>`.
+When you use `CombineValue` method, it will still use `ResultBox<T>` class, but value type will
+be `TwoValues<T1, T2>`, `ThreeValues<T1, T2, T3>`, `FourValues<T1, T2, T3, T4>`, `FiveValues<T1, T2, T3, T4, T5>`.
 
 We can do it with following code.
 
