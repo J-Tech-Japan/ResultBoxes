@@ -7,7 +7,6 @@ internal class Program
         denominator == 0
             ? throw new ApplicationException("can not divide by 0")
             : numerator / denominator;
-
     private static void Main(string[] args)
     {
         // This will return exception result

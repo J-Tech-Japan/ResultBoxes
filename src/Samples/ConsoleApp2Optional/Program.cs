@@ -10,7 +10,6 @@ internal class Program
             1 => OptionalValue<string>.Empty, // Not error but Empty 
             _ => OptionalValue<string>.FromValue(input[..^(input.Length / 2)]) // has value 
         };
-
     private static void Main(string[] args)
     {
         if (args.Length == 0)
