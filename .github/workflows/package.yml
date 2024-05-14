@@ -16,13 +16,13 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: |
-        pushd ./src/SingleValueResults
-        dotnet restore SingleValueResults.sln
+        pushd ./src/ResultBoxes
+        dotnet restore ResultBoxes.sln
     - name: Build with dotnet
       run: |
-        pushd ./src/SingleValueResults
-        dotnet build SingleValueResults.sln -c Release
-    - name: Pack SingleValueResults
+        pushd ./src/ResultBoxes
+        dotnet build ResultBoxes.sln -c Release
+    - name: Pack ResultBoxes
       run: |
-        dotnet nuget push "src/SingleValueResults/SingleValueResults/bin/Release/SingleValueResults.${{ github.event.release.tag_name }}.nupkg" --api-key ${{secrets.NUGET_APIKEY}}  --source https://api.nuget.org/v3/index.json
+        dotnet nuget push "src/ResultBoxes/ResultBoxes/bin/Release/ResultBoxes.${{ github.event.release.tag_name }}.nupkg" --api-key ${{secrets.NUGET_APIKEY}}  --source https://api.nuget.org/v3/index.json
   
