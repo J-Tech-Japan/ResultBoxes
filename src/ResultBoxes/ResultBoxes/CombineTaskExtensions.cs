@@ -4,33 +4,24 @@ public static class CombineTaskExtensions
 {
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineValue<TValue1,
         TValue2>(
-        this Task<ResultBox<TValue1>> firstValueTask,
+        this Task<ResultBox<TValue1>> currentTask,
         Func<Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await firstValueTask switch
+        => await currentTask switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                e.Exception),
-            { Value: { } firstValue } => await secondValueFunc() switch
+            { Exception: { } error } => error,
+            { Value: not null } current => await secondValueFunc() switch
             {
-                { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    default,
-                    e.Exception),
-                { Value: { } secondValue } => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    new TwoValues<TValue1, TValue2>(firstValue, secondValue),
-                    null),
-                _ => new ResultBox<TwoValues<TValue1, TValue2>>(
-                    default,
-                    new ResultValueNullException("out of range"))
+                { Exception: { } error } => error,
+                { Value: { } secondValue } => current.Append(secondValue),
+                _ => new ResultValueNullException()
             },
-            _ => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                new ResultValueNullException("out of range"))
+            _ => new ResultValueNullException()
         };
 
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> CombineValue<TValue1,
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> CombineValue<
+        TValue1,
         TValue2, TValue3>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValueTask,
         Func<Task<ResultBox<TValue3>>> secondValueFunc)
@@ -39,44 +30,43 @@ public static class CombineTaskExtensions
         where TValue3 : notnull
         => await firstValueTask switch
         {
-            { Exception: not null } e => ResultBox<ThreeValues<TValue1, TValue2, TValue3>>.FromException(e.Exception),
+            { Exception: { } error } => error,
             { Value: { } values } => await secondValueFunc() switch
             {
-                { Exception: not null } e => ResultBox<ThreeValues<TValue1, TValue2, TValue3>>.FromException(e.Exception),
-                { Value: { } thirdValue } => new ResultBox<ThreeValues<TValue1, TValue2, TValue3>>(
-                    new( values.Value1, values.Value2, thirdValue),
-                    null),
+                { Exception: { } error } => error,
+                { Value: { } thirdValue } => values.Append(thirdValue),
                 _ => ResultBox<ThreeValues<TValue1, TValue2, TValue3>>.OutOfRange
             },
-            var first => ResultBox<ThreeValues<TValue1, TValue2, TValue3>>.OutOfRange
+            _ => new ResultValueNullException()
         };
 
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> CombineValue<
-        TValue1, TValue2, TValue3, TValue4>(
-        this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> firstValueTask,
-        Func<Task<ResultBox<TValue4>>> secondValueFunc)
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>>
+        CombineValue<
+            TValue1, TValue2, TValue3, TValue4>(
+            this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> firstValueTask,
+            Func<Task<ResultBox<TValue4>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
         => await firstValueTask switch
         {
-            { Exception: not null } e => ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>.FromException(e.Exception),
+            { Exception: { } error } => error,
             { Value: { } values } =>
                 await secondValueFunc() switch
                 {
-                    { Exception: not null } e => 
-                        ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>.FromException(e.Exception),
+                    { Exception: { } error } => error,
                     { Value: { } fourthValue } => new
                         ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>(
-                            new(values.Value1,
-                            values.Value2,
-                            values.Value3,
-                            fourthValue),
+                            new FourValues<TValue1, TValue2, TValue3, TValue4>(
+                                values.Value1,
+                                values.Value2,
+                                values.Value3,
+                                fourthValue),
                             null),
-                    _ => ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>.OutOfRange
+                    _ => new ResultValueNullException()
                 },
-            _ => ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>.OutOfRange
+            _ => new ResultValueNullException()
         };
 
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
@@ -91,25 +81,14 @@ public static class CombineTaskExtensions
         where TValue5 : notnull
         => await currentValuesTask switch
         {
-            { Exception: not null } e => 
-                ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.FromException(
-                    e.Exception),
+            { Exception: { } error } => error,
             { Value: { } values } =>
                 await fifthValueFunc() switch
                 {
-                    { Exception: not null } e => 
-                        ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.FromException(
-                            e.Exception),
-                    { Value: { } fifthValue } => new
-                        ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>(
-                            new(values.Value1,
-                            values.Value2,
-                            values.Value3,
-                            values.Value4,
-                            fifthValue),
-                            null),
-                    _ => ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.OutOfRange
+                    { Exception: { } error } => error,
+                    { Value: { } fifthValue } => values.Append(fifthValue),
+                    _ => new ResultValueNullException()
                 },
-            var first => ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.OutOfRange
+            _ => new ResultValueNullException()
         };
 }

@@ -7,6 +7,20 @@ public record TwoValues<TValue1, TValue2>(TValue1 Value1, TValue2 Value2)
         ToFunc<TValueResult>(Func<TValue1, TValue2, ResultBox<TValueResult>> valueFunc)
         where TValueResult : notnull
         => values => valueFunc(values.Value1, values.Value2);
+    public ThreeValues<TValue1, TValue2, TValue3> Append<TValue3>(TValue3 value3)
+        where TValue3 : notnull
+        => new(Value1, Value2, value3);
+    public ResultBox<TValue3> Call<TValue3>(Func<TValue1, TValue2, ResultBox<TValue3>> addingFunc)
+        where TValue3 : notnull
+        => addingFunc(Value1, Value2);
+    public Task<ResultBox<TValue3>> Call<TValue3>(
+        Func<TValue1, TValue2, Task<ResultBox<TValue3>>> addingFunc) where TValue3 : notnull
+        => addingFunc(Value1, Value2);
+    public Task<TValue3> Call<TValue3>(Func<TValue1, TValue2, Task<TValue3>> addingFunc)
+        where TValue3 : notnull
+        => addingFunc(Value1, Value2);
+    public TValue3 Call<TValue3>(Func<TValue1, TValue2, TValue3> addingFunc) where TValue3 : notnull
+        => addingFunc(Value1, Value2);
 }
 public static class TwoValues
 {

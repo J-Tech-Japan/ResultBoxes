@@ -10,25 +10,9 @@ public static class CombineWrapTryExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                e.Exception),
-            { Value: not null } => await ResultBox<TValue2>.WrapTry(secondValueFunc)
-                switch
-                {
-                    { Exception: not null } e => new ResultBox<TwoValues<TValue1, TValue2>>(
-                        default,
-                        e.Exception),
-                    { Value: { } secondValue } => new
-                        ResultBox<TwoValues<TValue1, TValue2>>(
-                            new TwoValues<TValue1, TValue2>(current.Value, secondValue),
-                            null),
-                    _ => new ResultBox<TwoValues<TValue1, TValue2>>(default, null)
-                },
-            _ => new ResultBox<TwoValues<TValue1, TValue2>>(
-                default,
-                new ResultValueNullException(
-                    $"out of range for {nameof(TValue1)} combine to {nameof(TValue2)}"))
+            { Exception: { } error } => error,
+            { Value: not null } => (await ResultBox<TValue2>.WrapTry(secondValueFunc)).Handle(current.Append),
+            _ => new ResultValueNullException()
         };
     public static ResultBox<TwoValues<TValue, TValue2>>
         CombineValueWrapTry<TValue, TValue2>(
@@ -38,21 +22,13 @@ public static class CombineWrapTryExtensions
         where TValue2 : notnull
         => current switch
         {
-            { Exception: not null } e => new ResultBox<TwoValues<TValue, TValue2>>(
-                default,
-                e.Exception),
+            { Exception: { } error } => error,
             { Value: not null } => ResultBox<TValue2>.WrapTry(secondValueFunc) switch
             {
-                { Exception: not null } e => new ResultBox<TwoValues<TValue, TValue2>>(
-                    default,
-                    e.Exception),
-                { Value: { } secondValue } => new ResultBox<TwoValues<TValue, TValue2>>(
-                    new TwoValues<TValue, TValue2>(current.Value, secondValue),
-                    null),
-                _ => new ResultBox<TwoValues<TValue, TValue2>>(default, null)
+                { Exception: { } error } => error,
+                { Value: { } secondValue } => current.Append(secondValue),
+                _ => new ResultValueNullException()
             },
-            _ => new ResultBox<TwoValues<TValue, TValue2>>(
-                default,
-                new ResultValueNullException("out of range"))
+            _ => new ResultValueNullException()
         };
 }

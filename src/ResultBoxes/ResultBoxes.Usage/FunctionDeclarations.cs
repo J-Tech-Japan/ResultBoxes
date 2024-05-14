@@ -93,7 +93,7 @@ public static class FunctionDeclarations
     public static ResultBox<int> CombinedCalc(int target1, int target2, int target3)
         => Increment(target1) switch
         {
-            { Exception: not null } exception1 => exception1,
+            { Exception: { } error } => error,
             { Value: { } value1 } => Add(value1, target2) switch
             {
                 { Exception : not null } exception2 => exception2,
@@ -103,7 +103,7 @@ public static class FunctionDeclarations
     public static ResultBox<int> Combined2Calc(int target1, int target2, int target3)
         => Increment(target1) switch
         {
-            { Exception: not null } exception1 => exception1,
+            { Exception: { } error } => error,
             { Value: { } value1 } => Add(target2, target3) switch
             {
                 { Exception : not null } exception2 => exception2,
@@ -123,8 +123,8 @@ public static class FunctionDeclarations
     public static ResultBox<int> Railway2CalcG(int target1, int target2, int target3)
         => Increment(target1)
             .CombineValue(Add(target2, target3))
-        .Railway(DivideConverter);
-        // .Railway(TwoValues.ToFunc<int,int,int>(Divide));
+            .Railway(DivideConverter);
+    // .Railway(TwoValues.ToFunc<int,int,int>(Divide));
     // .Railway(TwoValues<int,int>.ToFunc(Divide))
     // .Railway(Divide);
     // .Railway((values) => Divide(values.Value1, values.Value2));
