@@ -8,15 +8,8 @@ public static class RailwayWrapTryExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => firstValue
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } values } => ResultBox<TValue3>
-                    .WrapTry(
-                        () => values.Call(handleValueFunc)),
-                _ => ResultBox<TValue3>.OutOfRange
-            };
+        => firstValue.Handle(values => ResultBox<TValue3>
+                .WrapTry(() => values.Call(handleValueFunc)));
 
     public static ResultBox<TValue2> RailwayWrapTry<TValue, TValue2>(
         this ResultBox<TValue> current,
@@ -24,11 +17,6 @@ public static class RailwayWrapTryExtensions
         where TValue : notnull
         where TValue2 : notnull
         =>
-            current switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } value } => ResultBox<TValue2>.WrapTry(
-                    () => handleValueFunc(value)),
-                _ => ResultBox<TValue2>.OutOfRange
-            };
+            current.Handle(value => ResultBox<TValue2>.WrapTry(
+                    () => handleValueFunc(value)));
 }
