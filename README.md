@@ -125,7 +125,7 @@ allow Value is null and Exception is null Result class. notnull prevent to use b
 
 Many feature assume those value as irregular case and not working with it. How can you write value is null in some case?
 you can
-use [OptionalValue](https://github.com/J-Tech-Japan/ResultBoxs/blob/main/src/ResultBoxs/ResultBoxs/OptionalValue.cs)
+use [OptionalValue](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/OptionalValue.cs)
 type.
 
 ```csharp
@@ -260,7 +260,7 @@ Railway Oriented Programming (ROP) is a functional programming pattern that faci
 in languages that support functional programming concepts, like F#, Haskell, and others. The analogy of a railway is
 used to describe the flow of data through a series of functions, similar to how a train travels along tracks.
 
-ResultBoxs supports ROP by providing chain method to connect functions and simply write error handling code.
+ResultBoxes supports ROP by providing chain method to connect functions and simply write error handling code.
 
 ![Simple ROP](./docs/images/SimpleRop.png)
 
@@ -511,7 +511,7 @@ internal class Program
 ## 7. Railway Oriented Programming - Combine Value
 
 We have cases that need to prepare 2 or more value and pass it to next function. One way to achieve this is, programmer
-make a wrapping function and gather two value in function and use railway to handle results. But ResultBoxs
+make a wrapping function and gather two value in function and use railway to handle results. But ResultBoxes
 provide `CombineValue` methods, which follows first Result, run second function and instead of passing only last
 executed value, but both first value and second value together and pass it to third function.
 
