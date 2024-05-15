@@ -53,11 +53,5 @@ public static class RailwayExtensions
         Func<TValue, Task<ResultBox<TValue2>>> handleValueFunc)
         where TValue : notnull
         where TValue2 : notnull
-        => current
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } value } => await handleValueFunc(value),
-                _ => ResultBox<TValue2>.OutOfRange
-            };
+        => await current.HandleAsync(handleValueFunc);
 }

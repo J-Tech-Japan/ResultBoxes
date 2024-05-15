@@ -8,26 +8,23 @@ public static class RailwayWrapTryTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => firstValue
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } values } => await ResultBox<TValue3>
-                    .WrapTry(() => handleValueFunc(values.Value1, values.Value2)),
-                _ => ResultBox<TValue3>.OutOfRange
-            };
+        => await firstValue.HandleAsync(async values => await ResultBox<TValue3>
+                .WrapTry(() => handleValueFunc(values.Value1, values.Value2)));
 
     public static async Task<ResultBox<TValue2>> RailwayWrapTry<TValue1, TValue2>(
         this Task<ResultBox<TValue1>> firstValue,
         Func<TValue1, Task<TValue2>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await firstValue
-            switch
-            {
-                { Exception: { } error } => error,
-                { Value: { } value } => await ResultBox<TValue2>.WrapTry(
-                    () => handleValueFunc(value)),
-                _ => ResultBox<TValue2>.OutOfRange
-            };
+        => await (await firstValue).HandleAsync(async value => await ResultBox<TValue2>.WrapTry(
+                () => handleValueFunc(value)));
+    
+    public static async Task<ResultBox<TValue3>> RailwayWrapTry<TValue1, TValue2, TValue3>(
+        this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
+        Func<TValue1, TValue2, Task<TValue3>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        => await (await firstValue).HandleAsync(async values => await ResultBox<TValue3>.WrapTry(async () => await values.Call(handleValueFunc)));
+
 }

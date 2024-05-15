@@ -8,6 +8,9 @@ public record ResultBox<TValue>(TValue? Value, Exception? Exception) where TValu
     public bool IsSuccess => Exception is null;
     public static ResultBox<TValue> OutOfRange => new(new ResultValueNullException());
     public static ResultBox<TValue> FromValue(TValue value) => new(value, null);
+    public static ResultBox<TValue> FromValue(Func<TValue> value) => new(value(), null);
+    public static async Task<ResultBox<TValue>> FromValueAsync(Func<Task<TValue>> value) =>
+        new(await value(), null);
     public static ResultBox<TValue> FromException(Exception exception) =>
         new(default, exception);
     public Exception GetException() =>
@@ -30,6 +33,40 @@ public record ResultBox<TValue>(TValue? Value, Exception? Exception) where TValu
         {
             { Exception: { } error } => error,
             { Value: { } value } => valueFunc(value),
+            _ => new ResultValueNullException()
+        };
+    public async Task<ResultBox<TValueResult>> HandleAsync<TValueResult>(
+        Func<TValue, Task<ResultBox<TValueResult>>> valueFunc) where TValueResult : notnull =>
+        this switch
+        {
+            { Exception: { } error } => error,
+            { Value: { } value } => await valueFunc(value),
+            _ => new ResultValueNullException()
+        };
+    public ResultBox<TValueResult> HandleResult<TValueResult>(
+        Func<ResultBox<TValue>, ResultBox<TValueResult>> valueFunc)
+        where TValueResult : notnull =>
+        this switch
+        {
+            { Exception: { } error } => error,
+            { Value: not null } value => valueFunc(value),
+            _ => new ResultValueNullException()
+        };
+    public async Task<ResultBox<TValueResult>> HandleResultAsync<TValueResult>(
+        Func<ResultBox<TValue>, Task<ResultBox<TValueResult>>> valueFunc)
+        where TValueResult : notnull =>
+        this switch
+        {
+            { Exception: { } error } => error,
+            { Value: not null } value => await valueFunc(value),
+            _ => new ResultValueNullException()
+        };
+    public async Task<ResultBox<TValueResult>> HandleAsync<TValueResult>(
+        Func<TValue, Task<TValueResult>> valueFunc) where TValueResult : notnull =>
+        this switch
+        {
+            { Exception: { } error } => error,
+            { Value: { } value } => await valueFunc(value),
             _ => new ResultValueNullException()
         };
 
@@ -84,4 +121,5 @@ public record ResultBox<TValue>(TValue? Value, Exception? Exception) where TValu
             return e;
         }
     }
+    public TValue Unwrap() => Value ?? throw (Exception ?? new ResultsInvalidOperationException());
 }

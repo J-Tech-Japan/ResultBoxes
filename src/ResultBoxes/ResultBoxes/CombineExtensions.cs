@@ -9,12 +9,7 @@ public static class CombineExtensions
         Func<Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => current switch
-        {
-            { Exception: { } error } => error,
-            { Value: not null } => (await secondValueFunc()).Handle(current.Append),
-            _ => new ResultValueNullException()
-        };
+        => await current.HandleAsync(async _ => (await secondValueFunc()).Handle(current.Append));
     #endregion
 
     #region Combine with async values returns Task<ResultBox<>>
@@ -24,12 +19,8 @@ public static class CombineExtensions
         Func<TValue, Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue : notnull
         where TValue2 : notnull
-        => current switch
-        {
-            { Exception: { } error } => error,
-            { Value: { } value } => (await secondValueFunc(value)).Handle(current.Append),
-            _ => new ResultValueNullException()
-        };
+        => await current.HandleAsync(
+            async value => (await secondValueFunc(value)).Handle(current.Append));
     #endregion
 
     #region Combine with ResultBox<> Value returns ResultBox<>
