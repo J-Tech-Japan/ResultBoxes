@@ -49,8 +49,9 @@ public static class RailwayTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await firstValue).HandleAsync(values => Task.FromResult(values.Call(handleValueFunc)));
-    
+        => await (await firstValue).HandleAsync(
+            values => Task.FromResult(values.Call(handleValueFunc)));
+
     public static async Task<ResultBox<TValue4>>
         Railway<TValue1, TValue2, TValue3, TValue4>(
             this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> firstValue,

@@ -8,7 +8,8 @@ public static class RailwayWrapTryExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => firstValue.Handle(values => ResultBox<TValue3>
+        => firstValue.Handle(
+            values => ResultBox<TValue3>
                 .WrapTry(() => values.Call(handleValueFunc)));
 
     public static ResultBox<TValue2> RailwayWrapTry<TValue, TValue2>(
@@ -17,6 +18,7 @@ public static class RailwayWrapTryExtensions
         where TValue : notnull
         where TValue2 : notnull
         =>
-            current.Handle(value => ResultBox<TValue2>.WrapTry(
+            current.Handle(
+                value => ResultBox<TValue2>.WrapTry(
                     () => handleValueFunc(value)));
 }

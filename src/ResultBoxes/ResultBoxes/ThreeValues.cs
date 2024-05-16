@@ -20,4 +20,9 @@ public record ThreeValues<TValue1, TValue2, TValue3>(TValue1 Value1, TValue2 Val
     public Task<TValue4> Call<TValue4>(Func<TValue1, TValue2, TValue3, Task<TValue4>> addingFunc)
         where TValue4 : notnull
         => addingFunc(Value1, Value2, Value3);
+
+    public void CallAction(Action<TValue1, TValue2, TValue3> action)
+        => action(Value1, Value2, Value3);
+    public async Task CallAction(Func<TValue1, TValue2, TValue3, Task> action)
+        => await action(Value1, Value2, Value3);
 }

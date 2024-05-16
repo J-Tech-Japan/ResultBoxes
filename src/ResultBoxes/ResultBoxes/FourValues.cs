@@ -24,4 +24,9 @@ public record FourValues<TValue1, TValue2, TValue3, TValue4>(
     public Task<TValue5> Call<TValue5>(
         Func<TValue1, TValue2, TValue3, TValue4, Task<TValue5>> addingFunc) where TValue5 : notnull
         => addingFunc(Value1, Value2, Value3, Value4);
+
+    public void CallAction(Action<TValue1, TValue2, TValue3, TValue4> action)
+        => action(Value1, Value2, Value3, Value4);
+    public async Task CallAction(Func<TValue1, TValue2, TValue3, TValue4, Task> action)
+        => await action(Value1, Value2, Value3, Value4);
 }

@@ -122,13 +122,14 @@ public record ResultBox<TValue>(TValue? Value, Exception? Exception) where TValu
         }
     }
 }
-
 public static class ResultBox
 {
     public static ResultBox<TValue> FromValue<TValue>(TValue value) where TValue : notnull =>
         new(value, null);
-    public static async Task<ResultBox<TValue>> FromValue<TValue>(Task<TValue> value) where TValue : notnull =>
+    public static async Task<ResultBox<TValue>> FromValue<TValue>(Task<TValue> value)
+        where TValue : notnull =>
         new(await value, null);
-    public static async Task<ResultBox<TValue>> FromValue<TValue>(Func<Task<TValue>> value) where TValue : notnull =>
+    public static async Task<ResultBox<TValue>> FromValue<TValue>(Func<Task<TValue>> value)
+        where TValue : notnull =>
         new(await value(), null);
 }
