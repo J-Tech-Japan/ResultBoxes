@@ -28,5 +28,5 @@ public static class ResultBoxTaskHandleExtensions
         where TValue : notnull where TValueResult : notnull =>
         await (await task).HandleAsync(valueFunc);
     public static Task<TValue> UnwrapAsync<TValue>(this Task<ResultBox<TValue>> task) where TValue : notnull =>
-        task.ContinueWith(t => t.Result.Unwrap());
+        task.ContinueWith(t => t.Result.UnwrapBox());
 }
