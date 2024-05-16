@@ -7,13 +7,13 @@
         <RootNamespace>ResultBoxes</RootNamespace>
         <LangVersion>preview</LangVersion>
         <PackageId>ResultBoxes</PackageId>
-        <Version>0.2.3-alpha</Version>
+        <Version>0.2.4-alpha</Version>
         <Authors>J-Tech Group</Authors>
         <Company>J-Tech-Japan</Company>
         <PackageDescription>ResultBoxes - C# Results Library that focus on Railway Programming.</PackageDescription>
         <RepositoryUrl>https://github.com/J-Tech-Japan/ResultBoxes</RepositoryUrl>
-        <PackageVersion>0.2.3-alpha</PackageVersion>
-        <Description>Unwrap() rename to UnwrapBox()</Description>
+        <PackageVersion>0.2.4-alpha</PackageVersion>
+        <Description>Add ResultBox.FromValue()</Description>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeSymbols>true</IncludeSymbols>
