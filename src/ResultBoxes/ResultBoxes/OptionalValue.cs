@@ -10,4 +10,5 @@ public record OptionalValue<TValue>(TValue? Value)
     public TValue GetValue() => Value ?? throw new ResultsInvalidOperationException("no value");
     public static implicit operator OptionalValue<TValue>(TValue value) => new(value);
     public static OptionalValue<TValue> FromValue(TValue value) => new(value);
+    public static OptionalValue<TValue> Null => new(default);
 }
