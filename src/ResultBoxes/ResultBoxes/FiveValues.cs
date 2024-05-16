@@ -30,4 +30,9 @@ public record FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>(
         Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task<TValue6>> addingFunc)
         where TValue6 : notnull
         => addingFunc(Value1, Value2, Value3, Value4, Value5);
+
+    public void CallAction(Action<TValue1, TValue2, TValue3, TValue4, TValue5> action)
+        => action(Value1, Value2, Value3, Value4, Value5);
+    public async Task CallAction(Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task> action)
+        => await action(Value1, Value2, Value3, Value4, Value5);
 }
