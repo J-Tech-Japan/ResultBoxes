@@ -10,26 +10,21 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return exception result
-        switch (ResultBox<int>.WrapTry(() => Divide(10, 0)))
-        {
-            case { IsSuccess: false } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value:
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        ResultBox<int>.WrapTry(() => Divide(10, 0))
+            .ScanResult(HandleResult);
 
         // This will return value result
-        switch (ResultBox<int>.WrapTry(() => Divide(10, 2)))
+        ResultBox<int>.WrapTry(() => Divide(10, 2))
+            .ScanResult(HandleResult);
+    }
+    public static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
         {
-            case { IsSuccess: false } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
                 break;
-            case { IsSuccess: true } value:
-                Console.WriteLine("Value: " + value.GetValue());
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
         }
-
     }
 }

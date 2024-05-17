@@ -12,35 +12,30 @@ internal class Program
     private static void Main(string[] args)
     {
         // use switch case to handle Result
-        switch (Increment(100))
-        {
-            case { IsSuccess: false } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value:
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
-        switch (Increment(1001))
-        {
-            // This will return exception result
-            case { IsSuccess: false } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value:
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        Increment(100)
+            .ScanResult(HandleResult);
+        Increment(1001)
+            .ScanResult(HandleResult);
 
         Console.WriteLine(RunIncrement(100));
         Console.WriteLine(RunIncrement(1001));
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
+        {
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
+                break;
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
+                break;
+        } 
     }
 
     // use switch expression to handle Result
     private static string RunIncrement(int target) =>
         Increment(target) switch
         {
-            { IsSuccess: false } error => $"Error: {error.GetException()}",
+            { IsSuccess: false } error => $"Error: {error.GetException().Message}",
             { IsSuccess: true } success => $"Value: {success.GetValue()}"
         };
 }

@@ -19,6 +19,14 @@ public static class ScanExtensions
         }
         return result;
     }
+    public static ResultBox<TValue> ScanResult<TValue>(
+        this ResultBox<TValue> result,
+        Action<ResultBox<TValue>> action)
+        where TValue : notnull
+    {
+        action(result);
+        return result;
+    }
     public static ResultBox<TwoValues<TValue1, TValue2>> Scan<TValue1, TValue2>(
         this ResultBox<TwoValues<TValue1, TValue2>> result,
         Action<TValue1, TValue2> action,
@@ -76,6 +84,14 @@ public static class ScanExtensions
                 await actionAsync(result.GetValue());
                 break;
         }
+        return result;
+    }
+    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+        this ResultBox<TValue> result,
+        Func<ResultBox<TValue>, Task> actionAsync)
+        where TValue : notnull
+    {
+        await actionAsync(result);
         return result;
     }
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
@@ -137,6 +153,16 @@ public static class ScanExtensions
         }
         return res;
     }
+    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+        this Task<ResultBox<TValue>> result,
+        Action<ResultBox<TValue>> action)
+        where TValue : notnull
+    {
+        var res = await result;
+        action(res);
+        return res;
+    }
+
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> result,
         Action<TValue1, TValue2> action,
@@ -195,6 +221,15 @@ public static class ScanExtensions
                 await actionAsync(res.GetValue());
                 break;
         }
+        return res;
+    }
+    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+        this Task<ResultBox<TValue>> result,
+        Func<ResultBox<TValue>, Task> actionAsync)
+        where TValue : notnull
+    {
+        var res = await result;
+        await actionAsync(res);
         return res;
     }
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(

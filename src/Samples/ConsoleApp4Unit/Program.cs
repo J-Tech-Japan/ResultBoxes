@@ -18,14 +18,21 @@ internal class Program
     {
         // This will return value (UnitValue) result
         ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!"))
-            .Scan(
-                value => Console.WriteLine("Value: " + value),
-                exception => Console.WriteLine("Exception: " + exception.Message));
+            .ScanResult(HandleResult);
 
         // This will return exception result
         ResultBox<UnitValue>.WrapTry(() => Print(string.Empty))
-            .Scan(
-                value => Console.WriteLine("Value: " + value),
-                exception => Console.WriteLine("Exception: " + exception.Message));
+            .ScanResult(HandleResult);
+    }
+    
+    public static void HandleResult(ResultBox<UnitValue> result)
+    {
+        switch (result)
+        {
+            case { IsSuccess: true } success: Console.WriteLine("Succeed! ");
+                break;
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
+                break;
+        }
     }
 }
