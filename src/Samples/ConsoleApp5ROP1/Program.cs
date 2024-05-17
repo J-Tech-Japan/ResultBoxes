@@ -21,19 +21,19 @@ internal class Program
     private static void Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for Increment
-        Increment(1001).Railway(Double).Railway(Triple)
+        Increment(1001).Conveyor(Double).Conveyor(Triple)
             .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Error: System.ApplicationException: 1001 is not allowed for Double
-        Increment(1000).Railway(Double).Railway(Triple)
+        Increment(1000).Conveyor(Double).Conveyor(Triple)
             .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Error: System.ApplicationException: 1202 is not allowed for Triple
-        Increment(600).Railway(Double).Railway(Triple)
+        Increment(600).Conveyor(Double).Conveyor(Triple)
             .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Value: 24
-        Increment(3).Railway(Double).Railway(Triple)
+        Increment(3).Conveyor(Double).Conveyor(Triple)
             .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
     }
 }

@@ -1,8 +1,8 @@
 namespace ResultBoxes;
 
-public static class RailwayWrapTryTaskExtensions
+public static class ConveyorWrapTryTaskExtensions
 {
-    public static async Task<ResultBox<TValue3>> RailwayWrapTry<TValue1, TValue2, TValue3>(
+    public static async Task<ResultBox<TValue3>> ConveyorWrapTry<TValue1, TValue2, TValue3>(
         this ResultBox<TwoValues<TValue1, TValue2>> firstValue,
         Func<TValue1, TValue2, Task<TValue3>> handleValueFunc)
         where TValue1 : notnull
@@ -12,7 +12,7 @@ public static class RailwayWrapTryTaskExtensions
             async values => await ResultBox<TValue3>
                 .WrapTry(() => handleValueFunc(values.Value1, values.Value2)));
 
-    public static async Task<ResultBox<TValue2>> RailwayWrapTry<TValue1, TValue2>(
+    public static async Task<ResultBox<TValue2>> ConveyorWrapTry<TValue1, TValue2>(
         this Task<ResultBox<TValue1>> firstValue,
         Func<TValue1, Task<TValue2>> handleValueFunc)
         where TValue1 : notnull
@@ -21,7 +21,7 @@ public static class RailwayWrapTryTaskExtensions
             async value => await ResultBox<TValue2>.WrapTry(
                 () => handleValueFunc(value)));
 
-    public static async Task<ResultBox<TValue3>> RailwayWrapTry<TValue1, TValue2, TValue3>(
+    public static async Task<ResultBox<TValue3>> ConveyorWrapTry<TValue1, TValue2, TValue3>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
         Func<TValue1, TValue2, Task<TValue3>> handleValueFunc)
         where TValue1 : notnull

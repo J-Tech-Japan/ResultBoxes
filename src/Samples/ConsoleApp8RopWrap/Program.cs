@@ -37,8 +37,8 @@ internal class Program
         // Calculate (1 + 1) * 2 * 3 = 12
         // Value1: 12
         switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing))
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing))
         {
             case { IsSuccess: false  } error:
                 Console.WriteLine("Exception1: " + error.GetException().Message);
@@ -52,8 +52,8 @@ internal class Program
         // WrapTry is used to catch exceptions and return them as error
         // Error2: System.ApplicationException: 2000 is not allowed for Increment
         switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing))
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing))
         {
             case { IsSuccess: false  } error:
                 Console.WriteLine("Exception2: " + error.GetException().Message);
@@ -67,8 +67,8 @@ internal class Program
         // WrapTry is used to catch exceptions and return them as error
         // Error3: System.ApplicationException: 1001 is not allowed for Double
         switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing))
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing))
         {
             case { IsSuccess: false  } error:
                 Console.WriteLine("Exception3: " + error.GetException().Message);
@@ -82,8 +82,8 @@ internal class Program
         // WrapTry is used to catch exceptions and return them as error
         // Error4: System.ApplicationException: 1202 is not allowed for Triple
         switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing))
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing))
         {
             case { IsSuccess: false  } error:
                 Console.WriteLine("Exception: " + error.GetException().Message);

@@ -44,7 +44,7 @@ public static class FourValueCase
             .CombineValue(Increment(v2))
             .CombineValue(Increment(v3))
             .CombineValue(Increment(v4))
-            .Railway(AddAndDivide4);
+            .Conveyor(AddAndDivide4);
 
     public static async Task<ResultBox<int>>
         Calc3ValueAsync(int v1, int v2, int v3, int v4) =>
@@ -52,5 +52,5 @@ public static class FourValueCase
             .CombineValue(() => IncrementAsync(v2))
             .CombineValue(() => IncrementAsync(v3))
             .CombineValue(() => IncrementAsync(v4))
-            .Railway(AddAndDivide4Async);
+            .Conveyor(AddAndDivide4Async);
 }

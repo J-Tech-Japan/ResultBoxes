@@ -47,7 +47,7 @@ internal class Program
     private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
-        switch (await Increment(1001).Railway(DoubleAsync).Railway(TripleAsync))
+        switch (await Increment(1001).Conveyor(DoubleAsync).Conveyor(TripleAsync))
         {
             case { IsSuccess: false  } error:
                 Console.WriteLine("Exception: " + error.GetException().Message);
@@ -57,7 +57,7 @@ internal class Program
                 break;
         }
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
-        switch (await IncrementAsync(1000).Railway(Double).Railway(TripleAsync))
+        switch (await IncrementAsync(1000).Conveyor(Double).Conveyor(TripleAsync))
         {
             case { IsSuccess: false  } error:
                 Console.WriteLine("Exception: " + error.GetException().Message);
@@ -67,7 +67,7 @@ internal class Program
                 break;
         }
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
-        switch (await IncrementAsync(600).Railway(DoubleAsync).Railway(Triple))
+        switch (await IncrementAsync(600).Conveyor(DoubleAsync).Conveyor(Triple))
         {
             case { IsSuccess: false  } error:
                 Console.WriteLine("Exception: " + error.GetException().Message);
@@ -77,7 +77,7 @@ internal class Program
                 break;
         }
         // Value: 24
-        switch (await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync))
+        switch (await IncrementAsync(3).Conveyor(DoubleAsync).Conveyor(TripleAsync))
         {
             case { IsSuccess: false  } error:
                 Console.WriteLine("Exception: " + error.GetException().Message);

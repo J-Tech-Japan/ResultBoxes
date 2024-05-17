@@ -47,7 +47,7 @@ public static class FiveValueCase
             .CombineValue(Increment(v3))
             .CombineValue(Increment(v4))
             .CombineValue(Increment(v5))
-            .Railway(AddAndDivide5);
+            .Conveyor(AddAndDivide5);
 
     public static async Task<ResultBox<int>>
         Calc3ValueAsync(int v1, int v2, int v3, int v4, int v5) =>
@@ -56,5 +56,5 @@ public static class FiveValueCase
             .CombineValue(() => IncrementAsync(v3))
             .CombineValue(() => IncrementAsync(v4))
             .CombineValue(() => IncrementAsync(v5))
-            .Railway(AddAndDivide5Async);
+            .Conveyor(AddAndDivide5Async);
 }
