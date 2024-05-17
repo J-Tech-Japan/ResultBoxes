@@ -34,14 +34,14 @@ internal class Program
         await IncrementAsync(1001)
             .Conveyor(DoubleAsync)
             .Conveyor(TripleAsync)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
         await IncrementAsync(1000)
             .Conveyor(DoubleAsync)
             .Conveyor(TripleAsync)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -49,14 +49,14 @@ internal class Program
         await IncrementAsync(600)
             .Conveyor(DoubleAsync)
             .Conveyor(TripleAsync)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
         // Value: 24
         await IncrementAsync(3)
             .Conveyor(DoubleAsync)
             .Conveyor(TripleAsync)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
     }

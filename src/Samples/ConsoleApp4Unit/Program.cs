@@ -18,13 +18,13 @@ internal class Program
     {
         // This will return value (UnitValue) result
         ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!"))
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
         // This will return exception result
         ResultBox<UnitValue>.WrapTry(() => Print(string.Empty))
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
     }

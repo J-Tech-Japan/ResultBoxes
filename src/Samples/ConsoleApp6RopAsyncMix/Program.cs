@@ -50,7 +50,7 @@ internal class Program
         await Increment(1001)
             .Conveyor(DoubleAsync)
             .Conveyor(TripleAsync)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -58,21 +58,21 @@ internal class Program
         await IncrementAsync(1000)
             .Conveyor(Double)
             .Conveyor(TripleAsync)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
         await IncrementAsync(600)
             .Conveyor(DoubleAsync)
             .Conveyor(Triple)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
         // Value: 24
         await IncrementAsync(3)
             .Conveyor(DoubleAsync)
             .Conveyor(TripleAsync)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
     }

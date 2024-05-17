@@ -29,7 +29,7 @@ internal class Program
         Increment(29)
             .Combine(Add(1, 9))
             .Conveyor(Divide)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -38,7 +38,7 @@ internal class Program
         Increment(2000)
             .Combine(Add(1, 9))
             .Conveyor(Divide)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -47,7 +47,7 @@ internal class Program
         Increment(19)
             .Combine(Add(1000, 9))
             .Conveyor(Divide)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -56,7 +56,7 @@ internal class Program
         Increment(19)
             .Combine(Add(0, 0))
             .Conveyor(Divide)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
     }

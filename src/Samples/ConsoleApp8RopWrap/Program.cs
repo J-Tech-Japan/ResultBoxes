@@ -39,7 +39,7 @@ internal class Program
         ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -49,7 +49,7 @@ internal class Program
         ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -59,7 +59,7 @@ internal class Program
         ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -69,7 +69,7 @@ internal class Program
         ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
     }

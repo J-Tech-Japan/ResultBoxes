@@ -24,7 +24,7 @@ internal class Program
         Increment(1001)
             .Conveyor(Double)
             .Conveyor(Triple)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -32,7 +32,7 @@ internal class Program
         Increment(1000)
             .Conveyor(Double)
             .Conveyor(Triple)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -40,7 +40,7 @@ internal class Program
         Increment(600)
             .Conveyor(Double)
             .Conveyor(Triple)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
 
@@ -48,7 +48,7 @@ internal class Program
         Increment(3)
             .Conveyor(Double)
             .Conveyor(Triple)
-            .Tap(
+            .Scan(
                 value => Console.WriteLine("Value: " + value),
                 exception => Console.WriteLine("Exception: " + exception.Message));
     }
