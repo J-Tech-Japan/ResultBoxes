@@ -47,44 +47,35 @@ internal class Program
     private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
-        switch (await Increment(1001).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        await Increment(1001)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
+
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
-        switch (await IncrementAsync(1000).Railway(Double).Railway(TripleAsync))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        await IncrementAsync(1000)
+            .Conveyor(Double)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
-        switch (await IncrementAsync(600).Railway(DoubleAsync).Railway(Triple))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        await IncrementAsync(600)
+            .Conveyor(DoubleAsync)
+            .Conveyor(Triple)
+            .ScanResult(HandleResult);
         // Value: 24
-        switch (await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync))
+        await IncrementAsync(3)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
         {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
                 break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
-        }
+        } 
     }
 }

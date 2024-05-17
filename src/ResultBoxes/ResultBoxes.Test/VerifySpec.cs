@@ -1,13 +1,13 @@
 using ResultBoxes;
 namespace SngleResults.Test;
 
-public class EnsureSpec
+public class VerifySpec
 {
     [Fact]
-    public void EnsureTest1()
+    public void VerifyTest1()
     {
         var result = ResultBox.FromValue(1);
-        var result2 = result.Ensure(
+        var result2 = result.Verify(
             x => x switch
             {
                 > 10 => new InvalidDataException("error1"),
@@ -17,10 +17,10 @@ public class EnsureSpec
         Assert.Equal(result, result2);
     }
     [Fact]
-    public void EnsureTest2()
+    public void VerifyTest2()
     {
         var result = ResultBox.FromValue(20)
-            .Ensure(
+            .Verify(
                 x => x switch
                 {
                     > 10 => new InvalidDataException("error1"),
@@ -30,10 +30,10 @@ public class EnsureSpec
         Assert.True(result.Exception is InvalidDataException);
     }
     [Fact]
-    public void EnsureTest3()
+    public void VerifyTest3()
     {
         var result = ResultBox.FromValue(0)
-            .Ensure(
+            .Verify(
                 x => x switch
                 {
                     > 10 => new InvalidDataException("error1"),
@@ -44,10 +44,10 @@ public class EnsureSpec
     }
 
     [Fact]
-    public async Task EnsureTest1Async()
+    public async Task VerifyTest1Async()
     {
         var result1 = await Task.FromResult(ResultBox.FromValue(1))
-            .Ensure(
+            .Verify(
                 x => x switch
                 {
                     > 10 => new InvalidDataException("error1"),
@@ -57,10 +57,10 @@ public class EnsureSpec
         Assert.Equal(1, result1.GetValue());
     }
     [Fact]
-    public async Task EnsureTest2Async()
+    public async Task VerifyTest2Async()
     {
         var result = await Task.FromResult(ResultBox.FromValue(20))
-            .Ensure(
+            .Verify(
                 x => x switch
                 {
                     > 10 => new InvalidDataException("error1"),
@@ -70,10 +70,10 @@ public class EnsureSpec
         Assert.True(result.Exception is InvalidDataException);
     }
     [Fact]
-    public async Task EnsureTest3Async()
+    public async Task VerifyTest3Async()
     {
         var result = await Task.FromResult(ResultBox.FromValue(0))
-            .Ensure(
+            .Verify(
                 x => x switch
                 {
                     > 10 => new InvalidDataException("error1"),

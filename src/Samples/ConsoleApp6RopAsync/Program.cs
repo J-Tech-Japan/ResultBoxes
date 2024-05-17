@@ -1,4 +1,5 @@
 ﻿using ResultBoxes;
+using System.Reflection.Metadata;
 namespace ConsoleApp6RopAsync;
 
 internal class Program
@@ -31,17 +32,35 @@ internal class Program
     private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
-        await IncrementAsync(1001).Railway(DoubleAsync).Railway(TripleAsync)
-        .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+        await IncrementAsync(1001)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
-        await IncrementAsync(1000).Railway(DoubleAsync).Railway(TripleAsync)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+        await IncrementAsync(1000)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
 
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
-        await IncrementAsync(600).Railway(DoubleAsync).Railway(TripleAsync)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+        await IncrementAsync(600)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
         // Value: 24
-        await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+        await IncrementAsync(3)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
+        {
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
+                break;
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
+                break;
+        } 
     }
 }

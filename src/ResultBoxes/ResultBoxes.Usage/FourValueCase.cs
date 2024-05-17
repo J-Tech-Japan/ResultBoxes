@@ -41,16 +41,16 @@ public static class FourValueCase
 
     public static ResultBox<int> Calc3Value(int v1, int v2, int v3, int v4) =>
         Increment(v1)
-            .CombineValue(Increment(v2))
-            .CombineValue(Increment(v3))
-            .CombineValue(Increment(v4))
-            .Railway(AddAndDivide4);
+            .Combine(Increment(v2))
+            .Combine(Increment(v3))
+            .Combine(Increment(v4))
+            .Conveyor(AddAndDivide4);
 
     public static async Task<ResultBox<int>>
         Calc3ValueAsync(int v1, int v2, int v3, int v4) =>
         await IncrementAsync(v1)
-            .CombineValue(() => IncrementAsync(v2))
-            .CombineValue(() => IncrementAsync(v3))
-            .CombineValue(() => IncrementAsync(v4))
-            .Railway(AddAndDivide4Async);
+            .Combine(() => IncrementAsync(v2))
+            .Combine(() => IncrementAsync(v3))
+            .Combine(() => IncrementAsync(v4))
+            .Conveyor(AddAndDivide4Async);
 }

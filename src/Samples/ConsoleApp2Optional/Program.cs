@@ -12,23 +12,23 @@ internal class Program
         };
     private static void Main(string[] args)
     {
-        if (args.Length == 0)
-        {
-            Console.WriteLine("Please input a string.");
-            return;
-        }
-        var result = ConvertStringToHalfLength(args[0]);
+        ConvertStringToHalfLength("")
+            .ScanResult(HandleResult);
+        ConvertStringToHalfLength("H")
+            .ScanResult(HandleResult);
+        ConvertStringToHalfLength("Hello")
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<OptionalValue<string>> result)
+    {
         switch (result)
         {
-            case { IsSuccess: false} error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
+            case { IsSuccess: true } success when success.GetValue().HasValue: Console.WriteLine("Value: " + success.GetValue().Value);
                 break;
-            case { IsSuccess: true } value when value.GetValue().HasValue: // When OptionalValue has value
-                Console.WriteLine("Value: " + value.GetValue().Value);
+            case { IsSuccess: true } success when !success.GetValue().HasValue: Console.WriteLine("No Value");
                 break;
-            case { IsSuccess: true } value when !value.GetValue().HasValue: // When OptionalValue has value
-                Console.WriteLine("No value");
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
-        }
+        } 
     }
 }

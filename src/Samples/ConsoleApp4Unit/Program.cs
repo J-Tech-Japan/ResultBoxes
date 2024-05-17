@@ -17,23 +17,21 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return value (UnitValue) result
-        switch (ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!")))
-        {
-            case { IsSuccess: false } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess:true }:
-                Console.WriteLine("No Exception");
-                break;
-        }
+        ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!"))
+            .ScanResult(HandleResult);
+
         // This will return exception result
-        switch (ResultBox<UnitValue>.WrapTry(() => Print(string.Empty)))
+        ResultBox<UnitValue>.WrapTry(() => Print(string.Empty))
+            .ScanResult(HandleResult);
+    }
+    
+    public static void HandleResult(ResultBox<UnitValue> result)
+    {
+        switch (result)
         {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
+            case { IsSuccess: true } success: Console.WriteLine("Succeed! ");
                 break;
-            default: 
-                Console.WriteLine("No Exception");
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
         }
     }

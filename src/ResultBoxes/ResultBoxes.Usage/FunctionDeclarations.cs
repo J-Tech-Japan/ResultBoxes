@@ -95,112 +95,112 @@ public static class FunctionDeclarations
         {
             { IsSuccess: false } error => error,
             { IsSuccess: true } value1 => Add(value1.GetValue(), target2) switch
-                {
-                    { IsSuccess: false } error => error,
-                    { IsSuccess: true } value2 => Divide(value2.GetValue(), target3)
-                }
+            {
+                { IsSuccess: false } error => error,
+                { IsSuccess: true } value2 => Divide(value2.GetValue(), target3)
+            }
         };
     public static ResultBox<int> Combined2Calc(int target1, int target2, int target3)
         => Increment(target1) switch
         {
-            { Exception: { } error } => error,
+            { IsSuccess: false } error => error,
             var value1 => Add(target2, target3) switch
             {
                 { IsSuccess: true } value2 => Divide(value1.GetValue(), value2.GetValue()),
-                var exception2 => exception2,
+                var exception2 => exception2
             }
         };
 
     public static ResultBox<int> RailwayCalc3(int target1, int target2, int target3)
         => Increment(target1)
-            .Railway(value1 => Add(value1, target2))
-            .Railway(value2 => Divide(value2, target3));
+            .Conveyor(value1 => Add(value1, target2))
+            .Conveyor(value2 => Divide(value2, target3));
     public static ResultBox<int> Railway2Calc3(int target1, int target2, int target3)
         => Increment(target1)
-            .CombineValue(Add(target2, target3))
-            .Railway(Divide);
+            .Combine(Add(target2, target3))
+            .Conveyor(Divide);
 
     public static ResultBox<int> Railway2CalcG(int target1, int target2, int target3)
         => Increment(target1)
-            .CombineValue(Add(target2, target3))
-            .Railway(DivideConverter);
-    // .Railway(TwoValues.ToFunc<int,int,int>(Divide));
-    // .Railway(TwoValues<int,int>.ToFunc(Divide))
-    // .Railway(Divide);
-    // .Railway((values) => Divide(values.Value1, values.Value2));
+            .Combine(Add(target2, target3))
+            .Conveyor(DivideConverter);
+    // .Conveyor(TwoValues.ToFunc<int,int,int>(Divide));
+    // .Conveyor(TwoValues<int,int>.ToFunc(Divide))
+    // .Conveyor(Divide);
+    // .Conveyor((values) => Divide(values.Value1, values.Value2));
 
 
     public static ResultBox<int> Railway2Calc4(int target1, int target2, int target3)
         => Increment(target1)
-            .CombineValueWrapTry(() => AddWithThrowing(target2, target3))
-            .RailwayWrapTry(DivideWithThrowing);
+            .CombineWrapTry(() => AddWithThrowing(target2, target3))
+            .ConveyorWrapTry(DivideWithThrowing);
 
     public static Task<ResultBox<int>> RailwayCalc3Async(
         int target1,
         int target2,
         int target3)
         => IncrementAsync(target1)
-            .CombineValue(() => AddAsync(target2, target3))
-            .Railway(DivideAsync);
+            .Combine(() => AddAsync(target2, target3))
+            .Conveyor(DivideAsync);
     public static Task<ResultBox<int>> RailwayCalc3Async2(
         int target1,
         int target2,
         int target3)
         => Increment(target1)
-            .CombineValue(() => AddAsync(target2, target3))
-            .Railway(Divide);
+            .Combine(() => AddAsync(target2, target3))
+            .Conveyor(Divide);
     public static Task<ResultBox<int>> RailwayCalc3Async4(
         int target1,
         int target2,
         int target3)
         => Increment(target1)
-            .CombineValueWrapTry(() => AddAsyncWithThrowing(target2, target3))
-            .RailwayWrapTry(DivideAsyncWithThrowing);
+            .CombineWrapTry(() => AddAsyncWithThrowing(target2, target3))
+            .ConveyorWrapTry(DivideAsyncWithThrowing);
 
     public static ResultBox<int> RailwayCalc3Async3(int target1, int target2, int target3)
         => Increment(target1)
-            .CombineValue(Add(target2, target3))
-            .RailwayWrapTry(DivideWithThrowing);
+            .Combine(Add(target2, target3))
+            .ConveyorWrapTry(DivideWithThrowing);
     public static Task<ResultBox<int>> RailwayCalc3Async5(
         int target1,
         int target2,
         int target3)
         => IncrementAsync(target1)
-            .CombineValueWrapTry(() => AddAsyncWithThrowing(target2, target3))
-            .Railway(DivideAsync);
+            .CombineWrapTry(() => AddAsyncWithThrowing(target2, target3))
+            .Conveyor(DivideAsync);
 
     public static Task<ResultBox<int>> Railway2Calc3Async6(
         int target1,
         int target2,
         int target3)
         => Increment(target1)
-            .CombineValue(Add(target2, target3))
-            .Railway(DivideAsync);
+            .Combine(Add(target2, target3))
+            .Conveyor(DivideAsync);
     public static Task<ResultBox<int>> Railway2Calc3Async7(
         int target1,
         int target2,
         int target3)
         => Increment(target1)
-            .CombineValue(Add(target2, target3))
-            .RailwayWrapTry(DivideAsyncWithThrowing);
+            .Combine(Add(target2, target3))
+            .ConveyorWrapTry(DivideAsyncWithThrowing);
 
     public static ResultBox<int> RailwayInstance(int target1)
         => Increment(target1)
-            .Railway(Double)
-            .Railway(Triple);
+            .Conveyor(Double)
+            .Conveyor(Triple);
     public static ResultBox<int> RailwayInstance2(int target1)
         => ResultBox<int>.WrapTry(() => IncrementWithThrowing(target1))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing);
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing);
 
     public static Task<ResultBox<int>> RailwayWithAsync(int target1)
-        => IncrementAsync(target1).Railway(DoubleAsync).Railway(TripleAsync);
+        => IncrementAsync(target1).Conveyor(DoubleAsync).Conveyor(TripleAsync);
     public static Task<ResultBox<int>> Railway2Async(int target1)
-        => Increment(target1).Railway(DoubleAsync).Railway(TripleAsync);
+        => Increment(target1).Conveyor(DoubleAsync).Conveyor(TripleAsync);
     public static Task<ResultBox<int>> Railway3Async(int target1)
-        => Increment(target1).Railway(DoubleAsync).Railway(Triple);
+        => Increment(target1).Conveyor(DoubleAsync).Conveyor(Triple);
     public static Task<ResultBox<int>> Railway4Async(int target1)
         => ResultBox<int>.WrapTry(() => IncrementAsyncWithThrowing(target1))
-            .RailwayWrapTry(DoubleAsyncWithThrowing)
-            .Railway(TripleAsync);
+            .ConveyorWrapTry(DoubleAsyncWithThrowing)
+            .Conveyor(TripleAsync);
 }
