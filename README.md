@@ -67,38 +67,31 @@ internal class Program
     private static void Main(string[] args)
     {
         // use switch case to handle Result
-        switch (Increment(100))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            // This will return value result
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
-        switch (Increment(1001))
-        {
-            // This will return exception result
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        Increment(100)
+            .ScanResult(HandleResult);
+        Increment(1001)
+            .ScanResult(HandleResult);
 
         Console.WriteLine(RunIncrement(100));
         Console.WriteLine(RunIncrement(1001));
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
+        {
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
+                break;
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
+                break;
+        } 
     }
 
     // use switch expression to handle Result
     private static string RunIncrement(int target) =>
         Increment(target) switch
         {
-            { Exception: { } error } => $"Error: {error}",
-            { Value: { } value } => $"Value: {value}",
-            _ => "Unknown"
+            { IsSuccess: false } error => $"Error: {error.GetException().Message}",
+            { IsSuccess: true } success => $"Value: {success.GetValue()}"
         };
 }
 ```
@@ -140,24 +133,24 @@ internal class Program
         };
     private static void Main(string[] args)
     {
-        if (args.Length == 0)
-        {
-            Console.WriteLine("Please input a string.");
-            return;
-        }
-        var result = ConvertStringToHalfLength(args[0]);
+        ConvertStringToHalfLength("")
+            .ScanResult(HandleResult);
+        ConvertStringToHalfLength("H")
+            .ScanResult(HandleResult);
+        ConvertStringToHalfLength("Hello")
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<OptionalValue<string>> result)
+    {
         switch (result)
         {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
+            case { IsSuccess: true } success when success.GetValue().HasValue: Console.WriteLine("Value: " + success.GetValue().Value);
                 break;
-            case { Value : { HasValue: true } value }: // When OptionalValue has value
-                Console.WriteLine("Value: " + value.Value);
+            case { IsSuccess: true } success when !success.GetValue().HasValue: Console.WriteLine("No Value");
                 break;
-            case { Value : { HasValue: false } }: // When OptionalValue is empty
-                Console.WriteLine("No value");
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
-        }
+        } 
     }
 }
 ```
@@ -170,7 +163,6 @@ type. `ResultBox` has `WrapTry` function to do this conversion.
 When you use `WrapTry`, you need to pass `Func` as the argument.
 
 ```csharp
-
 internal class Program
 {
     public static int Divide(int numerator, int denominator) =>
@@ -180,27 +172,22 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return exception result
-        switch (ResultBox<int>.WrapTry(() => Divide(10, 0)))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
-                break;
-            case { Value: { } value }:
-                Console.WriteLine("Value: " + value);
-                break;
-        }
+        ResultBox<int>.WrapTry(() => Divide(10, 0))
+            .ScanResult(HandleResult);
 
         // This will return value result
-        switch (ResultBox<int>.WrapTry(() => Divide(10, 2)))
+        ResultBox<int>.WrapTry(() => Divide(10, 2))
+            .ScanResult(HandleResult);
+    }
+    public static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
         {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
                 break;
-            case { Value: { } value }:
-                Console.WriteLine("Value: " + value);
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
         }
-
     }
 }
 ```
@@ -231,23 +218,21 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return value (UnitValue) result
-        switch (ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!")))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
-                break;
-            case { Value: not null }:
-                Console.WriteLine("No Exception");
-                break;
-        }
+        ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!"))
+            .ScanResult(HandleResult);
+
         // This will return exception result
-        switch (ResultBox<UnitValue>.WrapTry(() => Print(string.Empty)))
+        ResultBox<UnitValue>.WrapTry(() => Print(string.Empty))
+            .ScanResult(HandleResult);
+    }
+    
+    public static void HandleResult(ResultBox<UnitValue> result)
+    {
+        switch (result)
         {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
+            case { IsSuccess: true } success: Console.WriteLine("Succeed! ");
                 break;
-            case { Value: not null }:
-                Console.WriteLine("No Exception");
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
         }
     }
@@ -292,48 +277,38 @@ internal class Program
     private static void Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for Increment
-        switch (Increment(1001).Railway(Double).Railway(Triple))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        Increment(1001)
+            .Conveyor(Double)
+            .Conveyor(Triple)
+            .ScanResult(HandleResult);
 
         // Error: System.ApplicationException: 1001 is not allowed for Double
-        switch (Increment(1000).Railway(Double).Railway(Triple))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        Increment(1000)
+            .Conveyor(Double)
+            .Conveyor(Triple)
+            .ScanResult(HandleResult);
 
         // Error: System.ApplicationException: 1202 is not allowed for Triple
-        switch (Increment(600).Railway(Double).Railway(Triple))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        Increment(600)
+            .Conveyor(Double)
+            .Conveyor(Triple)
+            .ScanResult(HandleResult);
 
         // Value: 24
-        switch (Increment(3).Railway(Double).Railway(Triple))
+        Increment(3)
+            .Conveyor(Double)
+            .Conveyor(Triple)
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
         {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
                 break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
-        }
+        } 
     }
 }
 ```
@@ -373,45 +348,36 @@ internal class Program
     private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
-        switch (await IncrementAsync(1001).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(1001)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
-        switch (await IncrementAsync(1000).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(1000)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
+
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
-        switch (await IncrementAsync(600).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(600)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
         // Value: 24
-        switch (await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync))
+        await IncrementAsync(3)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
         {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
                 break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
-        }
+        } 
     }
 }
 ```
@@ -465,45 +431,36 @@ internal class Program
     private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
-        switch (await Increment(1001).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await Increment(1001)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
+
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
-        switch (await IncrementAsync(1000).Railway(Double).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(1000)
+            .Conveyor(Double)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
-        switch (await IncrementAsync(600).Railway(DoubleAsync).Railway(Triple))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(600)
+            .Conveyor(DoubleAsync)
+            .Conveyor(Triple)
+            .ScanResult(HandleResult);
         // Value: 24
-        switch (await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync))
+        await IncrementAsync(3)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
         {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
                 break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
-        }
+        } 
     }
 }
 ```
@@ -553,62 +510,44 @@ internal class Program
 
     private static void Main(string[] args)
     {
-        // Pattern 1 : Use CombineValue method chain
+        // Pattern 1 : Use Combine method chain
         // calculate answer = (29 + 1) / (1 + 9) = 3
         // Value: 3
-        switch (Increment(29)
-            .CombineValue(Add(1, 9))
-            .Railway(Divide))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception2: " + error.Message);
-                break;
-            case { Value: var value }:
-                Console.WriteLine("Value2: " + value);
-                break;
-        }
+        Increment(29)
+            .Combine(Add(1, 9))
+            .Conveyor(Divide)
+            .ScanResult(HandleResult);
 
         // Pattern 2 : Error in Increment method (target > 1000)
         // Exception3: 2000 can not use for the Increment. It should be under or equal 1000
-        switch (Increment(2000)
-            .CombineValue(Add(1, 9))
-            .Railway(Divide))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception3: " + error.Message);
-                break;
-            case { Value: var value }:
-                Console.WriteLine("Value3: " + value);
-                break;
-        }
+        Increment(2000)
+            .Combine(Add(1, 9))
+            .Conveyor(Divide)
+            .ScanResult(HandleResult);
 
         // Pattern 4 : Error in Add method (target1 > 100)
         // Exception4: over 100 is not allowed for Add
-        switch (Increment(19)
-            .CombineValue(Add(1000, 9))
-            .Railway(Divide))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception4: " + error.Message);
-                break;
-            case { Value: var value }:
-                Console.WriteLine("Value4: " + value);
-                break;
-        }
+        Increment(19)
+            .Combine(Add(1000, 9))
+            .Conveyor(Divide)
+            .ScanResult(HandleResult);
 
         // Pattern 5 : Error in Divide method (denominator <> 0)
         // Exception5: can not divide by 0
-        switch (Increment(19)
-            .CombineValue(Add(0, 0))
-            .Railway(Divide))
+        Increment(19)
+            .Combine(Add(0, 0))
+            .Conveyor(Divide)
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
         {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception5: " + error.Message);
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
                 break;
-            case { Value: var value }:
-                Console.WriteLine("Value5: " + value);
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
-        }
+        } 
     }
 }
 ```
@@ -656,62 +595,44 @@ internal class Program
         // WrapTry is used to catch exceptions and return them as error
         // Calculate (1 + 1) * 2 * 3 = 12
         // Value1: 12
-        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing))
-        {
-            case { Exception: { } error1 }:
-                Console.WriteLine($"Error1: {error1}");
-                break;
-            case { Value: { } value1 }:
-                Console.WriteLine($"Value1: {value1}");
-                break;
-        }
+        ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing)
+            .ScanResult(HandleResult);
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error2: System.ApplicationException: 2000 is not allowed for Increment
-        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing))
-        {
-            case { Exception: { } error2 }:
-                Console.WriteLine($"Error2: {error2}");
-                break;
-            case { Value: { } value2 }:
-                Console.WriteLine($"Value2: {value2}");
-                break;
-        }
+        ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing)
+            .ScanResult(HandleResult);
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error3: System.ApplicationException: 1001 is not allowed for Double
-        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing))
-        {
-            case { Exception: { } error3 }:
-                Console.WriteLine($"Error3: {error3}");
-                break;
-            case { Value: { } value3 }:
-                Console.WriteLine($"Value3: {value3}");
-                break;
-        }
+        ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing)
+            .ScanResult(HandleResult);
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error4: System.ApplicationException: 1202 is not allowed for Triple
-        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
-            .Railway(Double)
-            .RailwayWrapTry(TripleWithThrowing))
+        ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
+            .Conveyor(Double)
+            .ConveyorWrapTry(TripleWithThrowing)
+            .ScanResult(HandleResult);
+    }
+    private static void HandleResult(ResultBox<int> result)
+    {
+        switch (result)
         {
-            case { Exception: { } error4 }:
-                Console.WriteLine($"Error4: {error4}");
+            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
                 break;
-            case { Value: { } value4 }:
-                Console.WriteLine($"Value4: {value4}");
+            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
                 break;
-        }
+        } 
     }
 }
 ```
