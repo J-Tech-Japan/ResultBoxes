@@ -2,7 +2,7 @@ namespace ResultBoxes;
 
 public static class CombineWrapTryExtensions
 {
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineValueWrapTry<
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineWrapTry<
         TValue1, TValue2>(
         this ResultBox<TValue1> current,
         Func<Task<TValue2>> secondValueFunc)
@@ -13,7 +13,7 @@ public static class CombineWrapTryExtensions
                 (await ResultBox<TValue2>.WrapTry(secondValueFunc)).Handle(first.Append));
 
     public static ResultBox<TwoValues<TValue, TValue2>>
-        CombineValueWrapTry<TValue, TValue2>(
+        CombineWrapTry<TValue, TValue2>(
             this ResultBox<TValue> current,
             Func<TValue2> secondValueFunc)
         where TValue : notnull

@@ -2,7 +2,7 @@ namespace ResultBoxes;
 
 public static class CombineWrapTryTaskExtension
 {
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineValueWrapTry<
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineWrapTry<
         TValue1,
         TValue2>(
         this Task<ResultBox<TValue1>> firstValueTask,

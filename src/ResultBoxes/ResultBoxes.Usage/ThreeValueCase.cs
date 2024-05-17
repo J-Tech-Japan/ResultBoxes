@@ -39,13 +39,13 @@ public static class ThreeValueCase
 
     public static ResultBox<int> Calc3Value(int v1, int v2, int v3) =>
         Increment(v1)
-            .CombineValue(Increment(v2))
-            .CombineValue(Increment(v3))
+            .Combine(Increment(v2))
+            .Combine(Increment(v3))
             .Conveyor(AddAndDivide);
 
     public static async Task<ResultBox<int>> Calc3ValueAsync(int v1, int v2, int v3) =>
         await IncrementAsync(v1)
-            .CombineValue(() => IncrementAsync(v2))
-            .CombineValue(() => IncrementAsync(v3))
+            .Combine(() => IncrementAsync(v2))
+            .Combine(() => IncrementAsync(v3))
             .Conveyor(AddAndDivideAsync);
 }

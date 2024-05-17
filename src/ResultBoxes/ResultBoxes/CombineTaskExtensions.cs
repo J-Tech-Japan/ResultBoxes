@@ -2,7 +2,7 @@ namespace ResultBoxes;
 
 public static class CombineTaskExtensions
 {
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineValue<TValue1,
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Combine<TValue1,
         TValue2>(
         this Task<ResultBox<TValue1>> currentTask,
         Func<Task<ResultBox<TValue2>>> secondValueFunc)
@@ -12,7 +12,7 @@ public static class CombineTaskExtensions
             async current => await (await secondValueFunc()).HandleAsync(
                 addingValue => Task.FromResult(current.Append(addingValue))));
 
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> CombineValue<
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Combine<
         TValue1,
         TValue2, TValue3>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> currentTask,
@@ -25,7 +25,7 @@ public static class CombineTaskExtensions
                 addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>>
-        CombineValue<
+        Combine<
             TValue1, TValue2, TValue3, TValue4>(
             this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> currentTask,
             Func<Task<ResultBox<TValue4>>> addingFunc)
@@ -38,7 +38,7 @@ public static class CombineTaskExtensions
                 addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
-        CombineValue<
+        Combine<
             TValue1, TValue2, TValue3, TValue4, TValue5>(
             this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> currentTask,
             Func<Task<ResultBox<TValue5>>> addingFunc)
