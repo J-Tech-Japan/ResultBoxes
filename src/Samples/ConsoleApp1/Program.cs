@@ -11,27 +11,48 @@ internal class Program
 
     private static void Main(string[] args)
     {
-        // use switch case to handle Result
-        Increment(100)
-            .ScanResult(HandleResult);
-        Increment(1001)
-            .ScanResult(HandleResult);
-
-        Console.WriteLine(RunIncrement(100));
-        Console.WriteLine(RunIncrement(1001));
-    }
-    private static void HandleResult(ResultBox<int> result)
-    {
+        // Handle ResultBox<int> with switch expression
+        // Value: 101
+        var result = Increment(100);
         switch (result)
         {
-            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
+            case { IsSuccess: false }:
+                Console.WriteLine($"Error: {result.GetException().Message}");
                 break;
-            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
+            case { IsSuccess: true }:
+                Console.WriteLine($"Value: {result.GetValue()}");
                 break;
-        } 
-    }
+        }
+        
+        // Log() displays value.ToString() if IsSuccess is true, otherwise displays exception.Message
+        // case2 Error: Specified argument was out of the range of valid values. (Parameter 'target')
+        Increment(1001).Log("case2");
 
-    // use switch expression to handle Result
+        // RunIncrement() is a method that handles ResultBox<int> with switch expression
+        // Value: 101
+        Console.WriteLine(RunIncrement(100));
+        
+        // Handle ResultBox with if statement
+        // Error: Specified argument was out of the range of valid values. (Parameter 'target')
+        var result4 = Increment(1001);
+        if (result4.IsSuccess)
+        {
+            Console.WriteLine($"Value: {result4.GetValue()}");
+        }
+        else
+        {
+            Console.WriteLine($"Error: {result4.GetException().Message}");
+        }
+        
+        // Handle ResultBox with ternary operator ?:
+        // Value: 2
+        var result5 = Increment(1);
+        Console.WriteLine(
+            result5.IsSuccess ? $"Value: {result5.GetValue()}"
+                : $"Error: {result5.GetException().Message}");
+
+    }
+    // Handle ResultBox<int> with switch expression
     private static string RunIncrement(int target) =>
         Increment(target) switch
         {

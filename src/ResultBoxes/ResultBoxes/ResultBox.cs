@@ -3,14 +3,16 @@ namespace ResultBoxes;
 
 public record ResultBox<TValue> where TValue : notnull
 {
+    private readonly Exception? exception;
     internal ResultBox(TValue? value, Exception? exception) =>
-        (Value, Exception) = (value, exception);
+        (Value, this.exception) = (value, exception);
 
     [JsonIgnore]
-    public bool IsSuccess => Exception is null;
+    public bool IsSuccess => Exception is null && Value is not null;
     public static ResultBox<TValue> OutOfRange => new(new ResultValueNullException());
     internal TValue? Value { get; }
-    public Exception? Exception { get; }
+    public Exception? Exception =>
+        exception ?? (Value is null ? new ResultValueNullException() : null);
     public Exception GetException() =>
         Exception ?? throw new ResultsInvalidOperationException("no exception");
     public TValue GetValue() =>
@@ -34,16 +36,16 @@ public record ResultBox<TValue> where TValue : notnull
         Func<TValue, ResultBox<TValueResult>> valueFunc) where TValueResult : notnull =>
         this switch
         {
-            { IsSuccess: false } error => error.GetException(),
-            { IsSuccess: true } value => valueFunc(value.GetValue()),
+            { IsSuccess: false } => GetException(),
+            { IsSuccess: true } => valueFunc(GetValue()),
             _ => new ResultValueNullException()
         };
     public async Task<ResultBox<TValueResult>> RemapAsync<TValueResult>(
         Func<TValue, Task<ResultBox<TValueResult>>> valueFunc) where TValueResult : notnull =>
         this switch
         {
-            { IsSuccess: false } error => error.GetException(),
-            { IsSuccess: true } value => await valueFunc(value.GetValue()),
+            { IsSuccess: false } => GetException(),
+            { IsSuccess: true } => await valueFunc(GetValue()),
             _ => new ResultValueNullException()
         };
     public ResultBox<TValueResult> RemapResult<TValueResult>(
@@ -51,8 +53,8 @@ public record ResultBox<TValue> where TValue : notnull
         where TValueResult : notnull =>
         this switch
         {
-            { IsSuccess: false } error => error.GetException(),
-            { IsSuccess: true } value => valueFunc(value),
+            { IsSuccess: false } => GetException(),
+            { IsSuccess: true } => valueFunc(this),
             _ => new ResultValueNullException()
         };
     public async Task<ResultBox<TValueResult>> RemapResultAsync<TValueResult>(
@@ -60,16 +62,16 @@ public record ResultBox<TValue> where TValue : notnull
         where TValueResult : notnull =>
         this switch
         {
-            { IsSuccess: false } error => error.GetException(),
-            { IsSuccess: true } value => await valueFunc(value),
+            { IsSuccess: false } => GetException(),
+            { IsSuccess: true } => await valueFunc(this),
             _ => new ResultValueNullException()
         };
     public async Task<ResultBox<TValueResult>> RemapAsync<TValueResult>(
         Func<TValue, Task<TValueResult>> valueFunc) where TValueResult : notnull =>
         this switch
         {
-            { IsSuccess: false } error => error.GetException(),
-            { IsSuccess: true } value => await valueFunc(value.GetValue()),
+            { IsSuccess: false } => GetException(),
+            { IsSuccess: true } => await valueFunc(GetValue()),
             _ => new ResultValueNullException()
         };
 
@@ -77,13 +79,13 @@ public record ResultBox<TValue> where TValue : notnull
     public static implicit operator ResultBox<TValue>(Exception exception) =>
         new(default, exception);
 
-    public ResultBox<TwoValues<TValue, TValue2>> Append<TValue2>(TValue2 value)
+    public ResultBox<TwoValues<TValue, TValue2>> Append<TValue2>(TValue2 value2)
         where TValue2 : notnull =>
         this switch
         {
-            { IsSuccess: false } error => error.GetException(),
-            { IsSuccess: true } addingValue => new ResultBox<TwoValues<TValue, TValue2>>(
-                new TwoValues<TValue, TValue2>(addingValue.GetValue(), value),
+            { IsSuccess: false } => GetException(),
+            { IsSuccess: true } => new ResultBox<TwoValues<TValue, TValue2>>(
+                new TwoValues<TValue, TValue2>(GetValue(), value2),
                 null),
             _ => new ResultValueNullException()
         };
@@ -135,4 +137,24 @@ public static class ResultBox
     public static async Task<ResultBox<TValue>> FromValue<TValue>(Func<Task<TValue>> value)
         where TValue : notnull =>
         new(await value(), null);
+
+    public static void LogResult<TValue>(ResultBox<TValue> result) where TValue : notnull
+        => LogResult(result, "");
+
+    public static void LogResult<TValue>(ResultBox<TValue> result, string marking)
+        where TValue : notnull
+    {
+        switch (result)
+        {
+            case { IsSuccess: true }:
+                Console.WriteLine(SpaceWithMarking(marking) + "Value: " + result.GetValue());
+                break;
+            case { IsSuccess: false }:
+                Console.WriteLine(
+                    SpaceWithMarking(marking) + "Error: " + result.GetException().Message);
+                break;
+        }
+    }
+    private static string SpaceWithMarking(string marking) =>
+        string.IsNullOrWhiteSpace(marking) ? "" : marking + " ";
 }
