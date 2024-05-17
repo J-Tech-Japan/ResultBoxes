@@ -10,7 +10,7 @@ public class ThreeValueTest
         var sut = ThreeValueCase.Calc3Value(8, 2, 3);
 
         Assert.True(sut.IsSuccess);
-        Assert.Equal(3, sut.Value);
+        Assert.Equal(3, sut.GetValue());
     }
     [Fact]
     public async Task ThreeValueCaseAsyncSpec()
@@ -19,6 +19,6 @@ public class ThreeValueTest
         var sut = await ThreeValueCase.Calc3ValueAsync(8, 2, 3);
 
         Assert.True(sut.IsSuccess);
-        Assert.Equal(3, sut.Value);
+        Assert.Equal(3, sut.GetValue());
     }
 }

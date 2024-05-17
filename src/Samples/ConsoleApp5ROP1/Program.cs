@@ -21,47 +21,19 @@ internal class Program
     private static void Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for Increment
-        switch (Increment(1001).Railway(Double).Railway(Triple))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        Increment(1001).Railway(Double).Railway(Triple)
+            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Error: System.ApplicationException: 1001 is not allowed for Double
-        switch (Increment(1000).Railway(Double).Railway(Triple))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        Increment(1000).Railway(Double).Railway(Triple)
+            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Error: System.ApplicationException: 1202 is not allowed for Triple
-        switch (Increment(600).Railway(Double).Railway(Triple))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        Increment(600).Railway(Double).Railway(Triple)
+            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Value: 24
-        switch (Increment(3).Railway(Double).Railway(Triple))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        Increment(3).Railway(Double).Railway(Triple)
+            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
     }
 }

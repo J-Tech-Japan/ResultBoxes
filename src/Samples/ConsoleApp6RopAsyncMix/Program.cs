@@ -49,41 +49,41 @@ internal class Program
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
         switch (await Increment(1001).Railway(DoubleAsync).Railway(TripleAsync))
         {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
         switch (await IncrementAsync(1000).Railway(Double).Railway(TripleAsync))
         {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
         switch (await IncrementAsync(600).Railway(DoubleAsync).Railway(Triple))
         {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
         // Value: 24
         switch (await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync))
         {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
     }
