@@ -9,7 +9,7 @@ public class FromValueTest
         var value = 1;
         var result = ResultBox.FromValue(value);
         Assert.True(result.IsSuccess);
-        Assert.Equal(value, result.Value);
+        Assert.Equal(value, result.GetValue());
     }
     [Fact]
     public async Task TestAsync()
@@ -17,7 +17,7 @@ public class FromValueTest
         var value = 1;
         var result = await ResultBox.FromValue(Task.FromResult(value));
         Assert.True(result.IsSuccess);
-        Assert.Equal(value, result.Value);
+        Assert.Equal(value, result.GetValue());
     }
     [Fact]
     public async Task TestAsyncFunc()
@@ -25,7 +25,6 @@ public class FromValueTest
         var value = 1;
         var result = await ResultBox.FromValue(() => Task.FromResult(value));
         Assert.True(result.IsSuccess);
-        Assert.Equal(value, result.Value);
+        Assert.Equal(value, result.GetValue());
     }
-
 }

@@ -40,11 +40,11 @@ internal class Program
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing))
         {
-            case { Exception: { } error1 }:
-                Console.WriteLine($"Error1: {error1}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception1: " + error.GetException().Message);
                 break;
-            case { Value: { } value1 }:
-                Console.WriteLine($"Value1: {value1}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value1: " + value.GetValue());
                 break;
         }
 
@@ -55,11 +55,11 @@ internal class Program
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing))
         {
-            case { Exception: { } error2 }:
-                Console.WriteLine($"Error2: {error2}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception2: " + error.GetException().Message);
                 break;
-            case { Value: { } value2 }:
-                Console.WriteLine($"Value2: {value2}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value2: " + value.GetValue());
                 break;
         }
 
@@ -70,11 +70,11 @@ internal class Program
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing))
         {
-            case { Exception: { } error3 }:
-                Console.WriteLine($"Error3: {error3}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception3: " + error.GetException().Message);
                 break;
-            case { Value: { } value3 }:
-                Console.WriteLine($"Value3: {value3}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value3: " + value.GetValue());
                 break;
         }
 
@@ -85,11 +85,11 @@ internal class Program
             .Railway(Double)
             .RailwayWrapTry(TripleWithThrowing))
         {
-            case { Exception: { } error4 }:
-                Console.WriteLine($"Error4: {error4}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: { } value4 }:
-                Console.WriteLine($"Value4: {value4}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
     }

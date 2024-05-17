@@ -1,31 +1,34 @@
 using System.Text.Json.Serialization;
 namespace ResultBoxes;
 
-public record ResultBox<TValue>(TValue? Value, Exception? Exception) where TValue : notnull
+public record ResultBox<TValue> where TValue : notnull 
 {
-
-    [JsonIgnore]
-    public bool IsSuccess => Exception is null;
-    public static ResultBox<TValue> OutOfRange => new(new ResultValueNullException());
-    public static ResultBox<TValue> FromValue(TValue value) => new(value, null);
-    public static ResultBox<TValue> FromValue(Func<TValue> value) => new(value(), null);
-    public static async Task<ResultBox<TValue>> FromValueAsync(Func<Task<TValue>> value) =>
-        new(await value(), null);
-    public static ResultBox<TValue> FromException(Exception exception) =>
-        new(default, exception);
+    internal ResultBox(TValue? value, Exception? exception) =>
+        (this.Value, this.Exception) = (value, exception);
     public Exception GetException() =>
         Exception ?? throw new ResultsInvalidOperationException("no exception");
     public TValue GetValue() =>
         (IsSuccess ? Value : throw new ResultsInvalidOperationException("no value")) ??
         throw new ResultsInvalidOperationException();
 
+    [JsonIgnore]
+    public bool IsSuccess => Exception is null;
+    public static ResultBox<TValue> OutOfRange => new(new ResultValueNullException());
+    internal TValue? Value { get; }
+    public Exception? Exception { get; }
+    public static ResultBox<TValue> FromValue(TValue value) => new(value, null);
+    public static ResultBox<TValue> FromValue(Func<TValue> value) => new(value(), null);
+    public static async Task<ResultBox<TValue>> FromValueAsync(Func<Task<TValue>> value) =>
+        new(await value(), null);
+    public static ResultBox<TValue> FromException(Exception exception) =>
+        new(default, exception);
+
     public ResultBox<TValueResult> Handle<TValueResult>(Func<TValue, TValueResult> valueFunc)
         where TValueResult : notnull =>
         this switch
         {
-            { Exception: { } error } => error,
-            { Value: { } value } => valueFunc(value),
-            _ => new ResultValueNullException()
+            { IsSuccess: true } => valueFunc(GetValue()),
+            { IsSuccess: false } => GetException(),
         };
     public ResultBox<TValueResult> Handle<TValueResult>(
         Func<TValue, ResultBox<TValueResult>> valueFunc) where TValueResult : notnull =>
@@ -124,7 +127,7 @@ public record ResultBox<TValue>(TValue? Value, Exception? Exception) where TValu
 }
 public static class ResultBox
 {
-    public static ResultBox<TValue> FromValue<TValue>(TValue value) where TValue : notnull =>
+    public static ResultBox<TValue> FromValue<TValue>(TValue value) where TValue : notnull  =>
         new(value, null);
     public static async Task<ResultBox<TValue>> FromValue<TValue>(Task<TValue> value)
         where TValue : notnull =>

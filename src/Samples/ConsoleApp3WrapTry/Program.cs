@@ -12,22 +12,22 @@ internal class Program
         // This will return exception result
         switch (ResultBox<int>.WrapTry(() => Divide(10, 0)))
         {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: { } value }:
-                Console.WriteLine("Value: " + value);
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
 
         // This will return value result
         switch (ResultBox<int>.WrapTry(() => Divide(10, 2)))
         {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: { } value }:
-                Console.WriteLine("Value: " + value);
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
 

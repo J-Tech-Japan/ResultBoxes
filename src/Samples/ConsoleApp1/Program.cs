@@ -14,22 +14,21 @@ internal class Program
         // use switch case to handle Result
         switch (Increment(100))
         {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            // This will return value result
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
         switch (Increment(1001))
         {
             // This will return exception result
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
+            case { IsSuccess: false  } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
+            case { IsSuccess: true } value :
+                Console.WriteLine("Value: " + value.GetValue());
                 break;
         }
 
@@ -41,8 +40,7 @@ internal class Program
     private static string RunIncrement(int target) =>
         Increment(target) switch
         {
-            { Exception: { } error } => $"Error: {error}",
-            { Value: { } value } => $"Value: {value}",
-            _ => "Unknown"
+            { IsSuccess:false } error => $"Error: {error.GetException()}",
+            { IsSuccess:true } success => $"Value: {success.GetValue()}",
         };
 }

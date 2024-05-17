@@ -31,44 +31,17 @@ internal class Program
     private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
-        switch (await IncrementAsync(1001).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(1001).Railway(DoubleAsync).Railway(TripleAsync)
+        .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
-        switch (await IncrementAsync(1000).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(1000).Railway(DoubleAsync).Railway(TripleAsync)
+            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
-        switch (await IncrementAsync(600).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(600).Railway(DoubleAsync).Railway(TripleAsync)
+            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
         // Value: 24
-        switch (await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync))
-        {
-            case { Exception: { } error }:
-                Console.WriteLine($"Error: {error}");
-                break;
-            case { Value: { } value }:
-                Console.WriteLine($"Value: {value}");
-                break;
-        }
+        await IncrementAsync(3).Railway(DoubleAsync).Railway(TripleAsync)
+            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
     }
 }

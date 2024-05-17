@@ -19,10 +19,10 @@ internal class Program
         // This will return value (UnitValue) result
         switch (ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!")))
         {
-            case { Exception: { } error }:
-                Console.WriteLine("Exception: " + error.Message);
+            case { IsSuccess: false } error:
+                Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { Value: not null }:
+            case { IsSuccess:true }:
                 Console.WriteLine("No Exception");
                 break;
         }
@@ -32,7 +32,7 @@ internal class Program
             case { Exception: { } error }:
                 Console.WriteLine("Exception: " + error.Message);
                 break;
-            case { Value: not null }:
+            default: 
                 Console.WriteLine("No Exception");
                 break;
         }

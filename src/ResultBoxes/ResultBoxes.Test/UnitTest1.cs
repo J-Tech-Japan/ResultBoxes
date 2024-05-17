@@ -15,7 +15,7 @@ public class UnitTest1
         var sut = await FunctionDeclarations.RailwayWithAsync(1);
 
         Assert.True(sut.IsSuccess);
-        Assert.Equal(12, sut.Value);
+        Assert.Equal(12, sut.GetValue());
     }
     [Fact]
     public async Task Railway2AsyncSpec()
@@ -23,7 +23,7 @@ public class UnitTest1
         var sut = await FunctionDeclarations.Railway2Async(1);
 
         Assert.True(sut.IsSuccess);
-        Assert.Equal(12, sut.Value);
+        Assert.Equal(12, sut.GetValue());
     }
     [Fact]
     public void RailwaySpec()
@@ -31,7 +31,7 @@ public class UnitTest1
         var sut = FunctionDeclarations.RailwayInstance(1);
 
         Assert.True(sut.IsSuccess);
-        Assert.Equal(12, sut.Value);
+        Assert.Equal(12, sut.GetValue());
     }
     [Fact]
     public void RailwayInstance2Spec()
@@ -39,7 +39,7 @@ public class UnitTest1
         var sut = FunctionDeclarations.RailwayInstance2(1);
 
         Assert.True(sut.IsSuccess);
-        Assert.Equal(12, sut.Value);
+        Assert.Equal(12, sut.GetValue());
     }
     [Fact]
     public void RailwayInstance2WithErrorSpec()
@@ -63,28 +63,28 @@ public class UnitTest1
     {
         var sut = FunctionDeclarations.Railway2Calc3(9, 2, 3);
         Assert.True(sut.IsSuccess);
-        Assert.Equal(2, sut.Value);
+        Assert.Equal(2, sut.GetValue());
     }
     [Fact]
     public async Task Railway2Calc3AsyncSpec()
     {
         var sut = await FunctionDeclarations.RailwayCalc3Async(9, 2, 3);
         Assert.True(sut.IsSuccess);
-        Assert.Equal(2, sut.Value);
+        Assert.Equal(2, sut.GetValue());
     }
     [Fact]
     public async Task RailwayCalc3Async2Spec()
     {
         var sut = await FunctionDeclarations.RailwayCalc3Async2(9, 2, 3);
         Assert.True(sut.IsSuccess);
-        Assert.Equal(2, sut.Value);
+        Assert.Equal(2, sut.GetValue());
     }
     [Fact]
     public void Railway2Calc4Spec()
     {
         var sut = FunctionDeclarations.Railway2Calc4(9, 2, 3);
         Assert.True(sut.IsSuccess);
-        Assert.Equal(2, sut.Value);
+        Assert.Equal(2, sut.GetValue());
     }
     [Fact]
     public void Railway2Calc4SpecThrowing()
@@ -98,6 +98,6 @@ public class UnitTest1
     {
         var sut = await FunctionDeclarations.Railway3Async(1);
         Assert.True(sut.IsSuccess);
-        Assert.Equal(12, sut.Value);
+        Assert.Equal(12, sut.GetValue());
     }
 }
