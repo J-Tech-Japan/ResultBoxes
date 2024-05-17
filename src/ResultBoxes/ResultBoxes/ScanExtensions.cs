@@ -10,8 +10,8 @@ public static class ScanExtensions
     {
         switch (result)
         {
-            case { IsSuccess: false } error:
-                actionError?.Invoke(error.GetException());
+            case { IsSuccess: false }:
+                actionError?.Invoke(result.GetException());
                 break;
             case { IsSuccess: true }:
                 action(result.GetValue());
@@ -74,10 +74,10 @@ public static class ScanExtensions
     {
         switch (result)
         {
-            case { IsSuccess: false } error:
+            case { IsSuccess: false }:
                 if (actionErrorAsync is not null)
                 {
-                    await actionErrorAsync(error.GetException());
+                    await actionErrorAsync(result.GetException());
                 }
                 break;
             case { IsSuccess: true }:
@@ -144,8 +144,8 @@ public static class ScanExtensions
         var res = await result;
         switch (res)
         {
-            case { IsSuccess: false } error:
-                actionError?.Invoke(error.GetException());
+            case { IsSuccess: false }:
+                actionError?.Invoke(res.GetException());
                 break;
             case { IsSuccess: true }:
                 action(res.GetValue());
@@ -211,10 +211,10 @@ public static class ScanExtensions
         var res = await result;
         switch (res)
         {
-            case { IsSuccess: false } error:
+            case { IsSuccess: false }:
                 if (actionErrorAsync is not null)
                 {
-                    await actionErrorAsync(error.GetException());
+                    await actionErrorAsync(res.GetException());
                 }
                 break;
             case { IsSuccess: true }:
@@ -278,4 +278,17 @@ public static class ScanExtensions
         => await (await result).Scan(
             async values => await values.CallAction(action),
             actionErrorAsync);
+}
+public static class LogExtensions
+{
+    public static ResultBox<TValue> Log<TValue>(
+        this ResultBox<TValue> result,
+        string marking = "")
+        where TValue : notnull => result.ScanResult(_ => ResultBox.LogResult(result, marking));
+
+    public static async Task<ResultBox<TValue>> Log<TValue>(
+        this Task<ResultBox<TValue>> resultAsync,
+        string marking = "")
+        where TValue : notnull =>
+        (await resultAsync).ScanResult(result => ResultBox.LogResult(result, marking));
 }

@@ -24,34 +24,24 @@ internal class Program
         Increment(1001)
             .Conveyor(Double)
             .Conveyor(Triple)
-            .ScanResult(HandleResult);
+            .Log();
 
         // Error: System.ApplicationException: 1001 is not allowed for Double
         Increment(1000)
             .Conveyor(Double)
             .Conveyor(Triple)
-            .ScanResult(HandleResult);
+            .Log();
 
         // Error: System.ApplicationException: 1202 is not allowed for Triple
         Increment(600)
             .Conveyor(Double)
             .Conveyor(Triple)
-            .ScanResult(HandleResult);
+            .Log();
 
         // Value: 24
         Increment(3)
             .Conveyor(Double)
             .Conveyor(Triple)
-            .ScanResult(HandleResult);
-    }
-    private static void HandleResult(ResultBox<int> result)
-    {
-        switch (result)
-        {
-            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
-                break;
-            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
-                break;
-        } 
+            .Log();
     }
 }

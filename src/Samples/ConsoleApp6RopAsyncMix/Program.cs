@@ -50,32 +50,22 @@ internal class Program
         await Increment(1001)
             .Conveyor(DoubleAsync)
             .Conveyor(TripleAsync)
-            .ScanResult(HandleResult);
+            .Log();
 
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
         await IncrementAsync(1000)
             .Conveyor(Double)
             .Conveyor(TripleAsync)
-            .ScanResult(HandleResult);
+            .Log();
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
         await IncrementAsync(600)
             .Conveyor(DoubleAsync)
             .Conveyor(Triple)
-            .ScanResult(HandleResult);
+            .Log();
         // Value: 24
         await IncrementAsync(3)
             .Conveyor(DoubleAsync)
             .Conveyor(TripleAsync)
-            .ScanResult(HandleResult);
-    }
-    private static void HandleResult(ResultBox<int> result)
-    {
-        switch (result)
-        {
-            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
-                break;
-            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
-                break;
-        } 
+            .Log();
     }
 }

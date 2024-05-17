@@ -8,7 +8,7 @@ public static class UnwrapExtensions
         where TValue : notnull => await result switch
     {
         { IsSuccess: false } error => throw error.GetException(),
-        { IsSuccess: true } value => value.GetValue(),
+        { IsSuccess: true } success => success.GetValue(),
         _ => throw new ResultsInvalidOperationException()
     };
     public static TValueReturn UnwrapBox<TValue, TValueReturn>(
@@ -16,8 +16,8 @@ public static class UnwrapExtensions
         Func<TValue, TValueReturn> returnFunc) where TValue : notnull =>
         result switch
         {
-            { IsSuccess: false } error => throw error.GetException(),
-            { IsSuccess: true } value => returnFunc(value.GetValue()),
+            { IsSuccess: false } => throw result.GetException(),
+            { IsSuccess: true } => returnFunc(result.GetValue()),
             _ => throw new ResultsInvalidOperationException()
         };
     public static async Task<TValueReturn> UnwrapBox<TValue, TValueReturn>(
@@ -26,7 +26,7 @@ public static class UnwrapExtensions
         await result switch
         {
             { IsSuccess: false } error => throw error.GetException(),
-            { IsSuccess: true } value => returnFunc(value.GetValue()),
+            { IsSuccess: true } success => returnFunc(success.GetValue()),
             _ => throw new ResultsInvalidOperationException()
         };
     public static async Task<TValueReturn> UnwrapBox<TValue, TValueReturn>(
@@ -35,7 +35,7 @@ public static class UnwrapExtensions
         await result switch
         {
             { IsSuccess: false } error => throw error.GetException(),
-            { IsSuccess: true } value => await returnFunc(value.GetValue()),
+            { IsSuccess: true } success => await returnFunc(success.GetValue()),
             _ => throw new ResultsInvalidOperationException()
         };
 }

@@ -12,23 +12,13 @@ internal class Program
         };
     private static void Main(string[] args)
     {
-        ConvertStringToHalfLength("")
-            .ScanResult(HandleResult);
-        ConvertStringToHalfLength("H")
-            .ScanResult(HandleResult);
-        ConvertStringToHalfLength("Hello")
-            .ScanResult(HandleResult);
-    }
-    private static void HandleResult(ResultBox<OptionalValue<string>> result)
-    {
-        switch (result)
-        {
-            case { IsSuccess: true } success when success.GetValue().HasValue: Console.WriteLine("Value: " + success.GetValue().Value);
-                break;
-            case { IsSuccess: true } success when !success.GetValue().HasValue: Console.WriteLine("No Value");
-                break;
-            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
-                break;
-        } 
+        // Error: Input string is empty
+        ConvertStringToHalfLength("").Log();
+        
+        // Value: OptionalValue { Value = , HasValue = False }
+        ConvertStringToHalfLength("H").Log();
+        
+        // Value: OptionalValue { Value = Hel, HasValue = True }
+        ConvertStringToHalfLength("Hello").Log();
     }
 }

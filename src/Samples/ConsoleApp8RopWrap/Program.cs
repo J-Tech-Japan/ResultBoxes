@@ -39,7 +39,7 @@ internal class Program
         ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
-            .ScanResult(HandleResult);
+            .Log();
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
@@ -47,7 +47,7 @@ internal class Program
         ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
-            .ScanResult(HandleResult);
+            .Log();
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
@@ -55,7 +55,7 @@ internal class Program
         ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
-            .ScanResult(HandleResult);
+            .Log();
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
@@ -63,16 +63,6 @@ internal class Program
         ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
-            .ScanResult(HandleResult);
-    }
-    private static void HandleResult(ResultBox<int> result)
-    {
-        switch (result)
-        {
-            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
-                break;
-            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
-                break;
-        } 
+            .Log();
     }
 }
