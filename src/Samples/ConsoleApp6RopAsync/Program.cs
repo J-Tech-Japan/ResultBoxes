@@ -31,17 +31,33 @@ internal class Program
     private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
-        await IncrementAsync(1001).Conveyor(DoubleAsync).Conveyor(TripleAsync)
-        .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+        await IncrementAsync(1001)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
-        await IncrementAsync(1000).Conveyor(DoubleAsync).Conveyor(TripleAsync)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+        await IncrementAsync(1000)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
-        await IncrementAsync(600).Conveyor(DoubleAsync).Conveyor(TripleAsync)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+        await IncrementAsync(600)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
         // Value: 24
-        await IncrementAsync(3).Conveyor(DoubleAsync).Conveyor(TripleAsync)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+        await IncrementAsync(3)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
     }
 }

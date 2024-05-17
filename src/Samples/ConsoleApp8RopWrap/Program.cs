@@ -36,61 +36,41 @@ internal class Program
         // WrapTry is used to catch exceptions and return them as error
         // Calculate (1 + 1) * 2 * 3 = 12
         // Value1: 12
-        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
+        ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
             .Conveyor(Double)
-            .ConveyorWrapTry(TripleWithThrowing))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception1: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value1: " + value.GetValue());
-                break;
-        }
+            .ConveyorWrapTry(TripleWithThrowing)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error2: System.ApplicationException: 2000 is not allowed for Increment
-        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
+        ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
             .Conveyor(Double)
-            .ConveyorWrapTry(TripleWithThrowing))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception2: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value2: " + value.GetValue());
-                break;
-        }
+            .ConveyorWrapTry(TripleWithThrowing)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error3: System.ApplicationException: 1001 is not allowed for Double
-        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
+        ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
             .Conveyor(Double)
-            .ConveyorWrapTry(TripleWithThrowing))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception3: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value3: " + value.GetValue());
-                break;
-        }
+            .ConveyorWrapTry(TripleWithThrowing)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
 
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error4: System.ApplicationException: 1202 is not allowed for Triple
-        switch (ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
+        ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
             .Conveyor(Double)
-            .ConveyorWrapTry(TripleWithThrowing))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+            .ConveyorWrapTry(TripleWithThrowing)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
     }
 }

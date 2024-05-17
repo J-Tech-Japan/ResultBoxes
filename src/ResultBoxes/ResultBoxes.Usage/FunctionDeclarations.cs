@@ -95,19 +95,19 @@ public static class FunctionDeclarations
         {
             { IsSuccess: false } error => error,
             { IsSuccess: true } value1 => Add(value1.GetValue(), target2) switch
-                {
-                    { IsSuccess: false } error => error,
-                    { IsSuccess: true } value2 => Divide(value2.GetValue(), target3)
-                }
+            {
+                { IsSuccess: false } error => error,
+                { IsSuccess: true } value2 => Divide(value2.GetValue(), target3)
+            }
         };
     public static ResultBox<int> Combined2Calc(int target1, int target2, int target3)
         => Increment(target1) switch
         {
-            { Exception: { } error } => error,
+            { IsSuccess: false } error => error,
             var value1 => Add(target2, target3) switch
             {
                 { IsSuccess: true } value2 => Divide(value1.GetValue(), value2.GetValue()),
-                var exception2 => exception2,
+                var exception2 => exception2
             }
         };
 

@@ -47,44 +47,33 @@ internal class Program
     private static async Task Main(string[] args)
     {
         // Error: System.ApplicationException: 1001 is not allowed for IncrementAsync
-        switch (await Increment(1001).Conveyor(DoubleAsync).Conveyor(TripleAsync))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        await Increment(1001)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
+
         // Error: System.ApplicationException: 1001 is not allowed for DoubleAsync
-        switch (await IncrementAsync(1000).Conveyor(Double).Conveyor(TripleAsync))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        await IncrementAsync(1000)
+            .Conveyor(Double)
+            .Conveyor(TripleAsync)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
         // Error: System.ApplicationException: 1202 is not allowed for TripleAsync
-        switch (await IncrementAsync(600).Conveyor(DoubleAsync).Conveyor(Triple))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        await IncrementAsync(600)
+            .Conveyor(DoubleAsync)
+            .Conveyor(Triple)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
         // Value: 24
-        switch (await IncrementAsync(3).Conveyor(DoubleAsync).Conveyor(TripleAsync))
-        {
-            case { IsSuccess: false  } error:
-                Console.WriteLine("Exception: " + error.GetException().Message);
-                break;
-            case { IsSuccess: true } value :
-                Console.WriteLine("Value: " + value.GetValue());
-                break;
-        }
+        await IncrementAsync(3)
+            .Conveyor(DoubleAsync)
+            .Conveyor(TripleAsync)
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
     }
 }

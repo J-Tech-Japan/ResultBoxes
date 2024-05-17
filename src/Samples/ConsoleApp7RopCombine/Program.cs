@@ -29,27 +29,35 @@ internal class Program
         Increment(29)
             .CombineValue(Add(1, 9))
             .Conveyor(Divide)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Pattern 2 : Error in Increment method (target > 1000)
         // Exception3: 2000 can not use for the Increment. It should be under or equal 1000
         Increment(2000)
             .CombineValue(Add(1, 9))
             .Conveyor(Divide)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Pattern 4 : Error in Add method (target1 > 100)
         // Exception4: over 100 is not allowed for Add
         Increment(19)
             .CombineValue(Add(1000, 9))
             .Conveyor(Divide)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
 
         // Pattern 5 : Error in Divide method (denominator <> 0)
         // Exception5: can not divide by 0
         Increment(19)
             .CombineValue(Add(0, 0))
             .Conveyor(Divide)
-            .Tap((value)=> Console.WriteLine("Value: " + value), exception => Console.WriteLine("Exception: " + exception.Message));
+            .Tap(
+                value => Console.WriteLine("Value: " + value),
+                exception => Console.WriteLine("Exception: " + exception.Message));
     }
 }

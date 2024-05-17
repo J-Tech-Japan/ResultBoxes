@@ -14,9 +14,10 @@ public static class ConveyorExtensions
         where TValueResult : notnull
         => current.Handle(value => value.Call(handleValueFunc));
 
-    public static ResultBox<TValueResult> Conveyor<TValue1, TValue2, TValue3, TValue4, TValueResult>(
-        this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
-        Func<TValue1, TValue2, TValue3, TValue4, ResultBox<TValueResult>> handleValueFunc)
+    public static ResultBox<TValueResult>
+        Conveyor<TValue1, TValue2, TValue3, TValue4, TValueResult>(
+            this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
+            Func<TValue1, TValue2, TValue3, TValue4, ResultBox<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull

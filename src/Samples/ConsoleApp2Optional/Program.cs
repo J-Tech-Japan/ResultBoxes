@@ -20,13 +20,15 @@ internal class Program
         var result = ConvertStringToHalfLength(args[0]);
         switch (result)
         {
-            case { IsSuccess: false} error:
+            case { IsSuccess: false } error:
                 Console.WriteLine("Exception: " + error.GetException().Message);
                 break;
-            case { IsSuccess: true } value when value.GetValue().HasValue: // When OptionalValue has value
+            case { IsSuccess: true } value
+                when value.GetValue().HasValue: // When OptionalValue has value
                 Console.WriteLine("Value: " + value.GetValue().Value);
                 break;
-            case { IsSuccess: true } value when !value.GetValue().HasValue: // When OptionalValue has value
+            case { IsSuccess: true } value
+                when !value.GetValue().HasValue: // When OptionalValue has value
                 Console.WriteLine("No value");
                 break;
         }
