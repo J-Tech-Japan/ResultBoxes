@@ -8,7 +8,7 @@ public static class ConveyorWrapTryTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await firstValue.HandleAsync(
+        => await firstValue.RemapAsync(
             async values => await ResultBox<TValue3>
                 .WrapTry(() => handleValueFunc(values.Value1, values.Value2)));
 
@@ -17,7 +17,7 @@ public static class ConveyorWrapTryTaskExtensions
         Func<TValue1, Task<TValue2>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await (await firstValue).HandleAsync(
+        => await (await firstValue).RemapAsync(
             async value => await ResultBox<TValue2>.WrapTry(
                 () => handleValueFunc(value)));
 
@@ -27,7 +27,7 @@ public static class ConveyorWrapTryTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await firstValue).HandleAsync(
+        => await (await firstValue).RemapAsync(
             async values =>
                 await ResultBox<TValue3>.WrapTry(async () => await values.Call(handleValueFunc)));
 }

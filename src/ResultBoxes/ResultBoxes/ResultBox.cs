@@ -23,14 +23,14 @@ public record ResultBox<TValue> where TValue : notnull
     public static ResultBox<TValue> FromException(Exception exception) =>
         new(default, exception);
 
-    public ResultBox<TValueResult> Handle<TValueResult>(Func<TValue, TValueResult> valueFunc)
+    public ResultBox<TValueResult> Remap<TValueResult>(Func<TValue, TValueResult> valueFunc)
         where TValueResult : notnull =>
         this switch
         {
             { IsSuccess: true } => valueFunc(GetValue()),
             { IsSuccess: false } => GetException()
         };
-    public ResultBox<TValueResult> Handle<TValueResult>(
+    public ResultBox<TValueResult> Remap<TValueResult>(
         Func<TValue, ResultBox<TValueResult>> valueFunc) where TValueResult : notnull =>
         this switch
         {
@@ -38,7 +38,7 @@ public record ResultBox<TValue> where TValue : notnull
             { IsSuccess: true } value => valueFunc(value.GetValue()),
             _ => new ResultValueNullException()
         };
-    public async Task<ResultBox<TValueResult>> HandleAsync<TValueResult>(
+    public async Task<ResultBox<TValueResult>> RemapAsync<TValueResult>(
         Func<TValue, Task<ResultBox<TValueResult>>> valueFunc) where TValueResult : notnull =>
         this switch
         {
@@ -46,25 +46,25 @@ public record ResultBox<TValue> where TValue : notnull
             { IsSuccess: true } value => await valueFunc(value.GetValue()),
             _ => new ResultValueNullException()
         };
-    public ResultBox<TValueResult> HandleResult<TValueResult>(
+    public ResultBox<TValueResult> RemapResult<TValueResult>(
         Func<ResultBox<TValue>, ResultBox<TValueResult>> valueFunc)
         where TValueResult : notnull =>
         this switch
         {
             { IsSuccess: false } error => error.GetException(),
-            { Value: not null } value => valueFunc(value),
+            { IsSuccess: true } value => valueFunc(value),
             _ => new ResultValueNullException()
         };
-    public async Task<ResultBox<TValueResult>> HandleResultAsync<TValueResult>(
+    public async Task<ResultBox<TValueResult>> RemapResultAsync<TValueResult>(
         Func<ResultBox<TValue>, Task<ResultBox<TValueResult>>> valueFunc)
         where TValueResult : notnull =>
         this switch
         {
             { IsSuccess: false } error => error.GetException(),
-            { Value: not null } value => await valueFunc(value),
+            { IsSuccess: true } value => await valueFunc(value),
             _ => new ResultValueNullException()
         };
-    public async Task<ResultBox<TValueResult>> HandleAsync<TValueResult>(
+    public async Task<ResultBox<TValueResult>> RemapAsync<TValueResult>(
         Func<TValue, Task<TValueResult>> valueFunc) where TValueResult : notnull =>
         this switch
         {
@@ -82,8 +82,8 @@ public record ResultBox<TValue> where TValue : notnull
         this switch
         {
             { IsSuccess: false } error => error.GetException(),
-            { Value: { } addingValue } => new ResultBox<TwoValues<TValue, TValue2>>(
-                new TwoValues<TValue, TValue2>(Value, value),
+            { IsSuccess: true } addingValue => new ResultBox<TwoValues<TValue, TValue2>>(
+                new TwoValues<TValue, TValue2>(addingValue.GetValue(), value),
                 null),
             _ => new ResultValueNullException()
         };

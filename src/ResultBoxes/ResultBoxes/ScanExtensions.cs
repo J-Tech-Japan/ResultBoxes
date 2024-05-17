@@ -13,8 +13,8 @@ public static class ScanExtensions
             case { IsSuccess: false } error:
                 actionError?.Invoke(error.GetException());
                 break;
-            case { IsSuccess: true } value:
-                action(value.GetValue());
+            case { IsSuccess: true }:
+                action(result.GetValue());
                 break;
         }
         return result;
@@ -72,8 +72,8 @@ public static class ScanExtensions
                     await actionErrorAsync(error.GetException());
                 }
                 break;
-            case { IsSuccess: true } value:
-                await actionAsync(value.GetValue());
+            case { IsSuccess: true }:
+                await actionAsync(result.GetValue());
                 break;
         }
         return result;
@@ -96,7 +96,8 @@ public static class ScanExtensions
         where TValue3 : notnull
         => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
 
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<TValue1,
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+        TValue1,
         TValue2, TValue3, TValue4>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
         Func<TValue1, TValue2, TValue3, TValue4, Task> action,
@@ -130,8 +131,8 @@ public static class ScanExtensions
             case { IsSuccess: false } error:
                 actionError?.Invoke(error.GetException());
                 break;
-            case { IsSuccess: true } value:
-                action(value.GetValue());
+            case { IsSuccess: true }:
+                action(res.GetValue());
                 break;
         }
         return res;
@@ -153,7 +154,8 @@ public static class ScanExtensions
         where TValue3 : notnull
         => (await result).Scan(values => values.CallAction(action), actionError);
 
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<TValue1,
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+        TValue1,
         TValue2, TValue3, TValue4>(
         this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> result,
         Action<TValue1, TValue2, TValue3, TValue4> action,
@@ -189,8 +191,8 @@ public static class ScanExtensions
                     await actionErrorAsync(error.GetException());
                 }
                 break;
-            case { IsSuccess: true } value:
-                await actionAsync(value.GetValue());
+            case { IsSuccess: true }:
+                await actionAsync(res.GetValue());
                 break;
         }
         return res;
@@ -215,7 +217,8 @@ public static class ScanExtensions
         => await (await result).Scan(
             async values => await values.CallAction(action),
             actionErrorAsync);
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<TValue1,
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+        TValue1,
         TValue2, TValue3, TValue4>(
         this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> result,
         Func<TValue1, TValue2, TValue3, TValue4, Task> action,

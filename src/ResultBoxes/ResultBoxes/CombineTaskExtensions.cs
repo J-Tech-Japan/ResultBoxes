@@ -8,8 +8,8 @@ public static class CombineTaskExtensions
         Func<Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await (await currentTask).HandleResultAsync(
-            async current => await (await secondValueFunc()).HandleAsync(
+        => await (await currentTask).RemapResultAsync(
+            async current => await (await secondValueFunc()).RemapAsync(
                 addingValue => Task.FromResult(current.Append(addingValue))));
 
     public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Combine<
@@ -20,8 +20,8 @@ public static class CombineTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await currentTask).HandleAsync(
-            async values => await (await addingFunc()).HandleAsync(
+        => await (await currentTask).RemapAsync(
+            async values => await (await addingFunc()).RemapAsync(
                 addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>>
@@ -33,8 +33,8 @@ public static class CombineTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => await (await currentTask).HandleAsync(
-            async values => await (await addingFunc()).HandleAsync(
+        => await (await currentTask).RemapAsync(
+            async values => await (await addingFunc()).RemapAsync(
                 addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
@@ -47,7 +47,7 @@ public static class CombineTaskExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => await (await currentTask).HandleAsync(
-            async values => await (await addingFunc()).HandleAsync(
+        => await (await currentTask).RemapAsync(
+            async values => await (await addingFunc()).RemapAsync(
                 addingValue => Task.FromResult(values.Append(addingValue))));
 }

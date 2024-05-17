@@ -8,9 +8,9 @@ public static class CombineWrapTryExtensions
         Func<Task<TValue2>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await current.HandleResultAsync(
+        => await current.RemapResultAsync(
             async first =>
-                (await ResultBox<TValue2>.WrapTry(secondValueFunc)).Handle(first.Append));
+                (await ResultBox<TValue2>.WrapTry(secondValueFunc)).Remap(first.Append));
 
     public static ResultBox<TwoValues<TValue, TValue2>>
         CombineWrapTry<TValue, TValue2>(
@@ -18,6 +18,6 @@ public static class CombineWrapTryExtensions
             Func<TValue2> secondValueFunc)
         where TValue : notnull
         where TValue2 : notnull
-        => current.HandleResult(
-            c => ResultBox<TValue2>.WrapTry(secondValueFunc).Handle(current.Append));
+        => current.RemapResult(
+            c => ResultBox<TValue2>.WrapTry(secondValueFunc).Remap(current.Append));
 }
