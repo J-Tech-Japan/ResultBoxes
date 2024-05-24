@@ -1,5 +1,5 @@
 using SingleResults.Usage;
-namespace SngleResults.Test;
+namespace ResultBoxes.Test;
 
 public class UnitTest1
 {

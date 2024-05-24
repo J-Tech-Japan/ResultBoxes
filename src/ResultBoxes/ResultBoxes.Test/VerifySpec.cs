@@ -1,5 +1,4 @@
-using ResultBoxes;
-namespace SngleResults.Test;
+namespace ResultBoxes.Test;
 
 public class VerifySpec
 {
