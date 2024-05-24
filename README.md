@@ -10,8 +10,7 @@ dotnet add package ResultBoxes
 
 # Why Result type?
 
-Some language, especially functional language has custom to use `Result` type, that express return type of the function
-is either return value or Error.
+Some language, especially functional language has custom to use `Result` type, that express return type of the function is either return value or Error.
 
 There is of course pros and cons of result type.
 
@@ -30,8 +29,7 @@ There is of course pros and cons of result type.
 - C# is not pure functional language.
 - It seems complex for someone not used to the functional programming.
 
-This ResultBoxes try to be simple Result type, that fully use lately introduced pattern matching feature. And
-first class support of the `Railway Oriented Programming` that introduced with Scott Wlaschin with following article.
+This ResultBoxes try to be simple Result type, that fully use lately introduced pattern matching feature. And first class support of the `Railway Oriented Programming` that introduced with Scott Wlaschin with following article.
 
 [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
 
@@ -48,14 +46,13 @@ first class support of the `Railway Oriented Programming` that introduced with S
 
 ## 1. Simple Function and Use Result Function
 
-Basic use for this library is
-use [ResultBox<T>](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/ResultBox.cs)
+Basic use for this library is use [ResultBox<T>](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/ResultBox.cs)
 for the return type of the functions.
 
 Then you can return value when success, and when you have any issue, you can **return** exception. (not throw.)
 
-Like example below, you can either return **Value itself** or **Exception**, and implicit operation can convert it
-to `ResultBox<T>` class in code.
+Like example below, you can either return **Value itself** or **Exception
+**, and implicit operation can convert it to `ResultBox<T>` class in code.
 
 ```csharp
 internal class Program
@@ -121,9 +118,7 @@ internal class Program
 
 **Notes**
 
-`ResultBox<T>` does have `IsSuccess` property, which returns if it have error or not. We recommend you to
-use `IsSuccess` for the Pattern Matching handler, and using to check if it was success or not. And like code above, you
-can get Value with `result.GetValue()` or `result.GetException()` to get Exception.
+`ResultBox<T>` does have `IsSuccess` property, which returns if it have error or not. We recommend you to use `IsSuccess` for the Pattern Matching handler, and using to check if it was success or not. And like code above, you can get Value with `result.GetValue()` or `result.GetException()` to get Exception.
 
 Keep in mind,
 
@@ -131,10 +126,8 @@ Keep in mind,
 
 `result.GetException()` can only get when  `IsSuccess: false` otherwise, it throws `ResultsInvalidOperationException`.
 
-We use this because in some cases like primitive value `int`, value will be initiated with default value 0. In this
-case, when Success is false, Exception is not null, and also value is not null. This is why we hide accessing `Value`
-property directory from user, and provide `GetValue()` method. Hopefully C# typing system improve and allow us to open
-up value object to the public...
+We use this because in some cases like primitive value `int`, value will be initiated with default value 0. In this case, when Success is false, Exception is not null, and also value is not null. This is why we hide accessing `Value`
+property directory from user, and provide `GetValue()` method. Hopefully C# typing system improve and allow us to open up value object to the public...
 
 ## 2. Don't use nullable value as Type of the Value
 
@@ -142,11 +135,12 @@ C# has two different "nullable"
 types. [Nullable Value Types](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/nullable-value-types)
 and [Nullable Reference Types](https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references).
 
-`ResultBox<TValue>` has `where TValue: notnull` constraint. This is because if it allows null type, it will
-allow Value is null and Exception is null Result class. notnull prevent to use both **Nullable Value Types** and **Nullable Reference Types**. But for the **Nullable Value Types** only show warnings because it is wrapped with **Nullable** generic type. ResultBox designed when Value is null, Value is Empty.
+`ResultBox<TValue>` has `where TValue: notnull` constraint. This is because if it allows null type, it will allow Value is null and Exception is null Result class. notnull prevent to use both
+**Nullable Value Types** and **Nullable Reference Types**. But for the **Nullable Value Types
+** only show warnings because it is wrapped with **Nullable
+** generic type. ResultBox designed when Value is null, Value is Empty.
 
-How can you write value is null in some case? You can
-use [OptionalValue](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/OptionalValue.cs)
+How can you write value is null in some case? You can use [OptionalValue](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/OptionalValue.cs)
 type.
 
 ```csharp
@@ -175,10 +169,8 @@ internal class Program
 
 ## 3. Wrapping throwing function that returns value.
 
-When I use `Result` type in C# project, often need in mixing with non-result functions which can be throw exception any
-time. When this happens, we need to write try/catch and convert throwable functions to `Result`
-type. `ResultBox` has `WrapTry` function to do this conversion.
-When you use `WrapTry`, you need to pass `Func` as the argument.
+When I use `Result` type in C# project, often need in mixing with non-result functions which can be throw exception any time. When this happens, we need to write try/catch and convert throwable functions to `Result`
+type. `ResultBox` has `WrapTry` function to do this conversion. When you use `WrapTry`, you need to pass `Func` as the argument.
 
 ```csharp
 internal class Program
@@ -213,11 +205,8 @@ internal class Program
 ## 4. Wrapping void function.
 
 When a function does not return value, C# can use void as a return (type). But you can not use `ResultBox<void>`
-due to C# language definition. Instead, we
-made [UnitValue](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/UnitValue.cs)
-type, which means nothing inside but as a data class.
-UnitValue does not have any properties. You can wrap try with `WrapTry` void action, and it will
-return `ResultBox<UnitValue>` type.
+due to C# language definition. Instead, we made [UnitValue](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/UnitValue.cs)
+type, which means nothing inside but as a data class. UnitValue does not have any properties. You can wrap try with `WrapTry` void action, and it will return `ResultBox<UnitValue>` type.
 
 ```csharp
 internal class Program
@@ -241,9 +230,7 @@ internal class Program
 
 ## 5. Railway Oriented Programming - Method Chain
 
-Railway Oriented Programming (ROP) is a functional programming pattern that facilitates error handling and is often used
-in languages that support functional programming concepts, like F#, Haskell, and others. The analogy of a railway is
-used to describe the flow of data through a series of functions, similar to how a train travels along tracks.
+Railway Oriented Programming (ROP) is a functional programming pattern that facilitates error handling and is often used in languages that support functional programming concepts, like F#, Haskell, and others. The analogy of a railway is used to describe the flow of data through a series of functions, similar to how a train travels along tracks.
 
 ResultBoxes supports ROP by providing chain method to connect functions and simply write error handling code.
 
@@ -251,16 +238,11 @@ ResultBoxes supports ROP by providing chain method to connect functions and simp
 
 Like example below, you can use `Conveyor(nextFunction)` to method chain continuous functions.
 
-It is like Result"Box" are carrying through Belt Conveyor and moving next checkpoint, at next checkpoint, contents will
-be adjusted and pack with different form, and also if error happens, it will convert to the Error Result.
+It is like Result"Box" are carrying through Belt Conveyor and moving next checkpoint, at next checkpoint, contents will be adjusted and pack with different form, and also if error happens, it will convert to the Error Result.
 
 ![conveyor image](./docs/images/conveyer.jpg)
 
-If first method , in example `Increment` returns Exception, following functions `Double` and `Triple` will not executed,
-it will be just passing Exception that returned by `Increment`.
-If first method returns value, second method, in this case `Double` will be execute, and if all three method
-succeed, `Main` method receive the result value.
-If any methods returns Exception Result, it will return Exception to the `Main` function.
+If first method , in example `Increment` returns Exception, following functions `Double` and `Triple` will not executed, it will be just passing Exception that returned by `Increment`. If first method returns value, second method, in this case `Double` will be execute, and if all three method succeed, `Main` method receive the result value. If any methods returns Exception Result, it will return Exception to the `Main` function.
 
 ```csharp
 internal class Program
@@ -443,23 +425,17 @@ internal class Program
 
 ## 7. Railway Oriented Programming - Combine Value
 
-We have cases that need to prepare 2 or more value and pass it to next function. One way to achieve this is, programmer
-make a wrapping function and gather two value in function and use railway to handle results. But ResultBoxes
-provide `CombineValue` methods, which follows first Result, run second function and instead of passing only last
-executed value, but both first value and second value together and pass it to third function.
+We have cases that need to prepare 2 or more value and pass it to next function. One way to achieve this is, programmer make a wrapping function and gather two value in function and use railway to handle results. But ResultBoxes provide `CombineValue` methods, which follows first Result, run second function and instead of passing only last executed value, but both first value and second value together and pass it to third function.
 
 ![CombineValue](./docs/images/CombineValue.png)
 
-We
-provide
+We provide
 [TwoValues](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/TwoValues.cs),
 [ThreeValues](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/ThreeValues.cs),
 [FourValuesResult](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/FourValues.cs)
 and [FiveValues](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/FiveValues.cs)
 
-Those record class has keep multiple values and can be used in `CombineValue` method.
-When you use `CombineValue` method, it will still use `ResultBox<T>` class, but value type will
-be `TwoValues<T1, T2>`, `ThreeValues<T1, T2, T3>`, `FourValues<T1, T2, T3, T4>`, `FiveValues<T1, T2, T3, T4, T5>`.
+Those record class has keep multiple values and can be used in `CombineValue` method. When you use `CombineValue` method, it will still use `ResultBox<T>` class, but value type will be `TwoValues<T1, T2>`, `ThreeValues<T1, T2, T3>`, `FourValues<T1, T2, T3, T4>`, `FiveValues<T1, T2, T3, T4, T5>`.
 
 We can do it with following code.
 
@@ -522,8 +498,8 @@ We can use `RailWay` and `CombineValue` Method in Async as well.
 
 ## 8. Railway Oriented Programming with Wrapping Function with Try.
 
-Example above in **3. Wrapping throwing function that returns value.** can be use in the Railway Oriented Method Chain
-as well.
+Example above in **3. Wrapping throwing function that returns value.
+** can be use in the Railway Oriented Method Chain as well.
 
 ```csharp
 internal class Program

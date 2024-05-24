@@ -1,6 +1,5 @@
-using ResultBoxes;
 using SingleResults.Usage;
-namespace SngleResults.Test;
+namespace ResultBoxes.Test;
 
 public class UnwrapTest
 {
