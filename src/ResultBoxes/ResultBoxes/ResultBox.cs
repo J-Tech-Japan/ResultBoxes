@@ -18,11 +18,14 @@ public record ResultBox<TValue> where TValue : notnull
     public TValue GetValue() =>
         (IsSuccess ? Value : throw new ResultsInvalidOperationException("no value")) ??
         throw new ResultsInvalidOperationException();
+    public static ResultBox<TValue> Ok(TValue value) => new(value, null);
     public static ResultBox<TValue> FromValue(TValue value) => new(value, null);
     public static ResultBox<TValue> FromValue(Func<TValue> value) => new(value(), null);
     public static async Task<ResultBox<TValue>> FromValueAsync(Func<Task<TValue>> value) =>
         new(await value(), null);
     public static ResultBox<TValue> FromException(Exception exception) =>
+        new(default, exception);
+    public static ResultBox<TValue> Error(Exception exception) =>
         new(default, exception);
 
     public ResultBox<TValueResult> Remap<TValueResult>(Func<TValue, TValueResult> valueFunc)
@@ -130,6 +133,8 @@ public record ResultBox<TValue> where TValue : notnull
 public static class ResultBox
 {
     public static ResultBox<TValue> FromValue<TValue>(TValue value) where TValue : notnull =>
+        new(value, null);
+    public static ResultBox<TValue> Ok<TValue>(TValue value) where TValue : notnull =>
         new(value, null);
     public static async Task<ResultBox<TValue>> FromValue<TValue>(Task<TValue> value)
         where TValue : notnull =>
