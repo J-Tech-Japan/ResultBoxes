@@ -23,7 +23,7 @@ internal class Program
                 Console.WriteLine($"Value: {result.GetValue()}");
                 break;
         }
-        
+
         // Log() displays value.ToString() if IsSuccess is true, otherwise displays exception.Message
         // case2 Error: Specified argument was out of the range of valid values. (Parameter 'target')
         Increment(1001).Log("case2");
@@ -31,7 +31,7 @@ internal class Program
         // RunIncrement() is a method that handles ResultBox<int> with switch expression
         // Value: 101
         Console.WriteLine(RunIncrement(100));
-        
+
         // Handle ResultBox with if statement
         // Error: Specified argument was out of the range of valid values. (Parameter 'target')
         var result4 = Increment(1001);
@@ -43,7 +43,7 @@ internal class Program
         {
             Console.WriteLine($"Error: {result4.GetException().Message}");
         }
-        
+
         // Handle ResultBox with ternary operator ?:
         // Value: 2
         var result5 = Increment(1);

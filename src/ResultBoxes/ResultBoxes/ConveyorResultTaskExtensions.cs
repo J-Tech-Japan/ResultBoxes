@@ -8,7 +8,7 @@ public static class ConveyorResultTaskExtensions
         Func<ResultBox<TValue>, ResultBox<TValueResult>> valueFunc)
         where TValue : notnull
         where TValueResult : notnull =>
-        (await currentTask) switch
+        await currentTask switch
         {
             { IsSuccess: false } current => current.GetException(),
             { IsSuccess: true } current => valueFunc(current),
@@ -19,7 +19,7 @@ public static class ConveyorResultTaskExtensions
         Func<ResultBox<TValue>, Task<ResultBox<TValueResult>>> valueFunc)
         where TValue : notnull
         where TValueResult : notnull =>
-        (await currentTask) switch
+        await currentTask switch
         {
             { IsSuccess: false } current => current.GetException(),
             { IsSuccess: true } current => await valueFunc(current),

@@ -39,5 +39,4 @@ public class FromResultsSpec
         Assert.True(result.GetException() is ApplicationException);
         Assert.Equal("result 2 failed", result.GetException().Message);
     }
-
 }

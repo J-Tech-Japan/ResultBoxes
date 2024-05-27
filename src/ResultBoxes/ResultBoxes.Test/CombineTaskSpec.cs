@@ -6,7 +6,7 @@ public class CombineTaskSpec
     public async Task CombineTwoValuesTaskTest()
     {
         var result = await Task.FromResult(ResultBox.FromValue("Value1"))
-            .Combine((value1) => Task.FromResult(ResultBox.FromValue(value1 + "Value2")));
+            .Combine(value1 => Task.FromResult(ResultBox.FromValue(value1 + "Value2")));
 
         Assert.True(result.IsSuccess);
         Assert.Equal("Value1", result.GetValue().Value1);
@@ -16,13 +16,13 @@ public class CombineTaskSpec
     public async Task CombineTwoValuesTest()
     {
         var result = await Task.FromResult(ResultBox.FromValue("Value1"))
-            .Combine((value1) => ResultBox.FromValue(value1 + "Value2"));
+            .Combine(value1 => ResultBox.FromValue(value1 + "Value2"));
 
         Assert.True(result.IsSuccess);
         Assert.Equal("Value1", result.GetValue().Value1);
         Assert.Equal("Value1Value2", result.GetValue().Value2);
     }
-    
+
     [Fact]
     public async Task CombineTwoValuesTaskNotPassingTest()
     {
@@ -43,5 +43,4 @@ public class CombineTaskSpec
         Assert.Equal("Value1", result.GetValue().Value1);
         Assert.Equal("Value2", result.GetValue().Value2);
     }
-
 }

@@ -23,5 +23,4 @@ public class IsSuccessSpec
         // Assert
         Assert.False(result.IsSuccess);
     }
-
 }

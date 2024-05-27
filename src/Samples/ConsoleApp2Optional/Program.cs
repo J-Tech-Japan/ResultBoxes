@@ -14,10 +14,10 @@ internal class Program
     {
         // Error: Input string is empty
         ConvertStringToHalfLength("").Log();
-        
+
         // Value: OptionalValue { Value = , HasValue = False }
         ConvertStringToHalfLength("H").Log();
-        
+
         // Value: OptionalValue { Value = Hel, HasValue = True }
         ConvertStringToHalfLength("Hello").Log();
     }
