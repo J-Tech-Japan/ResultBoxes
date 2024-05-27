@@ -17,11 +17,11 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return value (UnitValue) result
-        ResultBox<UnitValue>.WrapTry(() => Print("Hello, World!"))
+        UnitValue.WrapTry(() => Print("Hello, World!"))
             .ScanResult(HandleResult);
 
         // This will return exception result
-        ResultBox<UnitValue>.WrapTry(() => Print(string.Empty))
+        UnitValue.WrapTry(() => Print(string.Empty))
             .ScanResult(HandleResult);
     }
     

@@ -10,7 +10,7 @@ public static class CombineWrapTryTaskExtension
         where TValue1 : notnull
         where TValue2 : notnull
         => await (await firstValueTask).ConveyorResult(
-            async current => await (await ResultBox<TValue2>.WrapTry(secondValueFunc)).Conveyor(
+            async current => await (await ResultBox.WrapTry(secondValueFunc)).Conveyor(
                 addingValue => Task.FromResult(current.Append(addingValue))));
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineWrapTry<
         TValue1,
@@ -20,7 +20,7 @@ public static class CombineWrapTryTaskExtension
         where TValue1 : notnull
         where TValue2 : notnull
         => await (await firstValueTask).ConveyorResult(
-            async current => await (await ResultBox<TValue2>.WrapTry(async() => await secondValueFunc(current.GetValue()))).Conveyor(
+            async current => await (await ResultBox.WrapTry(async() => await secondValueFunc(current.GetValue()))).Conveyor(
                 addingValue => Task.FromResult(current.Append(addingValue))));
     
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineWrapTry<
@@ -31,7 +31,7 @@ public static class CombineWrapTryTaskExtension
         where TValue1 : notnull
         where TValue2 : notnull
         => await (await firstValueTask).ConveyorResult(
-            async current => await (ResultBox<TValue2>.WrapTry(secondValueFunc)).Conveyor(
+            async current => await (ResultBox.WrapTry(secondValueFunc)).Conveyor(
                 addingValue => Task.FromResult(current.Append(addingValue))));
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> CombineWrapTry<
         TValue1,
@@ -41,6 +41,6 @@ public static class CombineWrapTryTaskExtension
         where TValue1 : notnull
         where TValue2 : notnull
         => await (await firstValueTask).ConveyorResult(
-            async current => await (ResultBox<TValue2>.WrapTry(() => secondValueFunc(current.GetValue()))).Conveyor(
+            async current => await (ResultBox.WrapTry(() => secondValueFunc(current.GetValue()))).Conveyor(
                 addingValue => Task.FromResult(current.Append(addingValue))));
 }

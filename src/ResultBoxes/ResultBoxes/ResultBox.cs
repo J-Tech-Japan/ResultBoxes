@@ -71,6 +71,18 @@ public record ResultBox<TValue> where TValue : notnull
             return e;
         }
     }
+    public static async Task<ResultBox<UnitValue>> WrapTry(Func<Task> action)
+    {
+        try
+        {
+            await action();
+            return new UnitValue();
+        }
+        catch (Exception e)
+        {
+            return e;
+        }
+    }
 
     public static async Task<ResultBox<TValue>> WrapTry(Func<Task<TValue>> func)
     {
@@ -97,6 +109,13 @@ public static class ResultBox
         where TValue : notnull =>
         new(await value(), null);
 
+    public static Task<ResultBox<TValueResult>> WrapTry<TValueResult>(Func<Task<TValueResult>> func)
+        where TValueResult : notnull
+        => ResultBox<TValueResult>.WrapTry(func);
+    public static ResultBox<TValueResult> WrapTry<TValueResult>(Func<TValueResult> func)
+        where TValueResult : notnull
+        => ResultBox<TValueResult>.WrapTry(func);
+    
     public static void LogResult<TValue>(ResultBox<TValue> result) where TValue : notnull
         => LogResult(result, "");
 

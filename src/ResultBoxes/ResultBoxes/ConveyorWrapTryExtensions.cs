@@ -19,6 +19,6 @@ public static class ConveyorWrapTryExtensions
         where TValue2 : notnull
         =>
             current.Conveyor(
-                value => ResultBox<TValue2>.WrapTry(
+                value => ResultBox.WrapTry(
                     () => handleValueFunc(value)));
 }

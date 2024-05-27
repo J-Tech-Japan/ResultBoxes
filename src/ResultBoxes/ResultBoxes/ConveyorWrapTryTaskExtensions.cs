@@ -18,7 +18,7 @@ public static class ConveyorWrapTryTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         => await (await firstValue).Conveyor(
-            async value => await ResultBox<TValue2>.WrapTry(
+            async value => await ResultBox.WrapTry(
                 () => handleValueFunc(value)));
 
     public static async Task<ResultBox<TValue3>> ConveyorWrapTry<TValue1, TValue2, TValue3>(
@@ -29,5 +29,5 @@ public static class ConveyorWrapTryTaskExtensions
         where TValue3 : notnull
         => await (await firstValue).Conveyor(
             async values =>
-                await ResultBox<TValue3>.WrapTry(async () => await values.Call(handleValueFunc)));
+                await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
 }

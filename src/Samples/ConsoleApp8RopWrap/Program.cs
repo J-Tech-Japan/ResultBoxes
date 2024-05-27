@@ -36,7 +36,7 @@ internal class Program
         // WrapTry is used to catch exceptions and return them as error
         // Calculate (1 + 1) * 2 * 3 = 12
         // Value1: 12
-        ResultBox<int>.WrapTry(() => IncrementWithThrowing(1))
+        ResultBox.WrapTry(() => IncrementWithThrowing(1))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
             .Log();
@@ -44,7 +44,7 @@ internal class Program
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error2: System.ApplicationException: 2000 is not allowed for Increment
-        ResultBox<int>.WrapTry(() => IncrementWithThrowing(2000))
+        ResultBox.WrapTry(() => IncrementWithThrowing(2000))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
             .Log();
@@ -52,7 +52,7 @@ internal class Program
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error3: System.ApplicationException: 1001 is not allowed for Double
-        ResultBox<int>.WrapTry(() => IncrementWithThrowing(1000))
+        ResultBox.WrapTry(() => IncrementWithThrowing(1000))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
             .Log();
@@ -60,7 +60,7 @@ internal class Program
         // IncrementWithThrowing and TripleWithThrowing can throw exceptions
         // WrapTry is used to catch exceptions and return them as error
         // Error4: System.ApplicationException: 1202 is not allowed for Triple
-        ResultBox<int>.WrapTry(() => IncrementWithThrowing(600))
+        ResultBox.WrapTry(() => IncrementWithThrowing(600))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing)
             .Log();
