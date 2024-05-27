@@ -132,5 +132,57 @@ public static class CombineWrapTryExtensions
         => current.Conveyor(
             values => ResultBox.WrapTry(() => values.Append(values.Call(secondValueFunc))));
 
+
     
+    
+        public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> CombineWrapTry<
+        TValue1, TValue2, TValue3, TValue4, TValue5>(
+        this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
+        Func<Task<TValue5>> lastValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        where TValue5 : notnull
+        => await current.ConveyorResult(
+            async first =>
+                (await ResultBox.WrapTry(lastValueFunc)).Remap(first.GetValue().Append));
+    public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> CombineWrapTry<
+        TValue1, TValue2, TValue3, TValue4, TValue5>(
+        this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
+        Func<TValue1, TValue2, TValue3, TValue4, Task<TValue5>> lastValueFuncAsync)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        where TValue5 : notnull
+        => await current.Conveyor(
+            async first =>
+                await ResultBox.WrapTry(
+                    async () => first.Append(await first.Call(lastValueFuncAsync))));
+
+    public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>
+        CombineWrapTry<TValue1, TValue2, TValue3, TValue4, TValue5>(
+            this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
+            Func<TValue5> lastValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        where TValue5 : notnull
+        => current.Conveyor(
+            values => ResultBox.WrapTry(() => values.Append(lastValueFunc())));
+
+    public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>
+        CombineWrapTry<TValue1, TValue2, TValue3, TValue4, TValue5>(
+            this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
+            Func<TValue1, TValue2, TValue3, TValue4, TValue5> secondValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        where TValue5 : notnull
+        => current.Conveyor(
+            values => ResultBox.WrapTry(() => values.Append(values.Call(secondValueFunc))));
+
 }
