@@ -6,7 +6,7 @@ public class CombineWrapTrySpec
     public void CombineWrapTryTest1()
     {
         var result = ResultBox<int>.FromValue(1)
-            .CombineWrapTry((value) => value + 1);
+            .CombineWrapTry(value => value + 1);
         Assert.True(result.IsSuccess);
         Assert.Equal(1, result.GetValue().Value1);
         Assert.Equal(2, result.GetValue().Value2);
@@ -24,7 +24,7 @@ public class CombineWrapTrySpec
     public async Task CombineWrapTryAsyncTest1()
     {
         var result = await ResultBox<int>.FromValue(1)
-            .CombineWrapTry((value) => Task.FromResult( value + 1));
+            .CombineWrapTry(value => Task.FromResult(value + 1));
         Assert.True(result.IsSuccess);
         Assert.Equal(1, result.GetValue().Value1);
         Assert.Equal(2, result.GetValue().Value2);
@@ -38,14 +38,14 @@ public class CombineWrapTrySpec
         Assert.Equal(1, result.GetValue().Value1);
         Assert.Equal(2, result.GetValue().Value2);
     }
-    
-    
-    
+
+
+
     [Fact]
     public async Task CombineWrapTryTest3()
     {
         var result = await ResultBox<int>.FromValue(Task.FromResult(1))
-            .CombineWrapTry((value) => value + 1);
+            .CombineWrapTry(value => value + 1);
         Assert.True(result.IsSuccess);
         Assert.Equal(1, result.GetValue().Value1);
         Assert.Equal(2, result.GetValue().Value2);
@@ -63,7 +63,7 @@ public class CombineWrapTrySpec
     public async Task CombineWrapTryAsyncTest3()
     {
         var result = await ResultBox<int>.FromValue(Task.FromResult(1))
-            .CombineWrapTry((value) => Task.FromResult( value + 1));
+            .CombineWrapTry(value => Task.FromResult(value + 1));
         Assert.True(result.IsSuccess);
         Assert.Equal(1, result.GetValue().Value1);
         Assert.Equal(2, result.GetValue().Value2);
@@ -77,6 +77,4 @@ public class CombineWrapTrySpec
         Assert.Equal(1, result.GetValue().Value1);
         Assert.Equal(2, result.GetValue().Value2);
     }
-
-    
 }

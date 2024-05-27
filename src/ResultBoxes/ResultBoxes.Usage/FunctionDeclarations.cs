@@ -189,7 +189,7 @@ public static class FunctionDeclarations
             .Conveyor(Double)
             .Conveyor(Triple);
     public static ResultBox<int> RailwayInstance2(int target1)
-        => ResultBox<int>.WrapTry(() => IncrementWithThrowing(target1))
+        => ResultBox.WrapTry(() => IncrementWithThrowing(target1))
             .Conveyor(Double)
             .ConveyorWrapTry(TripleWithThrowing);
 
@@ -200,7 +200,7 @@ public static class FunctionDeclarations
     public static Task<ResultBox<int>> Railway3Async(int target1)
         => Increment(target1).Conveyor(DoubleAsync).Conveyor(Triple);
     public static Task<ResultBox<int>> Railway4Async(int target1)
-        => ResultBox<int>.WrapTry(() => IncrementAsyncWithThrowing(target1))
+        => ResultBox.WrapTry(() => IncrementAsyncWithThrowing(target1))
             .ConveyorWrapTry(DoubleAsyncWithThrowing)
             .Conveyor(TripleAsync);
 }

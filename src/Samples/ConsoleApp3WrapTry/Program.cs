@@ -11,10 +11,10 @@ internal class Program
     {
         // This will return exception result
         // Error: can not divide by 0
-        ResultBox<int>.WrapTry(() => Divide(10, 0)).Log();
+        ResultBox.WrapTry(() => Divide(10, 0)).Log();
 
         // This will return value result
         // Value: 5
-        ResultBox<int>.WrapTry(() => Divide(10, 2)).Log();
+        ResultBox.WrapTry(() => Divide(10, 2)).Log();
     }
 }

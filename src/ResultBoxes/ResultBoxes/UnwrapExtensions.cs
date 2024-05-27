@@ -38,7 +38,7 @@ public static class UnwrapExtensions
             { IsSuccess: true } success => await returnFunc(success.GetValue()),
             _ => throw new ResultsInvalidOperationException()
         };
-    
+
     public static Task<TValue> UnwrapAsync<TValue>(this Task<ResultBox<TValue>> task)
         where TValue : notnull =>
         task.ContinueWith(t => t.Result.UnwrapBox());
