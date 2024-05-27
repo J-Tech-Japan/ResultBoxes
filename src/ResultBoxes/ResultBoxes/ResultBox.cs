@@ -30,7 +30,7 @@ public record ResultBox<TValue> where TValue : notnull
     public static ResultBox<TValue> Error(Exception exception) =>
         new(default, exception);
 
-    
+
 
     public static implicit operator ResultBox<TValue>(TValue value) => new(value, null);
     public static implicit operator ResultBox<TValue>(Exception exception) =>
@@ -115,7 +115,7 @@ public static class ResultBox
     public static ResultBox<TValueResult> WrapTry<TValueResult>(Func<TValueResult> func)
         where TValueResult : notnull
         => ResultBox<TValueResult>.WrapTry(func);
-    
+
     public static void LogResult<TValue>(ResultBox<TValue> result) where TValue : notnull
         => LogResult(result, "");
 
