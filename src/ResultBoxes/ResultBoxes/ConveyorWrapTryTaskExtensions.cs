@@ -35,13 +35,41 @@ public static class ConveyorWrapTryTaskExtensions
             value => ResultBox.WrapTry(handleValueFunc));
 
     
-    public static async Task<ResultBox<TValue3>> ConveyorWrapTry<TValue1, TValue2, TValue3>(
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValueResult>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
-        Func<TValue1, TValue2, Task<TValue3>> handleValueFunc)
+        Func<TValue1, TValue2, Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        where TValue3 : notnull
+        where TValueResult : notnull
         => await (await firstValue).Conveyor(
             async values =>
                 await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
+    
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValueResult>(
+        this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
+        Func<TValue1, TValue2, TValueResult> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValueResult : notnull
+        => (await firstValue).Conveyor(
+            values => ResultBox.WrapTry(() => values.Call(handleValueFunc)));
+
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValueResult>(
+        this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
+        Func<Task<TValueResult>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValueResult : notnull
+        => await (await firstValue).Conveyor(
+            async values =>
+                await ResultBox.WrapTry(async () => await handleValueFunc()));
+    
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValueResult>(
+        this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
+        Func<TValueResult> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValueResult : notnull
+        => (await firstValue).Conveyor(_ => ResultBox.WrapTry(handleValueFunc));
+
 }
