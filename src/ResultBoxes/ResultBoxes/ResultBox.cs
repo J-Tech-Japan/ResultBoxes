@@ -30,55 +30,7 @@ public record ResultBox<TValue> where TValue : notnull
     public static ResultBox<TValue> Error(Exception exception) =>
         new(default, exception);
 
-    public ResultBox<TValueResult> Remap<TValueResult>(Func<TValue, TValueResult> valueFunc)
-        where TValueResult : notnull =>
-        this switch
-        {
-            { IsSuccess: true } => valueFunc(GetValue()),
-            { IsSuccess: false } => GetException()
-        };
-    public ResultBox<TValueResult> Remap<TValueResult>(
-        Func<TValue, ResultBox<TValueResult>> valueFunc) where TValueResult : notnull =>
-        this switch
-        {
-            { IsSuccess: false } => GetException(),
-            { IsSuccess: true } => valueFunc(GetValue()),
-            _ => new ResultValueNullException()
-        };
-    public async Task<ResultBox<TValueResult>> RemapAsync<TValueResult>(
-        Func<TValue, Task<ResultBox<TValueResult>>> valueFunc) where TValueResult : notnull =>
-        this switch
-        {
-            { IsSuccess: false } => GetException(),
-            { IsSuccess: true } => await valueFunc(GetValue()),
-            _ => new ResultValueNullException()
-        };
-    public ResultBox<TValueResult> RemapResult<TValueResult>(
-        Func<ResultBox<TValue>, ResultBox<TValueResult>> valueFunc)
-        where TValueResult : notnull =>
-        this switch
-        {
-            { IsSuccess: false } => GetException(),
-            { IsSuccess: true } => valueFunc(this),
-            _ => new ResultValueNullException()
-        };
-    public async Task<ResultBox<TValueResult>> RemapResultAsync<TValueResult>(
-        Func<ResultBox<TValue>, Task<ResultBox<TValueResult>>> valueFunc)
-        where TValueResult : notnull =>
-        this switch
-        {
-            { IsSuccess: false } => GetException(),
-            { IsSuccess: true } => await valueFunc(this),
-            _ => new ResultValueNullException()
-        };
-    public async Task<ResultBox<TValueResult>> RemapAsync<TValueResult>(
-        Func<TValue, Task<TValueResult>> valueFunc) where TValueResult : notnull =>
-        this switch
-        {
-            { IsSuccess: false } => GetException(),
-            { IsSuccess: true } => await valueFunc(GetValue()),
-            _ => new ResultValueNullException()
-        };
+    
 
     public static implicit operator ResultBox<TValue>(TValue value) => new(value, null);
     public static implicit operator ResultBox<TValue>(Exception exception) =>

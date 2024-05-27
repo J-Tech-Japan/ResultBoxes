@@ -9,7 +9,7 @@ public static class CombineExtensions
         Func<Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await current.RemapAsync(async _ => (await secondValueFunc()).Remap(current.Append));
+        => await current.Conveyor(async _ => (await secondValueFunc()).Conveyor(current.Append));
     #endregion
 
     #region Combine with async values returns Task<ResultBox<>>
@@ -19,8 +19,8 @@ public static class CombineExtensions
         Func<TValue, Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue : notnull
         where TValue2 : notnull
-        => await current.RemapAsync(
-            async value => (await secondValueFunc(value)).Remap(current.Append));
+        => await current.Conveyor(
+            async value => (await secondValueFunc(value)).Conveyor(current.Append));
     #endregion
 
     #region Combine with ResultBox<> Value returns ResultBox<>
@@ -33,7 +33,7 @@ public static class CombineExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => values.Remap(value => addingResult.Remap(value.Append));
+        => values.Conveyor(value => addingResult.Remap(value.Append));
 
     public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> Combine<TValue1,
         TValue2, TValue3, TValue4>(
@@ -43,7 +43,7 @@ public static class CombineExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => values.Remap(value => addingResult.Remap(value.Append));
+        => values.Conveyor(value => addingResult.Remap(value.Append));
     public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> Combine<TValue1, TValue2,
         TValue3>(
         this ResultBox<TwoValues<TValue1, TValue2>> values,
@@ -51,7 +51,7 @@ public static class CombineExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => values.Remap(value => addingResult.Remap(value.Append));
+        => values.Conveyor(value => addingResult.Remap(value.Append));
 
 
     public static ResultBox<TwoValues<TValue1, TValue2>> Combine<TValue1, TValue2>(
@@ -59,7 +59,7 @@ public static class CombineExtensions
         ResultBox<TValue2> secondValue)
         where TValue1 : notnull
         where TValue2 : notnull
-        => current.Remap(_ => secondValue.Remap(current.Append));
+        => current.Conveyor(_ => secondValue.Conveyor(current.Append));
     #endregion
 
     #region Combine with values func returns ResultBox<>
@@ -72,7 +72,7 @@ public static class CombineExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => current.Remap(value => value.Call(addingFunc).Remap(value.Append));
+        => current.Conveyor(value => value.Call(addingFunc).Remap(value.Append));
 
     public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> Combine<TValue1,
         TValue2, TValue3, TValue4>(
@@ -82,7 +82,7 @@ public static class CombineExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => current.Remap(value => value.Call(addingFunc).Remap(value.Append));
+        => current.Conveyor(value => value.Call(addingFunc).Remap(value.Append));
     public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> Combine<TValue1, TValue2,
         TValue3>(
         this ResultBox<TwoValues<TValue1, TValue2>> current,
@@ -90,12 +90,12 @@ public static class CombineExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => current.Remap(value => value.Call(addingFunc).Remap(value.Append));
+        => current.Conveyor(value => value.Call(addingFunc).Remap(value.Append));
     public static ResultBox<TwoValues<TValue1, TValue2>> Combine<TValue1, TValue2>(
         this ResultBox<TValue1> current,
         Func<TValue1, ResultBox<TValue2>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => current.Remap(value => secondValueFunc(value).Remap(current.Append));
+        => current.Conveyor(value => secondValueFunc(value).Conveyor(current.Append));
     #endregion
 }

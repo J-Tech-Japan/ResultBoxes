@@ -7,15 +7,14 @@ public static class ConveyorTaskExtensions
         Func<TValue1, Task<ResultBox<TValue2>>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await firstValue.RemapAsync(async value => await handleValueFunc(value));
+        => await (await firstValue).Conveyor(handleValueFunc);
 
     public static async Task<ResultBox<TValue2>> Conveyor<TValue1, TValue2>(
         this Task<ResultBox<TValue1>> firstValue,
         Func<TValue1, ResultBox<TValue2>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await firstValue.RemapAsync(value => Task.FromResult(handleValueFunc(value)));
-
+        => await firstValue.Conveyor(value => Task.FromResult(handleValueFunc(value)));
 
     public static async Task<ResultBox<TValueReturn>> Conveyor<TValue1, TValue2, TValue3,
         TValueReturn>(
@@ -25,7 +24,7 @@ public static class ConveyorTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValueReturn : notnull
-        => await current.RemapAsync(values => Task.FromResult(values.Call(handleValueFunc)));
+        => await current.Conveyor(values => Task.FromResult(values.Call(handleValueFunc)));
 
     public static async Task<ResultBox<TValue3>> Conveyor<TValue1, TValue2, TValue3>(
         this ResultBox<TwoValues<TValue1, TValue2>> current,
@@ -33,7 +32,7 @@ public static class ConveyorTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await current.RemapAsync(async values => await values.Call(handleValueFunc));
+        => await current.Conveyor(async values => await values.Call(handleValueFunc));
 
     public static async Task<ResultBox<TValue3>> Conveyor<TValue1, TValue2, TValue3>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
@@ -41,7 +40,7 @@ public static class ConveyorTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await firstValue).RemapAsync(async values => await values.Call(handleValueFunc));
+        => await (await firstValue).Conveyor(async values => await values.Call(handleValueFunc));
 
     public static async Task<ResultBox<TValue3>> Conveyor<TValue1, TValue2, TValue3>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> firstValue,
@@ -49,7 +48,7 @@ public static class ConveyorTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await firstValue).RemapAsync(
+        => await (await firstValue).Conveyor(
             values => Task.FromResult(values.Call(handleValueFunc)));
 
     public static async Task<ResultBox<TValue4>>
@@ -60,7 +59,7 @@ public static class ConveyorTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => await (await firstValue).RemapAsync(async values => await values.Call(handleValueFunc));
+        => await (await firstValue).Conveyor(async values => await values.Call(handleValueFunc));
 
     public static async Task<ResultBox<TValue5>> Conveyor<TValue1, TValue2, TValue3, TValue4,
         TValue5>(
@@ -71,7 +70,7 @@ public static class ConveyorTaskExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => await (await firstValue).RemapAsync(async values => await values.Call(handleValueFunc));
+        => await (await firstValue).Conveyor(async values => await values.Call(handleValueFunc));
 
     public static async Task<ResultBox<TValue6>> Conveyor<TValue1, TValue2, TValue3, TValue4,
         TValue5, TValue6>(
@@ -84,5 +83,5 @@ public static class ConveyorTaskExtensions
         where TValue4 : notnull
         where TValue5 : notnull
         where TValue6 : notnull
-        => await (await firstValue).RemapAsync(async values => await values.Call(handleValueFunc));
+        => await (await firstValue).Conveyor(async values => await values.Call(handleValueFunc));
 }

@@ -8,7 +8,7 @@ public static class ConveyorWrapTryExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => firstValue.Remap(
+        => firstValue.Conveyor(
             values => ResultBox<TValue3>
                 .WrapTry(() => values.Call(handleValueFunc)));
 
@@ -18,7 +18,7 @@ public static class ConveyorWrapTryExtensions
         where TValue : notnull
         where TValue2 : notnull
         =>
-            current.Remap(
+            current.Conveyor(
                 value => ResultBox<TValue2>.WrapTry(
                     () => handleValueFunc(value)));
 }
