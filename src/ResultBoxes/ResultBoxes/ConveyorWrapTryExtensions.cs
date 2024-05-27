@@ -40,8 +40,8 @@ public static class ConveyorWrapTryExtensions
                 _ => ResultBox.WrapTry(
                     async () => await handleValueFunc()));
 
-    
-    
+
+
     public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValueResult>(
         this ResultBox<TwoValues<TValue1, TValue2>> firstValue,
         Func<TValue1, TValue2, TValueResult> handleValueFunc)
@@ -51,34 +51,37 @@ public static class ConveyorWrapTryExtensions
         => firstValue.Conveyor(
             values => ResultBox.WrapTry(() => values.Call(handleValueFunc)));
 
-    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValueResult>(
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2,
+        TValueResult>(
         this ResultBox<TwoValues<TValue1, TValue2>> firstValue,
-        Func<TValue1, TValue2, Task< TValueResult>> handleValueFunc)
+        Func<TValue1, TValue2, Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValueResult : notnull
         => await firstValue.Conveyor(
-             async values => await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
+            async values =>
+                await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
 
     public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValueResult>(
         this ResultBox<TwoValues<TValue1, TValue2>> firstValue,
-        Func< TValueResult> handleValueFunc)
+        Func<TValueResult> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValueResult : notnull
         => firstValue.Conveyor(
             _ => ResultBox.WrapTry(handleValueFunc));
 
-    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValueResult>(
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2,
+        TValueResult>(
         this ResultBox<TwoValues<TValue1, TValue2>> firstValue,
-        Func<Task< TValueResult>> handleValueFunc)
+        Func<Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValueResult : notnull
         => await firstValue.Conveyor(
             async values => await ResultBox.WrapTry(async () => await handleValueFunc()));
 
-    
+
     public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3, TValueResult>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> firstValue,
         Func<TValue1, TValue2, TValue3, TValueResult> handleValueFunc)
@@ -89,19 +92,21 @@ public static class ConveyorWrapTryExtensions
         => firstValue.Conveyor(
             values => ResultBox.WrapTry(() => values.Call(handleValueFunc)));
 
-    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3, TValueResult>(
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,
+        TValueResult>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> firstValue,
-        Func<TValue1, TValue2, TValue3, Task< TValueResult>> handleValueFunc)
+        Func<TValue1, TValue2, TValue3, Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
         where TValueResult : notnull
         => await firstValue.Conveyor(
-            async values => await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
+            async values =>
+                await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
 
     public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3, TValueResult>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> firstValue,
-        Func< TValueResult> handleValueFunc)
+        Func<TValueResult> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
@@ -109,9 +114,10 @@ public static class ConveyorWrapTryExtensions
         => firstValue.Conveyor(
             values => ResultBox.WrapTry(handleValueFunc));
 
-    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3, TValueResult>(
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,
+        TValueResult>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> firstValue,
-        Func<Task< TValueResult>> handleValueFunc)
+        Func<Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
@@ -119,10 +125,11 @@ public static class ConveyorWrapTryExtensions
         => await firstValue.Conveyor(
             async values => await ResultBox.WrapTry(async () => await handleValueFunc()));
 
-    
 
-    public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3,TValue4, TValueResult>(
-        this ResultBox<FourValues<TValue1, TValue2, TValue3,TValue4>> firstValue,
+
+    public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3, TValue4,
+        TValueResult>(
+        this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> firstValue,
         Func<TValue1, TValue2, TValue3, TValue4, TValueResult> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
@@ -132,20 +139,23 @@ public static class ConveyorWrapTryExtensions
         => firstValue.Conveyor(
             values => ResultBox.WrapTry(() => values.Call(handleValueFunc)));
 
-    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,TValue4, TValueResult>(
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,
+        TValue4, TValueResult>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> firstValue,
-        Func<TValue1, TValue2, TValue3, TValue4, Task< TValueResult>> handleValueFunc)
+        Func<TValue1, TValue2, TValue3, TValue4, Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
         where TValueResult : notnull
         => await firstValue.Conveyor(
-            async values => await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
+            async values =>
+                await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
 
-    public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3,TValue4, TValueResult>(
+    public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3, TValue4,
+        TValueResult>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> firstValue,
-        Func< TValueResult> handleValueFunc)
+        Func<TValueResult> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
@@ -154,9 +164,10 @@ public static class ConveyorWrapTryExtensions
         => firstValue.Conveyor(
             values => ResultBox.WrapTry(handleValueFunc));
 
-    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,TValue4, TValueResult>(
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,
+        TValue4, TValueResult>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> firstValue,
-        Func<Task< TValueResult>> handleValueFunc)
+        Func<Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
@@ -166,8 +177,9 @@ public static class ConveyorWrapTryExtensions
             async values => await ResultBox.WrapTry(async () => await handleValueFunc()));
 
 
-        public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3,TValue4,TValue5, TValueResult>(
-        this ResultBox<FiveValues<TValue1, TValue2, TValue3,TValue4,TValue5>> firstValue,
+    public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3, TValue4,
+        TValue5, TValueResult>(
+        this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> firstValue,
         Func<TValue1, TValue2, TValue3, TValue4, TValue5, TValueResult> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
@@ -178,9 +190,10 @@ public static class ConveyorWrapTryExtensions
         => firstValue.Conveyor(
             values => ResultBox.WrapTry(() => values.Call(handleValueFunc)));
 
-    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,TValue4,TValue5, TValueResult>(
-        this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4,TValue5>> firstValue,
-        Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task< TValueResult>> handleValueFunc)
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,
+        TValue4, TValue5, TValueResult>(
+        this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> firstValue,
+        Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
@@ -188,11 +201,13 @@ public static class ConveyorWrapTryExtensions
         where TValue5 : notnull
         where TValueResult : notnull
         => await firstValue.Conveyor(
-            async values => await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
+            async values =>
+                await ResultBox.WrapTry(async () => await values.Call(handleValueFunc)));
 
-    public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3,TValue4,TValue5, TValueResult>(
-        this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4,TValue5>> firstValue,
-        Func< TValueResult> handleValueFunc)
+    public static ResultBox<TValueResult> ConveyorWrapTry<TValue1, TValue2, TValue3, TValue4,
+        TValue5, TValueResult>(
+        this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> firstValue,
+        Func<TValueResult> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
@@ -202,9 +217,10 @@ public static class ConveyorWrapTryExtensions
         => firstValue.Conveyor(
             values => ResultBox.WrapTry(handleValueFunc));
 
-    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,TValue4,TValue5, TValueResult>(
-        this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4,TValue5>> firstValue,
-        Func<Task< TValueResult>> handleValueFunc)
+    public static async Task<ResultBox<TValueResult>> ConveyorWrapTry<TValue1, TValue2, TValue3,
+        TValue4, TValue5, TValueResult>(
+        this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> firstValue,
+        Func<Task<TValueResult>> handleValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
@@ -213,6 +229,4 @@ public static class ConveyorWrapTryExtensions
         where TValueResult : notnull
         => await firstValue.Conveyor(
             async values => await ResultBox.WrapTry(async () => await handleValueFunc()));
-
-    
 }

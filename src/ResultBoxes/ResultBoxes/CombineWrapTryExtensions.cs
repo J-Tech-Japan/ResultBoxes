@@ -149,8 +149,8 @@ public static class CombineWrapTryExtensions
                 (await ResultBox.WrapTry(lastValueFunc)).Remap(first.GetValue().Append));
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> CombineWrapTry<
         TValue1, TValue2, TValue3, TValue4, TValue5>(
-        this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
-        Func<TValue1, TValue2, TValue3, TValue4, Task<TValue5>> lastValueFuncAsync)
+            this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
+            Func<TValue1, TValue2, TValue3, TValue4, Task<TValue5>> lastValueFuncAsync)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
@@ -184,5 +184,4 @@ public static class CombineWrapTryExtensions
         where TValue5 : notnull
         => current.Conveyor(
             values => ResultBox.WrapTry(() => values.Append(values.Call(secondValueFunc))));
-
 }
