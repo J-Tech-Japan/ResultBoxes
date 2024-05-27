@@ -6,7 +6,7 @@ public static class VerifyExtension
         this ResultBox<TValue> result,
         Func<TValue, ExceptionOrNone> predicate)
         where TValue : notnull
-        => result.Remap(
+        => result.Conveyor(
             value => predicate(value) switch
             {
                 { Exception: { } error } => ResultBox<TValue>.FromException(error),
@@ -16,7 +16,7 @@ public static class VerifyExtension
         this Task<ResultBox<TValue>> result,
         Func<TValue, ExceptionOrNone> predicate)
         where TValue : notnull
-        => await (await result).RemapAsync(
+        => await (await result).Conveyor(
             value => Task.FromResult(
                 predicate(value) switch
                 {

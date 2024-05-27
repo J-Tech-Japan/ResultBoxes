@@ -8,8 +8,8 @@ public static class CombineTaskExtensions
         Func<Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await (await currentTask).RemapResultAsync(
-            async current => await (await secondValueFunc()).RemapAsync(
+        => await (await currentTask).ConveyorResult(
+            async current => await (await secondValueFunc()).Conveyor(
                 addingValue => Task.FromResult(current.Append(addingValue))));
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Combine<TValue1,
         TValue2>(
@@ -17,9 +17,9 @@ public static class CombineTaskExtensions
         Func<ResultBox<TValue2>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await (await currentTask).RemapResultAsync(
+        => await (await currentTask).ConveyorResult(
             async current => await secondValueFunc()
-                .RemapAsync(
+                .Conveyor(
                     addingValue => Task.FromResult(current.Append(addingValue))));
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Combine<TValue1,
         TValue2>(
@@ -27,8 +27,8 @@ public static class CombineTaskExtensions
         Func<TValue1, Task<ResultBox<TValue2>>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await (await currentTask).RemapResultAsync(
-            async current => await (await secondValueFunc(current.GetValue())).RemapAsync(
+        => await (await currentTask).ConveyorResult(
+            async current => await (await secondValueFunc(current.GetValue())).Conveyor(
                 addingValue => Task.FromResult(current.Append(addingValue))));
 
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Combine<TValue1,
@@ -37,9 +37,9 @@ public static class CombineTaskExtensions
         Func<TValue1, ResultBox<TValue2>> secondValueFunc)
         where TValue1 : notnull
         where TValue2 : notnull
-        => await (await currentTask).RemapResultAsync(
+        => await (await currentTask).ConveyorResult(
             async current => await secondValueFunc(current.GetValue())
-                .RemapAsync(
+                .Conveyor(
                     addingValue => Task.FromResult(current.Append(addingValue))));
 
     public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Combine<
@@ -50,8 +50,8 @@ public static class CombineTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await currentTask).RemapAsync(
-            async values => await (await addingFunc()).RemapAsync(
+        => await (await currentTask).Conveyor(
+            async values => await (await addingFunc()).Remap(
                 addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Combine<
@@ -62,8 +62,8 @@ public static class CombineTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await currentTask).RemapAsync(
-            async values => await (await addingFunc(values.Value1, values.Value2)).RemapAsync(
+        => await (await currentTask).Conveyor(
+            async values => await (await addingFunc(values.Value1, values.Value2)).Remap(
                 addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Combine<
@@ -74,9 +74,9 @@ public static class CombineTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await currentTask).RemapAsync(
+        => await (await currentTask).Conveyor(
             async values => await addingFunc()
-                .RemapAsync(
+                .Remap(
                     addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Combine<
@@ -87,9 +87,9 @@ public static class CombineTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await (await currentTask).RemapAsync(
+        => await (await currentTask).Conveyor(
             async values => await addingFunc(values.Value1, values.Value2)
-                .RemapAsync(
+                .Remap(
                     addingValue => Task.FromResult(values.Append(addingValue))));
 
 
@@ -105,8 +105,8 @@ public static class CombineTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => await (await currentTask).RemapAsync(
-            async values => await (await addingFunc()).RemapAsync(
+        => await (await currentTask).Conveyor(
+            async values => await (await addingFunc()).Remap(
                 addingValue => Task.FromResult(values.Append(addingValue))));
 
 
@@ -119,9 +119,9 @@ public static class CombineTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => await (await currentTask).RemapAsync(
+        => await (await currentTask).Conveyor(
             async values => await (await addingFunc(values.Value1, values.Value2, values.Value3))
-                .RemapAsync(
+                .Remap(
                     addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>>
@@ -133,9 +133,9 @@ public static class CombineTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => await (await currentTask).RemapAsync(
+        => await (await currentTask).Conveyor(
             async values => await addingFunc()
-                .RemapAsync(
+                .Remap(
                     addingValue => Task.FromResult(values.Append(addingValue))));
 
 
@@ -148,9 +148,9 @@ public static class CombineTaskExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => await (await currentTask).RemapAsync(
+        => await (await currentTask).Conveyor(
             async values => await addingFunc(values.Value1, values.Value2, values.Value3)
-                .RemapAsync(
+                .Remap(
                     addingValue => Task.FromResult(values.Append(addingValue))));
 
 
@@ -170,8 +170,8 @@ public static class CombineTaskExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => await (await currentTask).RemapAsync(
-            async values => await (await addingFunc()).RemapAsync(
+        => await (await currentTask).Conveyor(
+            async values => await (await addingFunc()).Remap(
                 addingValue => Task.FromResult(values.Append(addingValue))));
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
         Combine<
@@ -183,12 +183,12 @@ public static class CombineTaskExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => await (await currentTask).RemapAsync(
+        => await (await currentTask).Conveyor(
             async values => await (await addingFunc(
                 values.Value1,
                 values.Value2,
                 values.Value3,
-                values.Value4)).RemapAsync(
+                values.Value4)).Remap(
                 addingValue => Task.FromResult(values.Append(addingValue))));
 
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
@@ -201,9 +201,9 @@ public static class CombineTaskExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => await (await currentTask).RemapAsync(
+        => await (await currentTask).Conveyor(
             async values => await addingFunc()
-                .RemapAsync(
+                .Remap(
                     addingValue => Task.FromResult(values.Append(addingValue))));
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
         Combine<
@@ -215,12 +215,12 @@ public static class CombineTaskExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => await (await currentTask).RemapAsync(
+        => await (await currentTask).Conveyor(
             async values => await addingFunc(
                     values.Value1,
                     values.Value2,
                     values.Value3,
                     values.Value4)
-                .RemapAsync(
+                .Remap(
                     addingValue => Task.FromResult(values.Append(addingValue))));
 }
