@@ -21,8 +21,10 @@ public record ResultBox<TValue> where TValue : notnull
     public static ResultBox<TValue> Ok(TValue value) => new(value, null);
     public static ResultBox<TValue> FromValue(TValue value) => new(value, null);
     public static ResultBox<TValue> FromValue(Func<TValue> value) => new(value(), null);
-    public static async Task<ResultBox<TValue>> FromValueAsync(Func<Task<TValue>> value) =>
+    public static async Task<ResultBox<TValue>> FromValue(Func<Task<TValue>> value) =>
         new(await value(), null);
+    public static async Task<ResultBox<TValue>> FromValue(Task<TValue> value) =>
+        new(await value, null);
     public static ResultBox<TValue> FromException(Exception exception) =>
         new(default, exception);
     public static ResultBox<TValue> Error(Exception exception) =>
