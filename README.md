@@ -1,6 +1,6 @@
 # ResultBoxes
 
-C# Results Library that focus on Railway Oriented Programming.
+C# Results Library that focus on Railroad Oriented Programming.
 
 # How can you install?
 
@@ -29,9 +29,9 @@ There is of course pros and cons of result type.
 - C# is not pure functional language.
 - It seems complex for someone not used to the functional programming.
 
-This ResultBoxes try to be simple Result type, that fully use lately introduced pattern matching feature. And first class support of the `Railway Oriented Programming` that introduced with Scott Wlaschin with following article.
+This ResultBoxes try to be simple Result type, that fully use lately introduced pattern matching feature. And first class support of the `Railroad Oriented Programming` that introduced with Scott Wlaschin with following article.
 
-[Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
+[Railroad Oriented Programming](https://fsharpforfunandprofit.com/rop/)
 
 # Usage
 
@@ -39,10 +39,10 @@ This ResultBoxes try to be simple Result type, that fully use lately introduced 
 2. Don't use nullable value as Type of the Value
 3. Wrapping throwing function that returns value.
 4. Wrapping void function.
-5. Railway Oriented Programming - Method Chain
-6. Railway Oriented Programming - Async Task Functions.
-7. Railway Oriented Programming - Combine Value
-8. Railway Oriented Programming with Wrapping Function with Try.
+5. Railroad Oriented Programming - Method Chain
+6. Railroad Oriented Programming - Async Task Functions.
+7. Railroad Oriented Programming - Combine Value
+8. Railroad Oriented Programming with Wrapping Function with Try.
 
 ## 1. Simple Function and Use Result Function
 
@@ -228,9 +228,9 @@ internal class Program
 }
 ```
 
-## 5. Railway Oriented Programming - Method Chain
+## 5. Railroad Oriented Programming - Method Chain
 
-Railway Oriented Programming (ROP) is a functional programming pattern that facilitates error handling and is often used in languages that support functional programming concepts, like F#, Haskell, and others. The analogy of a railway is used to describe the flow of data through a series of functions, similar to how a train travels along tracks.
+Railroad Oriented Programming (ROP) is a functional programming pattern that facilitates error handling and is often used in languages that support functional programming concepts, like F#, Haskell, and others. The analogy of a Railroad is used to describe the flow of data through a series of functions, similar to how a train travels along tracks.
 
 ResultBoxes supports ROP by providing chain method to connect functions and simply write error handling code.
 
@@ -291,7 +291,7 @@ internal class Program
 }
 ```
 
-## 6. Railway Oriented Programming - Async Task Functions.
+## 6. Railroad Oriented Programming - Async Task Functions.
 
 Async method returns `Task<ResultBox<TValue>>`, but we provide async chaining methods as well.
 
@@ -423,9 +423,9 @@ internal class Program
 }
 ```
 
-## 7. Railway Oriented Programming - Combine Value
+## 7. Railroad Oriented Programming - Combine Value
 
-We have cases that need to prepare 2 or more value and pass it to next function. One way to achieve this is, programmer make a wrapping function and gather two value in function and use railway to handle results. But ResultBoxes provide `CombineValue` methods, which follows first Result, run second function and instead of passing only last executed value, but both first value and second value together and pass it to third function.
+We have cases that need to prepare 2 or more value and pass it to next function. One way to achieve this is, programmer make a wrapping function and gather two value in function and use Railroad to handle results. But ResultBoxes provide `CombineValue` methods, which follows first Result, run second function and instead of passing only last executed value, but both first value and second value together and pass it to third function.
 
 ![CombineValue](./docs/images/CombineValue.png)
 
@@ -494,12 +494,12 @@ internal class Program
 }
 ```
 
-We can use `RailWay` and `CombineValue` Method in Async as well.
+We can use `Conveyor` and `CombineValue` Method in Async as well.
 
-## 8. Railway Oriented Programming with Wrapping Function with Try.
+## 8. Railroad Oriented Programming with Wrapping Function with Try.
 
 Example above in **3. Wrapping throwing function that returns value.
-** can be use in the Railway Oriented Method Chain as well.
+** can be use in the Railroad Oriented Method Chain as well.
 
 ```csharp
 internal class Program

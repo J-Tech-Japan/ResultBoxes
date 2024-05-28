@@ -10,93 +10,93 @@ public class UnitTest1
     }
 
     [Fact]
-    public async Task RailwayAsyncSpec()
+    public async Task RailroadAsyncSpec()
     {
-        var sut = await FunctionDeclarations.RailwayWithAsync(1);
+        var sut = await FunctionDeclarations.RailroadWithAsync(1);
 
         Assert.True(sut.IsSuccess);
         Assert.Equal(12, sut.GetValue());
     }
     [Fact]
-    public async Task Railway2AsyncSpec()
+    public async Task Railroad2AsyncSpec()
     {
-        var sut = await FunctionDeclarations.Railway2Async(1);
+        var sut = await FunctionDeclarations.Railroad2Async(1);
 
         Assert.True(sut.IsSuccess);
         Assert.Equal(12, sut.GetValue());
     }
     [Fact]
-    public void RailwaySpec()
+    public void RailroadSpec()
     {
-        var sut = FunctionDeclarations.RailwayInstance(1);
+        var sut = FunctionDeclarations.RailroadInstance(1);
 
         Assert.True(sut.IsSuccess);
         Assert.Equal(12, sut.GetValue());
     }
     [Fact]
-    public void RailwayInstance2Spec()
+    public void RailroadInstance2Spec()
     {
-        var sut = FunctionDeclarations.RailwayInstance2(1);
+        var sut = FunctionDeclarations.RailroadInstance2(1);
 
         Assert.True(sut.IsSuccess);
         Assert.Equal(12, sut.GetValue());
     }
     [Fact]
-    public void RailwayInstance2WithErrorSpec()
+    public void RailroadInstance2WithErrorSpec()
     {
-        var sut = FunctionDeclarations.RailwayInstance2(4);
+        var sut = FunctionDeclarations.RailroadInstance2(4);
 
         Assert.False(sut.IsSuccess);
         Assert.True(sut.Exception is ApplicationException);
     }
     [Fact]
-    public void RailwayInstance2WithError2Spec()
+    public void RailroadInstance2WithError2Spec()
     {
-        var sut = FunctionDeclarations.RailwayInstance2(3);
+        var sut = FunctionDeclarations.RailroadInstance2(3);
 
         Assert.False(sut.IsSuccess);
         Assert.True(sut.Exception is ApplicationException);
     }
 
     [Fact]
-    public void Railway2Calc3Spec()
+    public void Railroad2Calc3Spec()
     {
-        var sut = FunctionDeclarations.Railway2Calc3(9, 2, 3);
+        var sut = FunctionDeclarations.Railroad2Calc3(9, 2, 3);
         Assert.True(sut.IsSuccess);
         Assert.Equal(2, sut.GetValue());
     }
     [Fact]
-    public async Task Railway2Calc3AsyncSpec()
+    public async Task Railroad2Calc3AsyncSpec()
     {
-        var sut = await FunctionDeclarations.RailwayCalc3Async(9, 2, 3);
+        var sut = await FunctionDeclarations.RailroadCalc3Async(9, 2, 3);
         Assert.True(sut.IsSuccess);
         Assert.Equal(2, sut.GetValue());
     }
     [Fact]
-    public async Task RailwayCalc3Async2Spec()
+    public async Task RailroadCalc3Async2Spec()
     {
-        var sut = await FunctionDeclarations.RailwayCalc3Async2(9, 2, 3);
+        var sut = await FunctionDeclarations.RailroadCalc3Async2(9, 2, 3);
         Assert.True(sut.IsSuccess);
         Assert.Equal(2, sut.GetValue());
     }
     [Fact]
-    public void Railway2Calc4Spec()
+    public void Railroad2Calc4Spec()
     {
-        var sut = FunctionDeclarations.Railway2Calc4(9, 2, 3);
+        var sut = FunctionDeclarations.Railroad2Calc4(9, 2, 3);
         Assert.True(sut.IsSuccess);
         Assert.Equal(2, sut.GetValue());
     }
     [Fact]
-    public void Railway2Calc4SpecThrowing()
+    public void Railroad2Calc4SpecThrowing()
     {
-        var sut = FunctionDeclarations.Railway2Calc4(9, 101, 3);
+        var sut = FunctionDeclarations.Railroad2Calc4(9, 101, 3);
         Assert.False(sut.IsSuccess);
         Assert.True(sut.Exception is ApplicationException);
     }
     [Fact]
-    public async Task Railway3AsyncSpec()
+    public async Task Railroad3AsyncSpec()
     {
-        var sut = await FunctionDeclarations.Railway3Async(1);
+        var sut = await FunctionDeclarations.Railroad3Async(1);
         Assert.True(sut.IsSuccess);
         Assert.Equal(12, sut.GetValue());
     }
