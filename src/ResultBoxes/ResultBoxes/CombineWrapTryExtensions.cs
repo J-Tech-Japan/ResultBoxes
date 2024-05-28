@@ -148,7 +148,7 @@ public static class CombineWrapTryExtensions
             async first =>
                 (await ResultBox.WrapTry(lastValueFunc)).Remap(first.GetValue().Append));
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> CombineWrapTry<
-        TValue1, TValue2, TValue3, TValue4, TValue5>(
+            TValue1, TValue2, TValue3, TValue4, TValue5>(
             this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> current,
             Func<TValue1, TValue2, TValue3, TValue4, Task<TValue5>> lastValueFuncAsync)
         where TValue1 : notnull
