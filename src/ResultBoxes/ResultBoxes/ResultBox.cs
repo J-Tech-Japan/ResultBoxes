@@ -112,6 +112,10 @@ public static class ResultBox
         new(await value(), null);
     public static ResultBox<UnitValue> Error(Exception exception) =>
         new(default, exception);
+    public static ResultBox<TValue> Error<TValue>(Exception exception) where TValue : notnull =>
+        new(default, exception);
+    public static ResultBox<TValue> FromException<TValue>(Exception exception) where TValue : notnull =>
+        new(default, exception);
 
     public static Task<ResultBox<TValueResult>> WrapTry<TValueResult>(Func<Task<TValueResult>> func)
         where TValueResult : notnull

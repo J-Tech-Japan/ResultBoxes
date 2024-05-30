@@ -1,3 +1,4 @@
+using System.Diagnostics;
 namespace ResultBoxes;
 
 public static class RemapExceptionExtensions
@@ -46,4 +47,9 @@ public static class RemapExceptionExtensions
                 { IsSuccess: true } errorBox => ResultBox.FromValue(errorBox.GetValue()) 
             };
 
+}
+public record ValueOrException
+{
+    public static ValueOrException Exception = new();
+    public static ValueOrException<TValue> FromValue<TValue>(TValue value) where TValue : notnull => ValueOrException<TValue>.FromValue(value);
 }
