@@ -98,6 +98,8 @@ public record ResultBox<TValue> where TValue : notnull
 }
 public static class ResultBox
 {
+    public static ResultBox<UnitValue> Start => ResultBox.Ok(UnitValue.None);
+    
     public static ResultBox<TValue> FromValue<TValue>(TValue value) where TValue : notnull =>
         new(value, null);
     public static ResultBox<TValue> Ok<TValue>(TValue value) where TValue : notnull =>
