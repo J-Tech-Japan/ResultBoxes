@@ -110,6 +110,8 @@ public static class ResultBox
     public static async Task<ResultBox<TValue>> FromValue<TValue>(Func<Task<TValue>> value)
         where TValue : notnull =>
         new(await value(), null);
+    public static ResultBox<UnitValue> Error(Exception exception) =>
+        new(default, exception);
 
     public static Task<ResultBox<TValueResult>> WrapTry<TValueResult>(Func<Task<TValueResult>> func)
         where TValueResult : notnull
