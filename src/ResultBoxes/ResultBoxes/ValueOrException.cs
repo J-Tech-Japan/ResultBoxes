@@ -9,3 +9,9 @@ public record ValueOrException<TValue>(TValue? Value, bool IsException) where TV
     public static implicit operator ValueOrException<TValue>(ValueOrException exception) => new(default, true);
 
 }
+
+public record ValueOrException
+{
+    public static readonly ValueOrException Exception = new();
+    public static ValueOrException<TValue> FromValue<TValue>(TValue value) where TValue : notnull => ValueOrException<TValue>.FromValue(value);
+}

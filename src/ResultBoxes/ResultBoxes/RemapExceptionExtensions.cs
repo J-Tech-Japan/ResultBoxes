@@ -48,8 +48,3 @@ public static class RemapExceptionExtensions
             };
 
 }
-public record ValueOrException
-{
-    public static readonly ValueOrException Exception = new();
-    public static ValueOrException<TValue> FromValue<TValue>(TValue value) where TValue : notnull => ValueOrException<TValue>.FromValue(value);
-}

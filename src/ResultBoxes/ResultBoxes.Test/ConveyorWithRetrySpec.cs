@@ -22,7 +22,7 @@ public class ConveyorWithRetrySpec(ITestOutputHelper testOutputHelper)
     {
         var result = await ResultBox.FromValue(1)
             .ConveyorWithRetry(
-                new RetryPolicy(3, TimeSpan.FromSeconds(1)),async i =>
+                new RetryPolicy(5, TimeSpan.FromSeconds(1)),async i =>
             {
                 await Task.CompletedTask;
                 testOutputHelper.WriteLine($"{i} can not use");
