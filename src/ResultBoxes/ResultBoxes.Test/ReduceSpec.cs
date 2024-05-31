@@ -1,3 +1,4 @@
+using Xunit.Sdk;
 namespace ResultBoxes.Test;
 
 public class ReduceSpec

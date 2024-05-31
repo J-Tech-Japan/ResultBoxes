@@ -42,6 +42,7 @@ public class ScanEachSpec(ITestOutputHelper testOutputHelper)
                 testOutputHelper.WriteLine(i.ToString());
             });
         Assert.True(result.IsSuccess);
+        Assert.IsType<List<int>>(result.GetValue());
     }
 
     [Fact]
