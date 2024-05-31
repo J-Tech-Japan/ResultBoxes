@@ -7,12 +7,13 @@ public class ConveyorWithRetrySpec(ITestOutputHelper testOutputHelper)
     public async Task ConveyorWithRetryTest1()
     {
         var result = await ResultBox.FromValue(1)
-            .ConveyorWithRetry(async i =>
+            .ConveyorWithRetry(new RetryPolicy(3, TimeSpan.Zero),
+                async i =>
             {
                 await Task.CompletedTask;
                 testOutputHelper.WriteLine($"{i} can not use");
                 return new ApplicationException($"can not use {i}");
-            }, new RetryPolicy(3, TimeSpan.Zero));
+            });
         
         Assert.False(result.IsSuccess); 
     }
@@ -20,12 +21,13 @@ public class ConveyorWithRetrySpec(ITestOutputHelper testOutputHelper)
     public async Task ConveyorWithRetryTest2()
     {
         var result = await ResultBox.FromValue(1)
-            .ConveyorWithRetry(async i =>
+            .ConveyorWithRetry(
+                new RetryPolicy(3, TimeSpan.FromSeconds(1)),async i =>
             {
                 await Task.CompletedTask;
                 testOutputHelper.WriteLine($"{i} can not use");
                 return new ApplicationException($"can not use {i}");
-            }, new RetryPolicy(3, TimeSpan.FromSeconds(1)));
+            });
         
         Assert.False(result.IsSuccess); 
     }
@@ -35,13 +37,35 @@ public class ConveyorWithRetrySpec(ITestOutputHelper testOutputHelper)
     {
         var localCount = 0;
         var result = await ResultBox.FromValue(1)
-            .ConveyorWithRetry(async i =>
+            .ConveyorWithRetry(
+                new RetryPolicy(5, TimeSpan.FromMilliseconds(100)),
+                async i =>
             {
                 localCount++;
                 await Task.CompletedTask;
                 testOutputHelper.WriteLine($"{i} can not use");
                 return localCount < 2 ? new ApplicationException($"can not use {i}, {localCount}") : localCount;
-            }, new RetryPolicy(5, TimeSpan.FromMilliseconds(100)));
+            });
+        
+        Assert.True(result.IsSuccess); 
+        Assert.Equal(2, result.GetValue()); 
+    }
+
+    [Fact]
+    public async Task ConveyorWithRetryTest4()
+    {
+        var localCount = 0;
+        var result = await ResultBox.FromValue(1)
+            .ConveyorWithRetry(
+                new RetryPolicy(5, TimeSpan.FromMilliseconds(100)),
+                i =>
+                // ReSharper disable once AccessToModifiedClosure
+                ResultBox.FromValue(i)
+                    .Scan(_ => localCount++)
+                    .Combine(ResultBox.FromValue(localCount))
+                    .Scan(values => testOutputHelper.WriteLine($"{values.Value1} can not use"))
+                    .Conveyor(values => values.Value2 < 2 ? ResultBox<int>.FromException(new ApplicationException($"can not use {values.Value1}, {values.Value2}")) : values.Value2)
+            );
         
         Assert.True(result.IsSuccess); 
         Assert.Equal(2, result.GetValue()); 

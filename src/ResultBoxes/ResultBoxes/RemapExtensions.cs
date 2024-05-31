@@ -176,35 +176,36 @@ public static class ConveyorWithRetryExtensions
 {
     public static async Task<ResultBox<TValue>> ConveyorWithRetry<TValue>(
         this ResultBox<TValue> current,
-        Func<TValue, Task<ResultBox<TValue>>> conveyorFunc,
-        IRetryPolicy retryPolicy)
+        IRetryPolicy retryPolicy,
+        Func<TValue, Task<ResultBox<TValue>>> conveyorFunc)
         where TValue : notnull
         => await current.Conveyor(
-            async value => await Retry(value, conveyorFunc, retryPolicy));
+            async value => await Retry(value,retryPolicy, conveyorFunc));
     public static async Task<ResultBox<TValue>> ConveyorWithRetry<TValue>(
         this ResultBox<TValue> current,
-        Func<TValue, ResultBox<TValue>> conveyorFunc,
-        IRetryPolicy retryPolicy)
+        IRetryPolicy retryPolicy,
+        Func<TValue, ResultBox<TValue>> conveyorFunc)
         where TValue : notnull
-        => await current.Conveyor(async value => await Retry(value, conveyorFunc, retryPolicy));
+        => await current.Conveyor(async value => await Retry(value, retryPolicy, conveyorFunc));
     public static async Task<ResultBox<TValue>> ConveyorWithRetry<TValue>(
         this Task<ResultBox<TValue>> current,
         Func<TValue, Task<ResultBox<TValue>>> conveyorFunc,
         IRetryPolicy retryPolicy)
         where TValue : notnull
-        => await current.Conveyor(async value => await Retry(value, conveyorFunc, retryPolicy));
+        => await current.Conveyor(async value => await Retry(value,retryPolicy, conveyorFunc));
 
     public static async Task<ResultBox<TValue>> ConveyorWithRetry<TValue>(
         this Task<ResultBox<TValue>> current,
-        Func<TValue, ResultBox<TValue>> conveyorFunc,
-        IRetryPolicy retryPolicy)
+        IRetryPolicy retryPolicy,
+        Func<TValue, ResultBox<TValue>> conveyorFunc)
         where TValue : notnull
-        => await current.Conveyor(async value => await Retry(value, conveyorFunc, retryPolicy));
+        => await current.Conveyor(async value => await Retry(value,retryPolicy, conveyorFunc));
 
     #region private methods 
     private static async Task<ResultBox<TValue>> Retry<TValue>(
         TValue value,
-        Func<TValue, Task<ResultBox<TValue>>> conveyorFunc, IRetryPolicy retryPolicy)
+        IRetryPolicy retryPolicy,
+        Func<TValue, Task<ResultBox<TValue>>> conveyorFunc)
         where TValue : notnull
     {
         var exceptionCount = 0;
@@ -227,9 +228,10 @@ public static class ConveyorWithRetryExtensions
     }
     private static async Task<ResultBox<TValue>> Retry<TValue>(
         TValue value,
-        Func<TValue, ResultBox<TValue>> conveyorFunc, IRetryPolicy retryPolicy)
+        IRetryPolicy retryPolicy,
+        Func<TValue, ResultBox<TValue>> conveyorFunc)
         where TValue : notnull
-        => await Retry(value, async v => await Task.FromResult(conveyorFunc(v)), retryPolicy);
+        => await Retry(value,retryPolicy, async v => await Task.FromResult(conveyorFunc(v)));
     #endregion
     
 }
