@@ -1,4 +1,3 @@
-using System.Diagnostics;
 namespace ResultBoxes;
 
 public static class RemapExceptionExtensions
@@ -22,7 +21,7 @@ public static class RemapExceptionExtensions
             current switch
             {
                 { IsSuccess: false } => await remapExceptionFuncAsync(current.GetException()),
-                { IsSuccess: true } => ResultBox.FromValue(current.GetValue()) 
+                { IsSuccess: true } => ResultBox.FromValue(current.GetValue())
             };
 
     public static async Task<ResultBox<TValue>> RemapException<TValue>(
@@ -33,7 +32,7 @@ public static class RemapExceptionExtensions
             await current switch
             {
                 { IsSuccess: false } valueBox => remapExceptionFunc(valueBox.GetException()),
-                { IsSuccess: true } errorBox => ResultBox.FromValue(errorBox.GetValue()) 
+                { IsSuccess: true } errorBox => ResultBox.FromValue(errorBox.GetValue())
             };
 
     public static async Task<ResultBox<TValue>> RemapException<TValue>(
@@ -43,8 +42,8 @@ public static class RemapExceptionExtensions
         =>
             await current switch
             {
-                { IsSuccess: false } valueBox => await remapExceptionFuncAsync(valueBox.GetException()),
-                { IsSuccess: true } errorBox => ResultBox.FromValue(errorBox.GetValue()) 
+                { IsSuccess: false } valueBox => await remapExceptionFuncAsync(
+                    valueBox.GetException()),
+                { IsSuccess: true } errorBox => ResultBox.FromValue(errorBox.GetValue())
             };
-
 }

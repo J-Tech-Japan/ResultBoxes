@@ -11,7 +11,8 @@ public static class RescueExtensions
             {
                 { IsSuccess: false } => remapExceptionFunc(current.GetException()) switch
                 {
-                    { IsException: true } => ResultBox<TValue>.FromException(current.GetException()),
+                    { IsException: true } =>
+                        ResultBox<TValue>.FromException(current.GetException()),
                     { IsException: false } value => ResultBox.FromValue(value.GetValue())
                 },
                 { IsSuccess: true } => current.GetValue()
@@ -25,7 +26,8 @@ public static class RescueExtensions
             {
                 { IsSuccess: false } => await remapExceptionFunc(current.GetException()) switch
                 {
-                    { IsException: true } => ResultBox<TValue>.FromException(current.GetException()),
+                    { IsException: true } =>
+                        ResultBox<TValue>.FromException(current.GetException()),
                     { IsException: false } value => ResultBox.FromValue(value.GetValue())
                 },
                 { IsSuccess: true } => current.GetValue()
@@ -40,7 +42,8 @@ public static class RescueExtensions
             {
                 { IsSuccess: false } errorBox => remapExceptionFunc(errorBox.GetException()) switch
                 {
-                    { IsException: true } => ResultBox<TValue>.FromException(errorBox.GetException()),
+                    { IsException: true } => ResultBox<TValue>.FromException(
+                        errorBox.GetException()),
                     { IsException: false } value => ResultBox.FromValue(value.GetValue())
                 },
                 { IsSuccess: true } valueBox => valueBox.GetValue()
@@ -52,12 +55,13 @@ public static class RescueExtensions
         =>
             await current switch
             {
-                { IsSuccess: false } errorBox => await remapExceptionFunc(errorBox.GetException()) switch
-                {
-                    { IsException: true } => ResultBox<TValue>.FromException(errorBox.GetException()),
-                    { IsException: false } value => ResultBox.FromValue(value.GetValue())
-                },
+                { IsSuccess: false } errorBox => await remapExceptionFunc(errorBox.GetException())
+                    switch
+                    {
+                        { IsException: true } => ResultBox<TValue>.FromException(
+                            errorBox.GetException()),
+                        { IsException: false } value => ResultBox.FromValue(value.GetValue())
+                    },
                 { IsSuccess: true } valueBox => valueBox.GetValue()
             };
-
 }

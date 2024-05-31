@@ -48,7 +48,7 @@ public static class IterateExtensions
         }
         foreach (var value in current.GetValue())
         {
-            if ((await action(value)) == ScanEachControlFlow.Break)
+            if (await action(value) == ScanEachControlFlow.Break)
             {
                 break;
             }
@@ -85,7 +85,7 @@ public static class IterateExtensions
         }
         foreach (var value in current.GetValue())
         {
-            if ((await action(value)) == ScanEachControlFlow.Break)
+            if (await action(value) == ScanEachControlFlow.Break)
             {
                 break;
             }

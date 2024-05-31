@@ -98,8 +98,8 @@ public record ResultBox<TValue> where TValue : notnull
 }
 public static class ResultBox
 {
-    public static ResultBox<UnitValue> Start => ResultBox.Ok(UnitValue.None);
-    
+    public static ResultBox<UnitValue> Start => Ok(UnitValue.None);
+
     public static ResultBox<TValue> FromValue<TValue>(TValue value) where TValue : notnull =>
         new(value, null);
     public static ResultBox<TValue> Ok<TValue>(TValue value) where TValue : notnull =>
@@ -114,7 +114,8 @@ public static class ResultBox
         new(default, exception);
     public static ResultBox<TValue> Error<TValue>(Exception exception) where TValue : notnull =>
         new(default, exception);
-    public static ResultBox<TValue> FromException<TValue>(Exception exception) where TValue : notnull =>
+    public static ResultBox<TValue> FromException<TValue>(Exception exception)
+        where TValue : notnull =>
         new(default, exception);
 
     public static Task<ResultBox<TValueResult>> WrapTry<TValueResult>(Func<Task<TValueResult>> func)

@@ -8,7 +8,7 @@ public class ResultBoxStartSpec
         var result = ResultBox.Start;
         Assert.True(result.IsSuccess);
     }
-    
+
     [Fact]
     public void UseResultBoxStart2()
     {
@@ -17,5 +17,4 @@ public class ResultBoxStartSpec
         Assert.True(result.IsSuccess);
         Assert.Equal(1, result.GetValue());
     }
-
 }

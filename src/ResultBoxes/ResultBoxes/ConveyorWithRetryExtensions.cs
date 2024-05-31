@@ -8,7 +8,7 @@ public static class ConveyorWithRetryExtensions
         Func<TValue, Task<ResultBox<TValue>>> conveyorFunc)
         where TValue : notnull
         => await current.Conveyor(
-            async value => await Retry(value,retryPolicy, conveyorFunc));
+            async value => await Retry(value, retryPolicy, conveyorFunc));
     public static async Task<ResultBox<TValue>> ConveyorWithRetry<TValue>(
         this ResultBox<TValue> current,
         IRetryPolicy retryPolicy,
@@ -20,16 +20,16 @@ public static class ConveyorWithRetryExtensions
         Func<TValue, Task<ResultBox<TValue>>> conveyorFunc,
         IRetryPolicy retryPolicy)
         where TValue : notnull
-        => await current.Conveyor(async value => await Retry(value,retryPolicy, conveyorFunc));
+        => await current.Conveyor(async value => await Retry(value, retryPolicy, conveyorFunc));
 
     public static async Task<ResultBox<TValue>> ConveyorWithRetry<TValue>(
         this Task<ResultBox<TValue>> current,
         IRetryPolicy retryPolicy,
         Func<TValue, ResultBox<TValue>> conveyorFunc)
         where TValue : notnull
-        => await current.Conveyor(async value => await Retry(value,retryPolicy, conveyorFunc));
+        => await current.Conveyor(async value => await Retry(value, retryPolicy, conveyorFunc));
 
-    #region private methods 
+    #region private methods
     private static async Task<ResultBox<TValue>> Retry<TValue>(
         TValue value,
         IRetryPolicy retryPolicy,
@@ -59,7 +59,6 @@ public static class ConveyorWithRetryExtensions
         IRetryPolicy retryPolicy,
         Func<TValue, ResultBox<TValue>> conveyorFunc)
         where TValue : notnull
-        => await Retry(value,retryPolicy, async v => await Task.FromResult(conveyorFunc(v)));
+        => await Retry(value, retryPolicy, async v => await Task.FromResult(conveyorFunc(v)));
     #endregion
-    
 }

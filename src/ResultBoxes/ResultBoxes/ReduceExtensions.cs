@@ -22,7 +22,8 @@ public static class ReduceExtensions
                 break;
             }
         }
-        return result.IsSuccess ? ResultBox.FromValue(result.GetValue().Value) : result.GetException();
+        return result.IsSuccess ? ResultBox.FromValue(result.GetValue().Value)
+            : result.GetException();
     }
 
     public static ResultBox<TValueResult> ReduceEach<TValue, TValueResult>(
@@ -48,8 +49,8 @@ public static class ReduceExtensions
         return result.IsSuccess ? ResultBox.FromValue(result.GetValue()) : result.GetException();
     }
 
-    
-    
+
+
     public static async Task<ResultBox<TValueResult>> ReduceEach<TValue, TValueResult>(
         this Task<ResultBox<List<TValue>>> currentTask,
         TValueResult initialValue,
@@ -71,7 +72,8 @@ public static class ReduceExtensions
                 break;
             }
         }
-        return result.IsSuccess ? ResultBox.FromValue(result.GetValue().Value) : result.GetException();
+        return result.IsSuccess ? ResultBox.FromValue(result.GetValue().Value)
+            : result.GetException();
     }
 
     public static async Task<ResultBox<TValueResult>> ReduceEach<TValue, TValueResult>(
@@ -120,7 +122,8 @@ public static class ReduceExtensions
                 break;
             }
         }
-        return result.IsSuccess ? ResultBox.FromValue(result.GetValue().Value) : result.GetException();
+        return result.IsSuccess ? ResultBox.FromValue(result.GetValue().Value)
+            : result.GetException();
     }
 
     public static async Task<ResultBox<TValueResult>> ReduceEach<TValue, TValueResult>(
@@ -167,7 +170,8 @@ public static class ReduceExtensions
                 break;
             }
         }
-        return result.IsSuccess ? ResultBox.FromValue(result.GetValue().Value) : result.GetException();
+        return result.IsSuccess ? ResultBox.FromValue(result.GetValue().Value)
+            : result.GetException();
     }
 
     public static async Task<ResultBox<TValueResult>> ReduceEach<TValue, TValueResult>(
