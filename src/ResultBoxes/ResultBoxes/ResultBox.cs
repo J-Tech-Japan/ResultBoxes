@@ -47,7 +47,7 @@ public record ResultBox<TValue> where TValue : notnull
             _ => new ResultValueNullException()
         };
 
-    public static ResultBox<TValue> WrapTry(Func<TValue> func)
+    public static ResultBox<TValue> WrapTry(Func<TValue> func, Func<Exception, Exception>? exceptionMapper)
     {
         try
         {
@@ -55,7 +55,7 @@ public record ResultBox<TValue> where TValue : notnull
         }
         catch (Exception e)
         {
-            return e;
+            return exceptionMapper?.Invoke(e) ?? e;
         }
     }
 
@@ -84,7 +84,7 @@ public record ResultBox<TValue> where TValue : notnull
         }
     }
 
-    public static async Task<ResultBox<TValue>> WrapTry(Func<Task<TValue>> func)
+    public static async Task<ResultBox<TValue>> WrapTry(Func<Task<TValue>> func, Func<Exception, Exception>? exceptionMapper)
     {
         try
         {
@@ -92,7 +92,7 @@ public record ResultBox<TValue> where TValue : notnull
         }
         catch (Exception e)
         {
-            return e;
+            return exceptionMapper?.Invoke(e) ?? e;
         }
     }
 }
@@ -117,12 +117,12 @@ public static class ResultBox
     public static ResultBox<TValue> FromException<TValue>(Exception exception) where TValue : notnull =>
         new(default, exception);
 
-    public static Task<ResultBox<TValueResult>> WrapTry<TValueResult>(Func<Task<TValueResult>> func)
+    public static Task<ResultBox<TValueResult>> WrapTry<TValueResult>(Func<Task<TValueResult>> func, Func<Exception, Exception>? exceptionMapper = null)
         where TValueResult : notnull
-        => ResultBox<TValueResult>.WrapTry(func);
-    public static ResultBox<TValueResult> WrapTry<TValueResult>(Func<TValueResult> func)
+        => ResultBox<TValueResult>.WrapTry(func, exceptionMapper);
+    public static ResultBox<TValueResult> WrapTry<TValueResult>(Func<TValueResult> func, Func<Exception, Exception>? exceptionMapper = null)
         where TValueResult : notnull
-        => ResultBox<TValueResult>.WrapTry(func);
+        => ResultBox<TValueResult>.WrapTry(func, exceptionMapper);
 
     public static void LogResult<TValue>(ResultBox<TValue> result) where TValue : notnull
         => LogResult(result, "");
