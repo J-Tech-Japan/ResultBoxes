@@ -77,4 +77,23 @@ public class CombineWrapTrySpec
         Assert.Equal(1, result.GetValue().Value1);
         Assert.Equal(2, result.GetValue().Value2);
     }
+    
+    [Fact]
+    public void CombineWrapTryTestThrowAndRemap()
+    {
+        var result = ResultBox<int>.FromValue(1)
+            .CombineWrapTry(value => value / (value - 1), exception => new ApplicationException("can not divide by 0"));
+        Assert.False(result.IsSuccess);
+        Assert.IsType<ApplicationException>(result.GetException());
+    }
+    [Fact]
+    public void CombineWrapTryTestThrowAndRemap2()
+    {
+        var result = ResultBox<int>.FromValue(1)
+            .CombineWrapTry(value => value / (value - 1));
+        Assert.False(result.IsSuccess);
+        var exception = result.GetException();
+        Assert.IsType<DivideByZeroException>(exception);
+    }
+
 }
