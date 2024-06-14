@@ -143,4 +143,26 @@ public static class ResultBox
     }
     private static string SpaceWithMarking(string marking) =>
         string.IsNullOrWhiteSpace(marking) ? "" : marking + " ";
+
+    public static ResultBox<TValue> CheckNull<TValue>(TValue? value, Exception? exception = null)
+        where TValue : notnull => value switch
+    {
+        { } => ResultBox.FromValue(value),
+        _ => ResultBox<TValue>.FromException(
+            exception ?? new ResultValueNullException(typeof(TValue).Name))
+    };
+    public static ResultBox<TValue> CheckNull<TValue>(Func<TValue?> valueFunc, Exception? exception = null)
+        where TValue : notnull => valueFunc() switch
+    {
+        { } value => ResultBox.FromValue(value),
+        _ => ResultBox<TValue>.FromException(
+            exception ?? new ResultValueNullException(typeof(TValue).Name))
+    };
+    public static async Task<ResultBox<TValue>> CheckNull<TValue>(Func<Task<TValue?>> valueFunc, Exception? exception = null)
+        where TValue : notnull => await valueFunc() switch
+    {
+        { } value => ResultBox.FromValue(value),
+        _ => ResultBox<TValue>.FromException(
+            exception ?? new ResultValueNullException(typeof(TValue).Name))
+    };
 }
