@@ -2,6 +2,7 @@ namespace ResultBoxes;
 
 public static class ScanExtensions
 {
+    #region scan value
     public static ResultBox<TValue> Scan<TValue>(
         this ResultBox<TValue> result,
         Action<TValue> action,
@@ -19,6 +20,9 @@ public static class ScanExtensions
         }
         return result;
     }
+    #endregion
+
+    #region Scan Result
     public static ResultBox<TValue> ScanResult<TValue>(
         this ResultBox<TValue> result,
         Action<ResultBox<TValue>> action)
@@ -27,6 +31,35 @@ public static class ScanExtensions
         action(result);
         return result;
     }
+    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+        this ResultBox<TValue> result,
+        Func<ResultBox<TValue>, Task> actionAsync)
+        where TValue : notnull
+    {
+        await actionAsync(result);
+        return result;
+    }
+    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+        this Task<ResultBox<TValue>> result,
+        Action<ResultBox<TValue>> action)
+        where TValue : notnull
+    {
+        var res = await result;
+        action(res);
+        return res;
+    }
+    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+        this Task<ResultBox<TValue>> result,
+        Func<ResultBox<TValue>, Task> actionAsync)
+        where TValue : notnull
+    {
+        var res = await result;
+        await actionAsync(res);
+        return res;
+    }
+    #endregion
+
+    #region Scan TwoValues
     public static ResultBox<TwoValues<TValue1, TValue2>> Scan<TValue1, TValue2>(
         this ResultBox<TwoValues<TValue1, TValue2>> result,
         Action<TValue1, TValue2> action,
@@ -34,7 +67,17 @@ public static class ScanExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         => Scan(result, values => values.CallAction(action), actionError);
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
+        this ResultBox<TwoValues<TValue1, TValue2>> result,
+        Func<TValue1, TValue2, Task> action,
+        Func<Exception, Task>? actionErrorAsync = null)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
 
+    #endregion
+
+    #region Scan ThreeValues
     public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> Scan<TValue1, TValue2, TValue3>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> result,
         Action<TValue1, TValue2, TValue3> action,
@@ -43,7 +86,19 @@ public static class ScanExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         => Scan(result, values => values.CallAction(action), actionError);
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
+        TValue2, TValue3>(
+        this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> result,
+        Func<TValue1, TValue2, TValue3, Task> action,
+        Func<Exception, Task>? actionErrorAsync = null)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
 
+    #endregion
+
+    #region Scan FourValues
     public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> Scan<TValue1, TValue2,
         TValue3, TValue4>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
@@ -54,6 +109,21 @@ public static class ScanExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         => Scan(result, values => values.CallAction(action), actionError);
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+        TValue1,
+        TValue2, TValue3, TValue4>(
+        this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
+        Func<TValue1, TValue2, TValue3, TValue4, Task> action,
+        Func<Exception, Task>? actionErrorAsync = null)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
+
+    #endregion
+
+    #region Scan FiveValues
     public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> Scan<TValue1,
         TValue2, TValue3, TValue4, TValue5>(
         this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> result,
@@ -65,7 +135,21 @@ public static class ScanExtensions
         where TValue4 : notnull
         where TValue5 : notnull
         => Scan(result, values => values.CallAction(action), actionError);
+    public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
+        Scan<TValue1, TValue2, TValue3, TValue4, TValue5>(
+            this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> result,
+            Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task> action,
+            Func<Exception, Task>? actionErrorAsync = null)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        where TValue5 : notnull
+        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
 
+    #endregion
+
+    #region Scan Value and Error
     public static async Task<ResultBox<TValue>> Scan<TValue>(
         this ResultBox<TValue> result,
         Func<TValue, Task> actionAsync,
@@ -86,55 +170,6 @@ public static class ScanExtensions
         }
         return result;
     }
-    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
-        this ResultBox<TValue> result,
-        Func<ResultBox<TValue>, Task> actionAsync)
-        where TValue : notnull
-    {
-        await actionAsync(result);
-        return result;
-    }
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
-        this ResultBox<TwoValues<TValue1, TValue2>> result,
-        Func<TValue1, TValue2, Task> action,
-        Func<Exception, Task>? actionErrorAsync = null)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
-
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
-        TValue2, TValue3>(
-        this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> result,
-        Func<TValue1, TValue2, TValue3, Task> action,
-        Func<Exception, Task>? actionErrorAsync = null)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        where TValue3 : notnull
-        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
-
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
-        TValue1,
-        TValue2, TValue3, TValue4>(
-        this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
-        Func<TValue1, TValue2, TValue3, TValue4, Task> action,
-        Func<Exception, Task>? actionErrorAsync = null)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        where TValue3 : notnull
-        where TValue4 : notnull
-        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
-    public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
-        Scan<TValue1, TValue2, TValue3, TValue4, TValue5>(
-            this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> result,
-            Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task> action,
-            Func<Exception, Task>? actionErrorAsync = null)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        where TValue3 : notnull
-        where TValue4 : notnull
-        where TValue5 : notnull
-        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
-
     public static async Task<ResultBox<TValue>> Scan<TValue>(
         this Task<ResultBox<TValue>> result,
         Action<TValue> action,
@@ -153,55 +188,6 @@ public static class ScanExtensions
         }
         return res;
     }
-    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
-        this Task<ResultBox<TValue>> result,
-        Action<ResultBox<TValue>> action)
-        where TValue : notnull
-    {
-        var res = await result;
-        action(res);
-        return res;
-    }
-
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
-        this Task<ResultBox<TwoValues<TValue1, TValue2>>> result,
-        Action<TValue1, TValue2> action,
-        Action<Exception>? actionError = null)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        => (await result).Scan(values => values.CallAction(action), actionError);
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
-        TValue2, TValue3>(
-        this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> result,
-        Action<TValue1, TValue2, TValue3> action,
-        Action<Exception>? actionError = null)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        where TValue3 : notnull
-        => (await result).Scan(values => values.CallAction(action), actionError);
-
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
-        TValue1,
-        TValue2, TValue3, TValue4>(
-        this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> result,
-        Action<TValue1, TValue2, TValue3, TValue4> action,
-        Action<Exception>? actionError = null)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        where TValue3 : notnull
-        where TValue4 : notnull
-        => (await result).Scan(values => values.CallAction(action), actionError);
-    public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
-        Scan<TValue1, TValue2, TValue3, TValue4, TValue5>(
-            this Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> result,
-            Action<TValue1, TValue2, TValue3, TValue4, TValue5> action)
-        where TValue1 : notnull
-        where TValue2 : notnull
-        where TValue3 : notnull
-        where TValue4 : notnull
-        where TValue5 : notnull
-        => (await result).Scan(values => values.CallAction(action));
-
     public static async Task<ResultBox<TValue>> Scan<TValue>(
         this Task<ResultBox<TValue>> result,
         Func<TValue, Task> actionAsync,
@@ -223,15 +209,17 @@ public static class ScanExtensions
         }
         return res;
     }
-    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
-        this Task<ResultBox<TValue>> result,
-        Func<ResultBox<TValue>, Task> actionAsync)
-        where TValue : notnull
-    {
-        var res = await result;
-        await actionAsync(res);
-        return res;
-    }
+    #endregion
+
+
+    #region Scan TwoValues and Error
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
+        this Task<ResultBox<TwoValues<TValue1, TValue2>>> result,
+        Action<TValue1, TValue2> action,
+        Action<Exception>? actionError = null)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        => (await result).Scan(values => values.CallAction(action), actionError);
     public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> result,
         Func<TValue1, TValue2, Task> action,
@@ -241,6 +229,19 @@ public static class ScanExtensions
         => await (await result).Scan(
             async values => await values.CallAction(action),
             actionErrorAsync);
+
+    #endregion
+
+    #region Scan TheeValues and Error
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
+        TValue2, TValue3>(
+        this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> result,
+        Action<TValue1, TValue2, TValue3> action,
+        Action<Exception>? actionError = null)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        => (await result).Scan(values => values.CallAction(action), actionError);
     public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
         TValue2, TValue3>(
         this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> result,
@@ -252,6 +253,21 @@ public static class ScanExtensions
         => await (await result).Scan(
             async values => await values.CallAction(action),
             actionErrorAsync);
+
+    #endregion
+
+    #region Scan FourValues and Error 
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+        TValue1,
+        TValue2, TValue3, TValue4>(
+        this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> result,
+        Action<TValue1, TValue2, TValue3, TValue4> action,
+        Action<Exception>? actionError = null)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        => (await result).Scan(values => values.CallAction(action), actionError);
     public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
         TValue1,
         TValue2, TValue3, TValue4>(
@@ -265,6 +281,20 @@ public static class ScanExtensions
         => await (await result).Scan(
             async values => await values.CallAction(action),
             actionErrorAsync);
+
+    #endregion
+    
+    #region Scan FiveValues and Error
+    public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
+        Scan<TValue1, TValue2, TValue3, TValue4, TValue5>(
+            this Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> result,
+            Action<TValue1, TValue2, TValue3, TValue4, TValue5> action)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        where TValue3 : notnull
+        where TValue4 : notnull
+        where TValue5 : notnull
+        => (await result).Scan(values => values.CallAction(action));
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
         Scan<TValue1, TValue2, TValue3, TValue4, TValue5>(
             this Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> result,
@@ -278,4 +308,8 @@ public static class ScanExtensions
         => await (await result).Scan(
             async values => await values.CallAction(action),
             actionErrorAsync);
+
+    #endregion
+    
+    
 }
