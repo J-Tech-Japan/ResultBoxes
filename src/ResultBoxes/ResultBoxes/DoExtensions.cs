@@ -1,9 +1,9 @@
 namespace ResultBoxes;
 
-public static class ScanExtensions
+public static class DoExtensions
 {
     #region Scan Nothing 
-    public static ResultBox<TValue> Scan<TValue>(
+    public static ResultBox<TValue> Do<TValue>(
         this ResultBox<TValue> result,
         Action action)
         where TValue : notnull
@@ -11,7 +11,7 @@ public static class ScanExtensions
         action();
         return result;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue>(
+    public static async Task<ResultBox<TValue>> Do<TValue>(
         this ResultBox<TValue> result,
         Func<Task> actionAsync)
         where TValue : notnull
@@ -19,7 +19,7 @@ public static class ScanExtensions
         await actionAsync();
         return result;
     }
-    public static ResultBox<TValue> Scan<TValue, TValueToIgnore>(
+    public static ResultBox<TValue> Do<TValue, TValueToIgnore>(
         this ResultBox<TValue> result,
         Func<TValueToIgnore> actionAsync)
         where TValue : notnull
@@ -27,7 +27,7 @@ public static class ScanExtensions
         actionAsync();
         return result;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue,TValueToIgnore>(
+    public static async Task<ResultBox<TValue>> Do<TValue,TValueToIgnore>(
         this ResultBox<TValue> result,
         Func<Task<TValueToIgnore>> actionAsync)
         where TValue : notnull
@@ -36,7 +36,7 @@ public static class ScanExtensions
         return result;
     }
 
-    public static async Task< ResultBox<TValue>> Scan<TValue>(
+    public static async Task< ResultBox<TValue>> Do<TValue>(
         this Task<ResultBox<TValue>> result,
         Action action)
         where TValue : notnull
@@ -44,7 +44,7 @@ public static class ScanExtensions
         action();
         return await result;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue>(
+    public static async Task<ResultBox<TValue>> Do<TValue>(
         this Task<ResultBox<TValue>> result,
         Func<Task> actionAsync)
         where TValue : notnull
@@ -52,7 +52,7 @@ public static class ScanExtensions
         await actionAsync();
         return await result;
     }
-    public static async Task< ResultBox<TValue>> Scan<TValue, TValueToIgnore>(
+    public static async Task< ResultBox<TValue>> Do<TValue, TValueToIgnore>(
         this Task<ResultBox<TValue>> result,
         Func<TValueToIgnore> actionAsync)
         where TValue : notnull
@@ -60,7 +60,7 @@ public static class ScanExtensions
         actionAsync();
         return await result;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue,TValueToIgnore>(
+    public static async Task<ResultBox<TValue>> Do<TValue,TValueToIgnore>(
         this Task<ResultBox<TValue>> result,
         Func<Task<TValueToIgnore>> actionAsync)
         where TValue : notnull
@@ -73,7 +73,7 @@ public static class ScanExtensions
     
     
     #region Scan Result
-    public static ResultBox<TValue> ScanResult<TValue>(
+    public static ResultBox<TValue> DoResult<TValue>(
         this ResultBox<TValue> result,
         Action<ResultBox<TValue>> action)
         where TValue : notnull
@@ -81,7 +81,7 @@ public static class ScanExtensions
         action(result);
         return result;
     }
-    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+    public static async Task<ResultBox<TValue>> DoResult<TValue>(
         this ResultBox<TValue> result,
         Func<ResultBox<TValue>, Task> actionAsync)
         where TValue : notnull
@@ -89,7 +89,7 @@ public static class ScanExtensions
         await actionAsync(result);
         return result;
     }
-    public static ResultBox<TValue> ScanResult<TValue, TValueToIgnore>(
+    public static ResultBox<TValue> DoResult<TValue, TValueToIgnore>(
         this ResultBox<TValue> result,
         Func<ResultBox<TValue>, TValueToIgnore> actionAsync)
         where TValue : notnull
@@ -97,7 +97,7 @@ public static class ScanExtensions
         actionAsync(result);
         return result;
     }
-    public static async Task<ResultBox<TValue>> ScanResult<TValue,TValueToIgnore>(
+    public static async Task<ResultBox<TValue>> DoResult<TValue,TValueToIgnore>(
         this ResultBox<TValue> result,
         Func<ResultBox<TValue>, Task<TValueToIgnore>> actionAsync)
         where TValue : notnull
@@ -106,7 +106,7 @@ public static class ScanExtensions
         return result;
     }
 
-    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+    public static async Task<ResultBox<TValue>> DoResult<TValue>(
         this Task<ResultBox<TValue>> result,
         Action<ResultBox<TValue>> action)
         where TValue : notnull
@@ -115,7 +115,7 @@ public static class ScanExtensions
         action(res);
         return res;
     }
-    public static async Task<ResultBox<TValue>> ScanResult<TValue>(
+    public static async Task<ResultBox<TValue>> DoResult<TValue>(
         this Task<ResultBox<TValue>> result,
         Func<ResultBox<TValue>, Task> actionAsync)
         where TValue : notnull
@@ -124,7 +124,7 @@ public static class ScanExtensions
         await actionAsync(res);
         return res;
     }
-    public static async Task<ResultBox<TValue>> ScanResult<TValue,TValueToIgnore>(
+    public static async Task<ResultBox<TValue>> DoResult<TValue,TValueToIgnore>(
         this Task<ResultBox<TValue>> result,
         Func<ResultBox<TValue>, TValueToIgnore> actionAsync)
         where TValue : notnull
@@ -133,7 +133,7 @@ public static class ScanExtensions
         actionAsync(res);
         return res;
     }
-    public static async Task<ResultBox<TValue>> ScanResult<TValue, TValueToIgnore>(
+    public static async Task<ResultBox<TValue>> DoResult<TValue, TValueToIgnore>(
         this Task<ResultBox<TValue>> result,
         Func<ResultBox<TValue>, Task<TValueToIgnore>> actionAsync)
         where TValue : notnull
@@ -145,7 +145,7 @@ public static class ScanExtensions
     #endregion
 
     #region Scan Value and Error
-    public static ResultBox<TValue> Scan<TValue>(
+    public static ResultBox<TValue> Do<TValue>(
         this ResultBox<TValue> result,
         Action<TValue> action,
         Action<Exception>? actionError = null)
@@ -162,7 +162,7 @@ public static class ScanExtensions
         }
         return result;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue>(
+    public static async Task<ResultBox<TValue>> Do<TValue>(
         this ResultBox<TValue> result,
         Func<TValue, Task> actionAsync,
         Func<Exception, Task>? actionErrorAsync = null)
@@ -182,7 +182,7 @@ public static class ScanExtensions
         }
         return result;
     }
-    public static ResultBox<TValue> Scan<TValue, TValueToIgnore>(
+    public static ResultBox<TValue> Do<TValue, TValueToIgnore>(
         this ResultBox<TValue> result,
         Func<TValue, TValueToIgnore> actionAsync,
         Action<Exception>? actionError = null)
@@ -202,7 +202,7 @@ public static class ScanExtensions
         }
         return result;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue, TValueToVoid>(
+    public static async Task<ResultBox<TValue>> Do<TValue, TValueToVoid>(
         this ResultBox<TValue> result,
         Func<TValue, Task<TValueToVoid>> actionAsync,
         Action<Exception>? actionError = null)
@@ -222,7 +222,7 @@ public static class ScanExtensions
         }
         return result;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue>(
+    public static async Task<ResultBox<TValue>> Do<TValue>(
         this Task<ResultBox<TValue>> result,
         Action<TValue> action,
         Action<Exception>? actionError = null)
@@ -240,7 +240,7 @@ public static class ScanExtensions
         }
         return res;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue>(
+    public static async Task<ResultBox<TValue>> Do<TValue>(
         this Task<ResultBox<TValue>> result,
         Func<TValue, Task> actionAsync,
         Action<Exception>? actionError = null)
@@ -261,7 +261,7 @@ public static class ScanExtensions
         }
         return res;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue, TValueToIgnore>(
+    public static async Task<ResultBox<TValue>> Do<TValue, TValueToIgnore>(
         this Task<ResultBox<TValue>> result,
         Func<TValue, TValueToIgnore> actionAsync,
         Action<Exception>? actionError = null)
@@ -282,7 +282,7 @@ public static class ScanExtensions
         }
         return res;
     }
-    public static async Task<ResultBox<TValue>> Scan<TValue, TValueToIgnore>(
+    public static async Task<ResultBox<TValue>> Do<TValue, TValueToIgnore>(
         this Task<ResultBox<TValue>> result,
         Func<TValue, Task<TValueToIgnore>> actionAsync,
         Action<Exception>? actionError = null)
@@ -307,14 +307,14 @@ public static class ScanExtensions
 
 
     #region Scan TwoValues and Error
-    public static ResultBox<TwoValues<TValue1, TValue2>> Scan<TValue1, TValue2>(
+    public static ResultBox<TwoValues<TValue1, TValue2>> Do<TValue1, TValue2>(
         this ResultBox<TwoValues<TValue1, TValue2>> result,
         Action<TValue1, TValue2> action,
         Action<Exception>? actionError = null)
         where TValue1 : notnull
         where TValue2 : notnull
-        => Scan(result, values => values.CallAction(action), actionError);
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
+        => Do(result, values => values.CallAction(action), actionError);
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Do<TValue1, TValue2>(
         this ResultBox<TwoValues<TValue1, TValue2>> result,
         Func<TValue1, TValue2, Task> action,
         Action<Exception>? actionError = null)
@@ -336,7 +336,7 @@ public static class ScanExtensions
         return result;
     }
     
-    public static ResultBox<TwoValues<TValue1, TValue2>> Scan<TValue1, TValue2, TValueIgnore>(
+    public static ResultBox<TwoValues<TValue1, TValue2>> Do<TValue1, TValue2, TValueIgnore>(
         this ResultBox<TwoValues<TValue1, TValue2>> result,
         Func<TValue1, TValue2, TValueIgnore> action,
         Action<Exception>? actionError = null)
@@ -360,7 +360,7 @@ public static class ScanExtensions
         } 
         return result;
     }
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2, TValueToIgnore>(
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Do<TValue1, TValue2, TValueToIgnore>(
         this ResultBox<TwoValues<TValue1, TValue2>> result,
         Func<TValue1, TValue2, Task<TValueToIgnore>> action,
         Action<Exception>? actionError = null)
@@ -382,14 +382,14 @@ public static class ScanExtensions
         return result;
     }
 
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Do<TValue1, TValue2>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> result,
         Action<TValue1, TValue2> action,
         Action<Exception>? actionError = null)
         where TValue1 : notnull
         where TValue2 : notnull
         => (await result).Scan(values => values.CallAction(action), actionError);
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2>(
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Do<TValue1, TValue2>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> result,
         Func<TValue1, TValue2, Task> action,
         Func<Exception, Task>? actionErrorAsync = null)
@@ -398,7 +398,7 @@ public static class ScanExtensions
         => await (await result).Scan(
             async values => await values.CallAction(action),
             actionErrorAsync);
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2, TValueToIgnore>(
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Do<TValue1, TValue2, TValueToIgnore>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> result,
         Func<TValue1, TValue2, TValueToIgnore> action,
         Func<Exception, Task>? actionErrorAsync = null)
@@ -416,7 +416,7 @@ public static class ScanExtensions
 
             },
             actionErrorAsync);
-    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Scan<TValue1, TValue2,TValueToIgnore>(
+    public static async Task<ResultBox<TwoValues<TValue1, TValue2>>> Do<TValue1, TValue2,TValueToIgnore>(
         this Task<ResultBox<TwoValues<TValue1, TValue2>>> result,
         Func<TValue1, TValue2, Task<TValueToIgnore>> action,
         Func<Exception, Task>? actionErrorAsync = null)
@@ -428,15 +428,15 @@ public static class ScanExtensions
     #endregion
 
     #region Scan TheeValues and Error
-    public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> Scan<TValue1, TValue2, TValue3>(
+    public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> Do<TValue1, TValue2, TValue3>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> result,
         Action<TValue1, TValue2, TValue3> action,
         Action<Exception>? actionError = null)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => Scan(result, values => values.CallAction(action), actionError);
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
+        => Do(result, values => values.CallAction(action), actionError);
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Do<TValue1,
         TValue2, TValue3>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> result,
         Func<TValue1, TValue2, TValue3, Task> action,
@@ -444,21 +444,21 @@ public static class ScanExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
+        => await Do(result, async values => await values.CallAction(action), actionErrorAsync);
     
-    public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> Scan<TValue1, TValue2, TValue3, TValueToIgnore>(
+    public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> Do<TValue1, TValue2, TValue3, TValueToIgnore>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> result,
         Func<TValue1, TValue2, TValue3,TValueToIgnore> action,
         Action<Exception>? actionError = null)
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => Scan(result, values => values.CallAction(
+        => Do(result, values => values.CallAction(
             (value1, value2, value3) =>
             {
                 action(value1, value2, value3);
             }), actionError);
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Do<TValue1,
         TValue2, TValue3,TValueToIgnore>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> result,
         Func<TValue1, TValue2, TValue3, Task<TValueToIgnore>> action,
@@ -466,9 +466,9 @@ public static class ScanExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         where TValue3 : notnull
-        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
+        => await Do(result, async values => await values.CallAction(action), actionErrorAsync);
 
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Do<TValue1,
         TValue2, TValue3>(
         this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> result,
         Action<TValue1, TValue2, TValue3> action,
@@ -477,7 +477,7 @@ public static class ScanExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         => (await result).Scan(values => values.CallAction(action), actionError);
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Do<TValue1,
         TValue2, TValue3>(
         this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> result,
         Func<TValue1, TValue2, TValue3, Task> action,
@@ -490,7 +490,7 @@ public static class ScanExtensions
             actionErrorAsync);
 
     
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Do<TValue1,
         TValue2, TValue3,TValueToIgnore>(
         this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> result,
         Func<TValue1, TValue2, TValue3,TValueToIgnore> action,
@@ -502,7 +502,7 @@ public static class ScanExtensions
         {
             action(v1,v2,v3);
         }), actionError);
-    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Scan<TValue1,
+    public static async Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> Do<TValue1,
         TValue2, TValue3,TValueToIgnore>(
         this Task<ResultBox<ThreeValues<TValue1, TValue2, TValue3>>> result,
         Func<TValue1, TValue2, TValue3, Task<TValueToIgnore>> action,
@@ -517,7 +517,7 @@ public static class ScanExtensions
     #endregion
 
     #region Scan FourValues and Error 
-    public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> Scan<TValue1, TValue2,
+    public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> Do<TValue1, TValue2,
         TValue3, TValue4>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
         Action<TValue1, TValue2, TValue3, TValue4> action,
@@ -526,8 +526,8 @@ public static class ScanExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => Scan(result, values => values.CallAction(action), actionError);
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+        => Do(result, values => values.CallAction(action), actionError);
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Do<
         TValue1,
         TValue2, TValue3, TValue4>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
@@ -537,10 +537,10 @@ public static class ScanExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
+        => await Do(result, async values => await values.CallAction(action), actionErrorAsync);
     
     
-    public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> Scan<TValue1, TValue2,
+    public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> Do<TValue1, TValue2,
         TValue3, TValue4, TValueToIgnore>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
         Func<TValue1, TValue2, TValue3, TValue4, TValueToIgnore> action,
@@ -549,11 +549,11 @@ public static class ScanExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => Scan(result, values => values.CallAction((v1,v2,v3,v4) =>
+        => Do(result, values => values.CallAction((v1,v2,v3,v4) =>
         {
             action(v1,v2,v3,v4);
         }), actionError);
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Do<
         TValue1,
         TValue2, TValue3, TValue4,TValueToIgnore>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
@@ -563,11 +563,11 @@ public static class ScanExtensions
         where TValue2 : notnull
         where TValue3 : notnull
         where TValue4 : notnull
-        => await Scan(result, async values => await values.CallAction(action), actionErrorAsync);
+        => await Do(result, async values => await values.CallAction(action), actionErrorAsync);
 
     
     
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Do<
         TValue1,
         TValue2, TValue3, TValue4>(
         this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> result,
@@ -578,7 +578,7 @@ public static class ScanExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         => (await result).Scan(values => values.CallAction(action), actionError);
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Do<
         TValue1,
         TValue2, TValue3, TValue4>(
         this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> result,
@@ -593,7 +593,7 @@ public static class ScanExtensions
             actionErrorAsync);
 
     
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Do<
         TValue1,
         TValue2, TValue3, TValue4, TValueToIgnore>(
         this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> result,
@@ -607,7 +607,7 @@ public static class ScanExtensions
         {
             action(v1,v2,v3,v4);
         }), actionError);
-    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Scan<
+    public static async Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> Do<
         TValue1,
         TValue2, TValue3, TValue4,TValueToIgnore>(
         this Task<ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>> result,
@@ -624,7 +624,7 @@ public static class ScanExtensions
     #endregion
     
     #region Scan FiveValues and Error
-    public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> Scan<TValue1,
+    public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> Do<TValue1,
         TValue2, TValue3, TValue4, TValue5>(
         this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> result,
         Action<TValue1, TValue2, TValue3, TValue4, TValue5> action,
@@ -634,9 +634,9 @@ public static class ScanExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => Scan(result, values => values.CallAction(action), actionError);
+        => Do(result, values => values.CallAction(action), actionError);
     public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>
-        Scan<TValue1, TValue2, TValue3, TValue4, TValue5>(
+        Do<TValue1, TValue2, TValue3, TValue4, TValue5>(
             this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> result,
             Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task> action,
             Action<Exception>? actionError = null)
@@ -645,9 +645,9 @@ public static class ScanExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => Scan(result, async values => await values.CallAction(action), actionError);
+        => Do(result, async values => await values.CallAction(action), actionError);
     
-    public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> Scan<TValue1,
+    public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> Do<TValue1,
         TValue2, TValue3, TValue4, TValue5, TValueToIgnore>(
         this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> result,
         Func<TValue1, TValue2, TValue3, TValue4, TValue5, TValueToIgnore> action,
@@ -657,12 +657,12 @@ public static class ScanExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => Scan(result, values => values.CallAction((v1,v2,v3,v4,v5) =>
+        => Do(result, values => values.CallAction((v1,v2,v3,v4,v5) =>
         {
             action(v1,v2,v3,v4,v5);
         }), actionError);
     public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>
-        Scan<TValue1, TValue2, TValue3, TValue4, TValue5,TValueToIgnore>(
+        Do<TValue1, TValue2, TValue3, TValue4, TValue5,TValueToIgnore>(
             this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> result,
             Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task<TValueToIgnore>> action,
             Action<Exception>? actionError = null)
@@ -671,14 +671,14 @@ public static class ScanExtensions
         where TValue3 : notnull
         where TValue4 : notnull
         where TValue5 : notnull
-        => Scan(result, async values => await values.CallAction(action), actionError);
+        => Do(result, async values => await values.CallAction(action), actionError);
 
     
     
     
     
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
-        Scan<TValue1, TValue2, TValue3, TValue4, TValue5>(
+        Do<TValue1, TValue2, TValue3, TValue4, TValue5>(
             this Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> result,
             Action<TValue1, TValue2, TValue3, TValue4, TValue5> action,Action<Exception>? actionError = null)
         where TValue1 : notnull
@@ -688,7 +688,7 @@ public static class ScanExtensions
         where TValue5 : notnull
         => (await result).Scan(values => values.CallAction(action), actionError);
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
-        Scan<TValue1, TValue2, TValue3, TValue4, TValue5>(
+        Do<TValue1, TValue2, TValue3, TValue4, TValue5>(
             this Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> result,
             Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task> action,
             Action<Exception>? actionError = null)
@@ -715,7 +715,7 @@ public static class ScanExtensions
 
     
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
-        Scan<TValue1, TValue2, TValue3, TValue4, TValue5, TValueToIgnore>(
+        Do<TValue1, TValue2, TValue3, TValue4, TValue5, TValueToIgnore>(
             this Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> result,
             Func<TValue1, TValue2, TValue3, TValue4, TValue5,TValueToIgnore> action,Action<Exception>? actionError = null)
         where TValue1 : notnull
@@ -728,7 +728,7 @@ public static class ScanExtensions
             action(v1,v2,v3,v4,v5);
         }), actionError);
     public static async Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>>
-        Scan<TValue1, TValue2, TValue3, TValue4, TValue5,TValueToIgnore>(
+        Do<TValue1, TValue2, TValue3, TValue4, TValue5,TValueToIgnore>(
             this Task<ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>> result,
             Func<TValue1, TValue2, TValue3, TValue4, TValue5, Task<TValueToIgnore>> action,
             Action<Exception>? actionError = null)
