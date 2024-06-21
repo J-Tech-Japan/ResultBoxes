@@ -151,6 +151,42 @@ public static class ResultBox
         _ => ResultBox<TValue>.FromException(
             exception ?? new ResultValueNullException(typeof(TValue).Name))
     };
+    public static ResultBox<TValue> CheckNullWrapTry<TValue>(Func<TValue?> func, Func<Exception, Exception>? exceptionMapper = null)
+        where TValue : notnull
+    {
+        try
+        {
+            return func() switch
+            {
+                { } value => ResultBox.FromValue(value),
+                _ => ResultBox<TValue>.FromException(
+                    new ResultValueNullException(typeof(TValue).Name)
+                )
+            };
+        }
+        catch (Exception e)
+        {
+            return exceptionMapper?.Invoke(e) ?? e;
+        }
+    }
+    public static async Task<ResultBox<TValue>> CheckNullWrapTry<TValue>(Func<Task<TValue?>> funcAsync, Func<Exception, Exception>? exceptionMapper = null)
+        where TValue : notnull
+    {
+        try
+        {
+            return await funcAsync() switch
+            {
+                { } value => ResultBox.FromValue(value),
+                _ => ResultBox<TValue>.FromException(
+                    new ResultValueNullException(typeof(TValue).Name)
+                )
+            };
+        }
+        catch (Exception e)
+        {
+            return exceptionMapper?.Invoke(e) ?? e;
+        }
+    }
     public static ResultBox<TValue> CheckNull<TValue>(Func<TValue?> valueFunc, Exception? exception = null)
         where TValue : notnull => valueFunc() switch
     {
