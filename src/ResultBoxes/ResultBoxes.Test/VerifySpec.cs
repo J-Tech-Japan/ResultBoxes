@@ -181,4 +181,111 @@ public class VerifySpec
             .Verify(v => ResultBox.FromException<ExceptionOrNone>(new ApplicationException("test error"))).ToTask();
         Assert.False(sut.IsSuccess);
     }
+    
+    [Fact]
+    public async Task VerifyWithNoParam1()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(() => ExceptionOrNone.None).ToTask();
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParam2()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(() => new ApplicationException("error")).ToTask();
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParam3()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(() => ExceptionOrNone.None);
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParam4()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(() => new ApplicationException("error"));
+        Assert.False(sut.IsSuccess);
+    }
+
+    
+    [Fact]
+    public async Task VerifyWithNoParam5()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(() => Task.FromResult(ExceptionOrNone.None));
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParam6()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(() => Task.FromResult(ExceptionOrNone.FromException(new ApplicationException("error"))));
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParam7()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(() => Task.FromResult(ExceptionOrNone.None));
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParam8()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(() => Task.FromResult(ExceptionOrNone.FromException(new ApplicationException("error"))));
+        Assert.False(sut.IsSuccess);
+    }
+
+    
+    
+    
+    [Fact]
+    public async Task VerifyWithNoParamWithResult1()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(() => ResultBox.FromValue(ExceptionOrNone.None)).ToTask();
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParamWithResult2()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(() => ResultBox.FromException<ExceptionOrNone>(new ApplicationException("error"))).ToTask();
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParamWithResult3()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(() => ResultBox.FromValue<ExceptionOrNone>(new ApplicationException("error"))).ToTask();
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParamWithResult4()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(() => ResultBox.FromValue(ExceptionOrNone.None));
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParamWithResult5()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(() => ResultBox.FromException<ExceptionOrNone>(new ApplicationException("error")));
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithNoParamWithResult6()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(() => ResultBox.FromValue<ExceptionOrNone>(new ApplicationException("error")));
+        Assert.False(sut.IsSuccess);
+    }
+
+    
 }
