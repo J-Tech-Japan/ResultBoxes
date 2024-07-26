@@ -7,12 +7,12 @@
         <RootNamespace>ResultBoxes</RootNamespace>
         <LangVersion>preview</LangVersion>
         <PackageId>ResultBoxes</PackageId>
-        <Version>0.3.17</Version>
+        <Version>0.3.18</Version>
         <Authors>J-Tech Group</Authors>
         <Company>J-Tech-Japan</Company>
         <PackageDescription>ResultBoxes - C# Results Library that focus on Railway Programming.</PackageDescription>
         <RepositoryUrl>https://github.com/J-Tech-Japan/ResultBoxes</RepositoryUrl>
-        <PackageVersion>0.3.17</PackageVersion>
+        <PackageVersion>0.3.18</PackageVersion>
         <Description>Conveyer, Verify can take no param. Verify can take Task and Result</Description>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>
