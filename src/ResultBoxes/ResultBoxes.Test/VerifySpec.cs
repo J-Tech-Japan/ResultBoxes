@@ -110,4 +110,75 @@ public class VerifySpec
             .Verify(v => Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error")));
         Assert.False(sut.IsSuccess);
     }
+    
+    [Fact]
+    public async Task VerifyWithResultBox1()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(v => ResultBox.FromValue(Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error"))));
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox2()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(v => ResultBox.FromValue(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error"))).ToTask();
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox3()
+    {
+        var sut = await ResultBox.FromValue(2)
+            .Verify(v => ResultBox.FromValue(Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error"))));
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox4()
+    {
+        var sut = await ResultBox.FromValue(2)
+            .Verify(v => ResultBox.FromValue(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error"))).ToTask();
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox5()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(v => ResultBox.FromValue(Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error"))));
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox6()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(v => ResultBox.FromValue(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error")));
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox7()
+    {
+        var sut = await ResultBox.FromValue(2).ToTask()
+            .Verify(v => ResultBox.FromValue(Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error"))));
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox8()
+    {
+        var sut = await ResultBox.FromValue(2).ToTask()
+            .Verify(v => ResultBox.FromValue(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error")));
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox9()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(v => ResultBox.FromException<ExceptionOrNone>(new ApplicationException("test error")));
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithResultBox10()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(v => ResultBox.FromException<ExceptionOrNone>(new ApplicationException("test error"))).ToTask();
+        Assert.False(sut.IsSuccess);
+    }
 }
