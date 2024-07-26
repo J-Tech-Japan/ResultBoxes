@@ -35,4 +35,17 @@ public class MatchSpec
         Assert.Equal("err 2", result);
     }
 
+    [Fact]
+    public async Task MatchCanReturnNullable()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask().Match(value => (int?)value, exception => null);
+        Assert.Equal(1, sut);
+    }
+    [Fact]
+    public async Task MatchCanReturnNullable2()
+    {
+        var sut = await ResultBox.FromException<int>(new ApplicationException("test")).ToTask().Match(value => (int?)value, exception => null);
+        Assert.Null(sut);
+    }
+
 }
