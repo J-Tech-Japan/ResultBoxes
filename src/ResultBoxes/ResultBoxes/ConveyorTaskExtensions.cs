@@ -16,6 +16,19 @@ public static class ConveyorTaskExtensions
         where TValue1 : notnull
         where TValue2 : notnull
         => await (await firstValue).Conveyor(handleValueFunc);
+    public static async Task<ResultBox<TValue2>> Conveyor<TValue1, TValue2>(
+        this Task<ResultBox<TValue1>> firstValue,
+        Func<ResultBox<TValue2>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        => await firstValue.Conveyor(value => Task.FromResult(handleValueFunc()));
+
+    public static async Task<ResultBox<TValue2>> Conveyor<TValue1, TValue2>(
+        this Task<ResultBox<TValue1>> firstValue,
+        Func<Task<ResultBox<TValue2>>> handleValueFunc)
+        where TValue1 : notnull
+        where TValue2 : notnull
+        => await (await firstValue).Conveyor(handleValueFunc);
     #endregion
 
 
