@@ -2,6 +2,8 @@ namespace ResultBoxes;
 
 public static class VerifyExtension
 {
+    #region SingleValue
+
     public static ResultBox<TValue> Verify<TValue>(
         this ResultBox<TValue> result,
         Func<TValue, ExceptionOrNone> predicate)
@@ -24,6 +26,9 @@ public static class VerifyExtension
                     _ => value
                 }));
     
+    #endregion
+    
+    #region TwoValues
     
     public static ResultBox<TwoValues<TValue1, TValue2>> Verify<TValue1, TValue2>(
         this ResultBox<TwoValues<TValue1, TValue2>> result,
@@ -47,7 +52,9 @@ public static class VerifyExtension
                 { Exception: { } error } => ResultBox<TwoValues<TValue1,TValue2>>.FromException(error),
                 _ => values
             });
+    #endregion
 
+    #region ThreeValues
     public static ResultBox<ThreeValues<TValue1, TValue2, TValue3>> Verify<TValue1, TValue2, TValue3>(
         this ResultBox<ThreeValues<TValue1, TValue2, TValue3>> result,
         Func<TValue1, TValue2, TValue3, ExceptionOrNone> predicate)
@@ -72,7 +79,8 @@ public static class VerifyExtension
                 { Exception: { } error } => ResultBox<ThreeValues<TValue1,TValue2, TValue3>>.FromException(error),
                 _ => values
             });
-
+#endregion
+#region FourValues
     public static ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> Verify<TValue1, TValue2, TValue3, TValue4>(
         this ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>> result,
         Func<TValue1, TValue2, TValue3, TValue4, ExceptionOrNone> predicate)
@@ -99,7 +107,8 @@ public static class VerifyExtension
                 { Exception: { } error } => ResultBox<FourValues<TValue1, TValue2, TValue3, TValue4>>.FromException(error),
                 _ => values
             });
-
+#endregion
+#region FiveValues
     public static ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> Verify<TValue1, TValue2, TValue3, TValue4, TValue5>(
         this ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>> result,
         Func<TValue1, TValue2, TValue3, TValue4, TValue5, ExceptionOrNone> predicate)
@@ -128,5 +137,5 @@ public static class VerifyExtension
                 { Exception: { } error } => ResultBox<FiveValues<TValue1, TValue2, TValue3, TValue4, TValue5>>.FromException(error),
                 _ => values
             });
-
+#endregion
 }
