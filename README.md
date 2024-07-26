@@ -234,13 +234,13 @@ Railway Oriented Programming (ROP) is a functional programming pattern that faci
 
 ResultBoxes supports ROP by providing chain method to connect functions and simply write error handling code.
 
-![Simple ROP](https://github.com/J-Tech-Japan/ResultBoxes/raw/main/docs/images/SimpleRop.png)
+![Simple ROP](https://raw.githubusercontent.com/J-Tech-Japan/ResultBoxes/main/docs/images/SimpleRop.png)
 
 Like example below, you can use `Conveyor(nextFunction)` to method chain continuous functions.
 
 It is like Result"Box" are carrying through Belt Conveyor and moving next checkpoint, at next checkpoint, contents will be adjusted and pack with different form, and also if error happens, it will convert to the Error Result.
 
-![conveyor image](https://github.com/J-Tech-Japan/ResultBoxes/raw/main/docs/images/conveyer.jpg)
+![conveyor image](https://raw.githubusercontent.com/J-Tech-Japan/ResultBoxes/main/docs/images/conveyer.jpg)
 
 If first method , in example `Increment` returns Exception, following functions `Double` and `Triple` will not executed, it will be just passing Exception that returned by `Increment`. If first method returns value, second method, in this case `Double` will be execute, and if all three method succeed, `Main` method receive the result value. If any methods returns Exception Result, it will return Exception to the `Main` function.
 
@@ -427,7 +427,7 @@ internal class Program
 
 We have cases that need to prepare 2 or more value and pass it to next function. One way to achieve this is, programmer make a wrapping function and gather two value in function and use railway to handle results. But ResultBoxes provide `CombineValue` methods, which follows first Result, run second function and instead of passing only last executed value, but both first value and second value together and pass it to third function.
 
-![CombineValue](https://github.com/J-Tech-Japan/ResultBoxes/raw/main/docs/images/CombineValue.png)
+![CombineValue](https://raw.githubusercontent.com/J-Tech-Japan/ResultBoxes/main/docs/images/CombineValue.png)
 
 We provide
 [TwoValues](https://github.com/J-Tech-Japan/ResultBoxes/blob/main/src/ResultBoxes/ResultBoxes/TwoValues.cs),
