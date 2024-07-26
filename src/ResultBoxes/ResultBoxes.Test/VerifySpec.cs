@@ -81,4 +81,33 @@ public class VerifySpec
                 });
         Assert.True(result.Exception is DivideByZeroException);
     }
+
+    [Fact]
+    public async Task VerifyWithTask1()
+    {
+        var sut = await ResultBox.FromValue(1)
+            .Verify(v => Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error")));
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithTask2()
+    {
+        var sut = await ResultBox.FromValue(1).ToTask()
+            .Verify(v => Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error")));
+        Assert.True(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithTask3()
+    {
+        var sut = await ResultBox.FromValue(2)
+            .Verify(v => Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error")));
+        Assert.False(sut.IsSuccess);
+    }
+    [Fact]
+    public async Task VerifyWithTask4()
+    {
+        var sut = await ResultBox.FromValue(2).ToTask()
+            .Verify(v => Task.FromResult(v == 1 ? ExceptionOrNone.None : new ApplicationException("test error")));
+        Assert.False(sut.IsSuccess);
+    }
 }
