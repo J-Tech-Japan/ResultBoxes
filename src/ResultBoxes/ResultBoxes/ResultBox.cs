@@ -151,6 +151,29 @@ public static class ResultBox
         _ => ResultBox<TValue>.FromException(
             exception ?? new ResultValueNullException(typeof(TValue).Name))
     };
+    public static ResultBox<TValue> CheckNull<TValue>(TValue? value, Exception? exception = null)
+        where TValue : struct => value switch
+    {
+        { } v => ResultBox.FromValue(v),
+        _ => ResultBox<TValue>.FromException(
+            exception ?? new ResultValueNullException(typeof(TValue).Name))
+    };
+
+    public static async Task<ResultBox<TValue>> CheckNull<TValue>(Task<TValue?> value, Exception? exception = null)
+        where TValue : notnull => await value switch
+    {
+        { } v => ResultBox.FromValue(v),
+        _ => ResultBox<TValue>.FromException(
+            exception ?? new ResultValueNullException(typeof(TValue).Name))
+    };
+    public static async Task<ResultBox<TValue>> CheckNull<TValue>(Task<TValue?> value, Exception? exception = null)
+        where TValue : struct => await value switch
+    {
+        { } v => ResultBox.FromValue(v),
+        _ => ResultBox<TValue>.FromException(
+            exception ?? new ResultValueNullException(typeof(TValue).Name))
+    };
+    
     public static ResultBox<TValue> CheckNull<TValue>(Func<TValue?> valueFunc, Exception? exception = null)
         where TValue : notnull => valueFunc() switch
     {
@@ -158,6 +181,14 @@ public static class ResultBox
         _ => ResultBox<TValue>.FromException(
             exception ?? new ResultValueNullException(typeof(TValue).Name))
     };
+    public static ResultBox<TValue> CheckNull<TValue>(Func<TValue?> valueFunc, Exception? exception = null)
+        where TValue : struct => valueFunc() switch
+    {
+        { } value => ResultBox.FromValue(value),
+        _ => ResultBox<TValue>.FromException(
+            exception ?? new ResultValueNullException(typeof(TValue).Name))
+    };
+    
     public static async Task<ResultBox<TValue>> CheckNull<TValue>(Func<Task<TValue?>> valueFunc, Exception? exception = null)
         where TValue : notnull => await valueFunc() switch
     {
@@ -165,6 +196,14 @@ public static class ResultBox
         _ => ResultBox<TValue>.FromException(
             exception ?? new ResultValueNullException(typeof(TValue).Name))
     };
+    public static async Task<ResultBox<TValue>> CheckNull<TValue>(Func<Task<TValue?>> valueFunc, Exception? exception = null)
+        where TValue : struct => await valueFunc() switch
+    {
+        { } value => ResultBox.FromValue(value),
+        _ => ResultBox<TValue>.FromException(
+            exception ?? new ResultValueNullException(typeof(TValue).Name))
+    };
+    
     public static ResultBox<TValue> CheckNullWrapTry<TValue>(Func<TValue?> func, Func<Exception, Exception>? exceptionMapper = null)
         where TValue : notnull
     {
@@ -183,8 +222,45 @@ public static class ResultBox
             return exceptionMapper?.Invoke(e) ?? e;
         }
     }
+    public static ResultBox<TValue> CheckNullWrapTry<TValue>(Func<TValue?> func, Func<Exception, Exception>? exceptionMapper = null)
+        where TValue : struct
+    {
+        try
+        {
+            var result = func();
+            return result.HasValue switch
+            {
+                true => ResultBox<TValue>.FromValue(result.Value),
+                _ => ResultBox<TValue>.FromException(
+                    new ResultValueNullException(typeof(TValue).Name)
+                )
+            };
+        }
+        catch (Exception e)
+        {
+            return exceptionMapper?.Invoke(e) ?? e;
+        }
+    }
     public static async Task<ResultBox<TValue>> CheckNullWrapTry<TValue>(Func<Task<TValue?>> funcAsync, Func<Exception, Exception>? exceptionMapper = null)
         where TValue : notnull
+    {
+        try
+        {
+            return await funcAsync() switch
+            {
+                { } value => ResultBox.FromValue(value),
+                _ => ResultBox<TValue>.FromException(
+                    new ResultValueNullException(typeof(TValue).Name)
+                )
+            };
+        }
+        catch (Exception e)
+        {
+            return exceptionMapper?.Invoke(e) ?? e;
+        }
+    }
+    public static async Task<ResultBox<TValue>> CheckNullWrapTry<TValue>(Func<Task<TValue?>> funcAsync, Func<Exception, Exception>? exceptionMapper = null)
+        where TValue : struct
     {
         try
         {
