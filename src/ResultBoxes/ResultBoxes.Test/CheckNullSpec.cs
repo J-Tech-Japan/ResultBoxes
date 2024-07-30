@@ -9,6 +9,37 @@ public class CheckNullSpec
         
         Assert.True(result.IsSuccess);
     }
+
+    private Guid? TestGuid(int value) => value == 0 ? null : Guid.NewGuid();
+    private int? TestInt(int value) => value == 0 ? null : value;
+
+
+    [Fact]
+    public void CheckNullTestWithPrimitive()
+    {
+        var result = ResultBox.CheckNull(TestGuid(0));
+        Assert.False(result.IsSuccess);
+    }
+    [Fact]
+    public void CheckNullTestWithPrimitive2()
+    {
+        var result = ResultBox.CheckNull(TestGuid(1));
+        Assert.True(result.IsSuccess);
+    }
+    [Fact]
+    public void CheckNullTestWithPrimitiveInt()
+    {
+        var result = ResultBox.CheckNull(TestInt(0));
+        Assert.False(result.IsSuccess);
+    }
+    [Fact]
+    public void CheckNullTestWithPrimitiveInt2()
+    {
+        var result = ResultBox.CheckNull(TestInt(1));
+        Assert.True(result.IsSuccess);
+        Assert.Equal(1, result.GetValue());
+    }
+    
     [Fact]
     public void CheckNullTest2()
     {
