@@ -17,24 +17,9 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return value (UnitValue) result
-        UnitValue.WrapTry(() => Print("Hello, World!"))
-            .ScanResult(HandleResult);
+        UnitValue.WrapTry(() => Print("Hello, World!")).Log();
 
         // This will return exception result
-        UnitValue.WrapTry(() => Print(string.Empty))
-            .ScanResult(HandleResult);
-    }
-
-    public static void HandleResult(ResultBox<UnitValue> result)
-    {
-        switch (result)
-        {
-            case { IsSuccess: true } success:
-                Console.WriteLine("Succeed! ");
-                break;
-            case { IsSuccess: false } failure:
-                Console.WriteLine("Error: " + failure.GetException().Message);
-                break;
-        }
+        UnitValue.WrapTry(() => Print(string.Empty)).Log();
     }
 }
