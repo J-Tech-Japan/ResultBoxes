@@ -182,22 +182,12 @@ internal class Program
     private static void Main(string[] args)
     {
         // This will return exception result
-        ResultBox<int>.WrapTry(() => Divide(10, 0))
-            .ScanResult(HandleResult);
+        // Error: can not divide by 0
+        ResultBox.WrapTry(() => Divide(10, 0)).Log();
 
         // This will return value result
-        ResultBox<int>.WrapTry(() => Divide(10, 2))
-            .ScanResult(HandleResult);
-    }
-    public static void HandleResult(ResultBox<int> result)
-    {
-        switch (result)
-        {
-            case { IsSuccess: true } success: Console.WriteLine("Value: " + success.GetValue());
-                break;
-            case { IsSuccess: false } failure: Console.WriteLine("Error: " + failure.GetException().Message);
-                break;
-        }
+        // Value: 5
+        ResultBox.WrapTry(() => Divide(10, 2)).Log();
     }
 }
 ```
