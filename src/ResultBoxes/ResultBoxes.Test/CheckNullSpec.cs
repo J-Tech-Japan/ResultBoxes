@@ -111,9 +111,15 @@ public class CheckNullSpec
     [Fact]
     public async Task CheckNullWrapTryTest6()
     {
-        await Task.CompletedTask;
         var result = await ResultBox.CheckNullWrapTry(() =>Task.FromResult(ThrowException(true)));
         Assert.False(result.IsSuccess);
+    }
+[Fact]
+    public async Task CheckNullWrapTryShouldGoThroughRemapper()
+    {
+        var sut = await ResultBox.CheckNullWrapTry(() => Task.FromResult((string?)null), exception => new ApplicationException("remapped"));
+        Assert.False(sut.IsSuccess);
+        Assert.IsType<ApplicationException>(sut.GetException());
     }
 
 }
