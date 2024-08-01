@@ -214,7 +214,7 @@ public static class ResultBox
                 { } value => ResultBox.FromValue(value),
                 _ => ResultBox<TValue>.FromException(
                     new ResultValueNullException(typeof(TValue).Name)
-                )
+                ).RemapException(e => exceptionMapper?.Invoke(e) ?? e)
             };
         }
         catch (Exception e)
@@ -233,7 +233,7 @@ public static class ResultBox
                 true => ResultBox<TValue>.FromValue(result.Value),
                 _ => ResultBox<TValue>.FromException(
                     new ResultValueNullException(typeof(TValue).Name)
-                )
+                ).RemapException(e => exceptionMapper?.Invoke(e) ?? e)
             };
         }
         catch (Exception e)
@@ -251,7 +251,7 @@ public static class ResultBox
                 { } value => ResultBox.FromValue(value),
                 _ => ResultBox<TValue>.FromException(
                     new ResultValueNullException(typeof(TValue).Name)
-                )
+                ).RemapException(e => exceptionMapper?.Invoke(e) ?? e)
             };
         }
         catch (Exception e)
@@ -269,7 +269,7 @@ public static class ResultBox
                 { } value => ResultBox.FromValue(value),
                 _ => ResultBox<TValue>.FromException(
                     new ResultValueNullException(typeof(TValue).Name)
-                )
+                ).RemapException(e => exceptionMapper?.Invoke(e) ?? e)
             };
         }
         catch (Exception e)
