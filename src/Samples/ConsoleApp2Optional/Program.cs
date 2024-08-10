@@ -8,7 +8,7 @@ internal class Program
         {
             0 => new ApplicationException("Input string is empty"), // Exception
             1 => OptionalValue<string>.Empty, // Not error but Empty 
-            _ => OptionalValue<string>.FromValue(input[..^(input.Length / 2)]) // has value 
+            _ => OptionalValue.FromValue(input[..^(input.Length / 2)]) // has value 
         };
     private static void Main(string[] args)
     {

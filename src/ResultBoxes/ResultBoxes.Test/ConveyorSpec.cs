@@ -2,10 +2,8 @@ using Xunit.Abstractions;
 
 namespace ResultBoxes.Test;
 
-public class ConveyorSpec(ITestOutputHelper testOutputHelper)
+public class ConveyorSpec()
 {
-
-
     [Fact]
     public void ConveyorWithNoParam()
     {
