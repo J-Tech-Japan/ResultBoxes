@@ -11,6 +11,30 @@ public record OptionalValue<TValue>(TValue? Value, bool HasValue = true)
     public static implicit operator OptionalValue<TValue>(TValue value) => new(value);
 
     public static OptionalValue<TValue> FromValue(TValue value) => new(value);
+
+    public TResult Match<TResult>(Func<TValue, TResult> some, Func<TResult> none) =>
+        HasValue ? some(GetValue()) : none();
+
+    public async Task<TResult> Match<TResult>(Func<TValue, Task<TResult>> some, Func<Task<TResult>> none) =>
+        HasValue ? await some(GetValue()) : await none();
+
+    public async Task<TResult> Match<TResult>(Func<TValue, TResult> some, Func<Task<TResult>> none) =>
+        HasValue ? some(GetValue()) : await none();
+
+    public async Task<TResult> Match<TResult>(Func<TValue, Task<TResult>> some, Func<TResult> none) =>
+        HasValue ? await some(GetValue()) : none();
+
+    public TResult Match<TResult>(Func<TValue, TResult> some, TResult none) =>
+        HasValue ? some(GetValue()) : none;
+
+    public async Task<TResult> Match<TResult>(Func<TValue, Task<TResult>> some, Task<TResult> none) =>
+        HasValue ? await some(GetValue()) : await none;
+
+    public async Task<TResult> Match<TResult>(Func<TValue, TResult> some, Task<TResult> none) =>
+        HasValue ? some(GetValue()) : await none;
+
+    public async Task<TResult> Match<TResult>(Func<TValue, Task<TResult>> some, TResult none) =>
+        HasValue ? await some(GetValue()) : none;
 }
 
 public static class OptionalValue
@@ -22,14 +46,20 @@ public static class OptionalValue
         value.HasValue
             ? new OptionalValue<TValueRemapped>(remapFunc(value.GetValue()))
             : OptionalValue<TValueRemapped>.Empty;
-    public static async Task<OptionalValue<TValueRemapped>> Remap<TValue, TValueRemapped>(this OptionalValue<TValue> value,
+
+    public static async Task<OptionalValue<TValueRemapped>> Remap<TValue, TValueRemapped>(
+        this OptionalValue<TValue> value,
         Func<TValue, Task<TValueRemapped>> remapFunc) where TValue : notnull =>
         value.HasValue
             ? new OptionalValue<TValueRemapped>(await remapFunc(value.GetValue()))
             : OptionalValue<TValueRemapped>.Empty;
-    public static async Task<OptionalValue<TValueRemapped>> Remap<TValue, TValueRemapped>(this Task<OptionalValue<TValue>> value,
+
+    public static async Task<OptionalValue<TValueRemapped>> Remap<TValue, TValueRemapped>(
+        this Task<OptionalValue<TValue>> value,
         Func<TValue, TValueRemapped> remapFunc) where TValue : notnull => Remap(await value, remapFunc);
-    public static async Task<OptionalValue<TValueRemapped>> Remap<TValue, TValueRemapped>(this Task<OptionalValue<TValue>> value,
+
+    public static async Task<OptionalValue<TValueRemapped>> Remap<TValue, TValueRemapped>(
+        this Task<OptionalValue<TValue>> value,
         Func<TValue, Task<TValueRemapped>> remapFunc) where TValue : notnull => await Remap(await value, remapFunc);
 
     public static async Task<OptionalValue<TValue>> FromValue<TValue>(Task<TValue> value) where TValue : notnull =>
@@ -53,4 +83,8 @@ public static class OptionalValue
         optional.HasValue && optional.Value is not null
             ? optional.Value
             : new ResultsInvalidOperationException("no value");
+
+    public static async Task<TResult> Match<TValue, TResult>(this Task<OptionalValue<TValue>> optional,
+        Func<TValue, TResult> some, Func<TResult> none) where TValue : notnull =>
+        (await optional).Match(some, none);
 }
