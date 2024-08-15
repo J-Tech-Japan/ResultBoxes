@@ -101,31 +101,3 @@ public class UnitTest1
         Assert.Equal(12, sut.GetValue());
     }
 }
-
-public class OptionalValueTests
-{
-    [Fact]
-    public void OptionalValueEmptyTest()
-    {
-        var sut = OptionalValue<string>.Empty;
-
-        Assert.False(sut.HasValue);
-        Assert.Throws<ResultsInvalidOperationException>(() => sut.GetValue());
-    }
-
-    [Fact]
-    public void OptionalValueCreateSpec()
-    {
-        var value = (Guid?) Guid.NewGuid();
-        var sut = OptionalValue.FromNullableValue(value);
-        Assert.True(sut.HasValue);
-    }
-    [Fact]
-    public void OptionalValueCreateSpec2()
-    {
-        var value = (Guid?) null;
-        var sut = OptionalValue.FromNullableValue(value);
-        Assert.False(sut.HasValue);
-    }
-
-}

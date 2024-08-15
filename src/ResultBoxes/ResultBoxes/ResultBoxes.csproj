@@ -7,13 +7,13 @@
         <RootNamespace>ResultBoxes</RootNamespace>
         <LangVersion>preview</LangVersion>
         <PackageId>ResultBoxes</PackageId>
-        <Version>0.3.23</Version>
+        <Version>0.3.24</Version>
         <Authors>J-Tech Group</Authors>
         <Company>J-Tech-Japan</Company>
         <PackageDescription>ResultBoxes - C# Results Library that focus on Railway Programming.</PackageDescription>
         <RepositoryUrl>https://github.com/J-Tech-Japan/ResultBoxes</RepositoryUrl>
-        <PackageVersion>0.3.23</PackageVersion>
-        <Description>OptionalValue (Task and remap), ResultBox.UnitValue</Description>
+        <PackageVersion>0.3.24</PackageVersion>
+        <Description>OptionalValue ( Match ) and ResultBox.CheckOptionalEmpty</Description>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeSymbols>true</IncludeSymbols>
