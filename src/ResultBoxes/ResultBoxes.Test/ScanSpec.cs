@@ -71,4 +71,20 @@ public class ScanSpec
             .Scan(async x => await Task.Run(() => Console.WriteLine(x)));
         Assert.Equal(TwoValues.FromValues(100, 2), result.GetValue());
     }
+
+    [Fact]
+    public async Task ScanExecutingOrder()
+    {
+        var i = 2;
+        var result = await ResultBox.FromValue(Task.Run(() =>
+        {
+            Task.Delay(1000);
+            return 10 / i;
+        })).Do(async () =>
+        {
+            await Task.Delay(100);
+            i = 1;
+        });
+        Assert.Equal(5, result.GetValue());
+    }
 }
