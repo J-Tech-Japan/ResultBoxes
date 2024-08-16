@@ -79,6 +79,24 @@ public class DoSpec
         Assert.Equal(UnitValue.Unit, result.GetValue());
     }
 
+    [Fact]
+    public async Task DoAfterSpec()
+    {
+        var sut = await GetAdditionAsync(1, 3)
+            .Do(async () =>
+            {
+                await Task.CompletedTask;
+                Console.WriteLine("done");
+            });
+        Assert.True(sut.IsSuccess);
+        Assert.Equal(4, sut.GetValue());
+    }
+    
+    private Task<ResultBox<int>> GetAdditionAsync(int i, int j)
+    {
+        return Task.FromResult(ResultBox.FromValue(i + j));
+    }
+
     private int ThrowableFunction(int i)
     {
         if (i == 0)
