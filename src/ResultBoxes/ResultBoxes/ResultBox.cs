@@ -136,6 +136,8 @@ public static class ResultBox
 
     public static ResultBox<TValue> FromException<TValue>(Exception exception) where TValue : notnull =>
         new(default, exception);
+    public static async Task<ResultBox<TValue>> FromException<TValue>(Task<Exception> exception) where TValue : notnull =>
+        new(default, await exception);
 
     public static Task<ResultBox<TValueResult>> WrapTry<TValueResult>(Func<Task<TValueResult>> func,
         Func<Exception, Exception>? exceptionMapper = null)

@@ -7,13 +7,13 @@
         <RootNamespace>ResultBoxes</RootNamespace>
         <LangVersion>preview</LangVersion>
         <PackageId>ResultBoxes</PackageId>
-        <Version>0.3.25</Version>
+        <Version>0.3.26</Version>
         <Authors>J-Tech Group</Authors>
         <Company>J-Tech-Japan</Company>
         <PackageDescription>ResultBoxes - C# Results Library that focus on Railway Programming.</PackageDescription>
         <RepositoryUrl>https://github.com/J-Tech-Japan/ResultBoxes</RepositoryUrl>
-        <PackageVersion>0.3.25</PackageVersion>
-        <Description>Scan(async ()=>{}) execute order fixed</Description>
+        <PackageVersion>0.3.26</PackageVersion>
+        <Description>Add ToResultBox</Description>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeSymbols>true</IncludeSymbols>
