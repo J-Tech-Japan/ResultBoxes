@@ -6,22 +6,30 @@
         <RootNamespace>ResultBoxes</RootNamespace>
         <LangVersion>preview</LangVersion>
         <PackageId>ResultBoxes</PackageId>
-        <Version>0.3.27</Version>
+        <Version>0.3.28</Version>
         <Authors>J-Tech Group</Authors>
         <Company>J-Tech-Japan</Company>
         <PackageDescription>ResultBoxes - C# Results Library that focus on Railway Programming.</PackageDescription>
         <RepositoryUrl>https://github.com/J-Tech-Japan/ResultBoxes</RepositoryUrl>
-        <PackageVersion>0.3.27</PackageVersion>
-        <Description>Add ToResultBox</Description>
+        <PackageVersion>0.3.28</PackageVersion>
+        <Description>Add SBOM</Description>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <GenerateSBOM>true</GenerateSBOM>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\..\..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Sbom.Targets" Version="3.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 </Project>
