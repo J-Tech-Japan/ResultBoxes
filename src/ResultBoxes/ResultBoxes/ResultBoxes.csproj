@@ -6,13 +6,13 @@
         <RootNamespace>ResultBoxes</RootNamespace>
         <LangVersion>preview</LangVersion>
         <PackageId>ResultBoxes</PackageId>
-        <Version>0.3.28</Version>
+        <Version>0.3.29</Version>
         <Authors>J-Tech Group</Authors>
         <Company>J-Tech-Japan</Company>
         <PackageDescription>ResultBoxes - C# Results Library that focus on Railway Programming.</PackageDescription>
         <RepositoryUrl>https://github.com/J-Tech-Japan/ResultBoxes</RepositoryUrl>
-        <PackageVersion>0.3.28</PackageVersion>
-        <Description>Add SBOM</Description>
+        <PackageVersion>0.3.29</PackageVersion>
+        <Description>Fixed combine</Description>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeSymbols>true</IncludeSymbols>
@@ -27,9 +27,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Sbom.Targets" Version="3.0.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="3.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 </Project>
