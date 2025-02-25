@@ -10,6 +10,15 @@ public class OptionalValueTests
         Assert.False(sut.HasValue);
         Assert.Throws<ResultsInvalidOperationException>(() => sut.GetValue());
     }
+    
+    [Fact]
+    public void OptionalValueNoneTest()
+    {
+        var sut = OptionalValue<string>.None;
+
+        Assert.False(sut.HasValue);
+        Assert.Throws<ResultsInvalidOperationException>(() => sut.GetValue());
+    }
 
     [Fact]
     public void OptionalValueCreateSpec()

@@ -4,6 +4,7 @@ public record OptionalValue<TValue>(TValue? Value, bool HasValue = true)
 {
     public static OptionalValue<TValue> Empty => new(default, false);
     public static OptionalValue<TValue> Null => new(default, false);
+    public static OptionalValue<TValue> None => new(default, false);
 
     public TValue GetValue() =>
         HasValue && Value is not null ? Value : throw new ResultsInvalidOperationException("no value");
@@ -45,14 +46,14 @@ public static class OptionalValue
         Func<TValue, TValueRemapped> remapFunc) where TValue : notnull =>
         value.HasValue
             ? new OptionalValue<TValueRemapped>(remapFunc(value.GetValue()))
-            : OptionalValue<TValueRemapped>.Empty;
+            : OptionalValue<TValueRemapped>.None;
 
     public static async Task<OptionalValue<TValueRemapped>> Remap<TValue, TValueRemapped>(
         this OptionalValue<TValue> value,
         Func<TValue, Task<TValueRemapped>> remapFunc) where TValue : notnull =>
         value.HasValue
             ? new OptionalValue<TValueRemapped>(await remapFunc(value.GetValue()))
-            : OptionalValue<TValueRemapped>.Empty;
+            : OptionalValue<TValueRemapped>.None;
 
     public static async Task<OptionalValue<TValueRemapped>> Remap<TValue, TValueRemapped>(
         this Task<OptionalValue<TValue>> value,
