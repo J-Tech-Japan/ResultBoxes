@@ -201,6 +201,72 @@ ResultBox<int> result = RiskyOperation()
 // Other failures or successes from RiskyOperation remain unchanged.
 ```
 
+**10. Starting a Chain (`ResultBox.Start`)**
+
+```csharp
+// Sometimes you need a neutral starting point, especially before Combine.
+ResultBox<UnitValue> start = ResultBox.Start; // A successful box with no specific value.
+
+ResultBox<string> result = start
+    .Combine(GetUserName) // Now combine can add the first real value
+    .Remap(combined => combined.Value1); // Extract the username
+
+// ResultBox.Start is often used implicitly when the first step doesn't need input.
+```
+
+**11. Validating Intermediate Results (`Verify`)**
+
+```csharp
+ResultBox<int> GetUserInputNumber() { /* ... */ }
+
+// --- Usage ---
+// Ensure the number is positive after getting it.
+ResultBox<int> validatedResult = GetUserInputNumber()
+    .Verify(number => {
+        if (number > 0) {
+            return ExceptionOrNone.None; // Validation passed
+        } else {
+            return new ArgumentOutOfRangeException("Number must be positive"); // Validation failed
+        }
+    });
+
+// If GetUserInputNumber succeeded but the number wasn't positive, 
+// validatedResult becomes Failure(ArgumentOutOfRangeException).
+// Otherwise, it keeps the original Success or Failure from GetUserInputNumber.
+```
+
+**12. Exiting the Box (Use with Caution) (`UnwrapBox`)**
+
+```csharp
+ResultBox<string> GetCriticalData() { /* ... should succeed normally ... */ }
+
+// --- Usage ---
+// Use UnwrapBox when you expect success and consider failure exceptional (will throw).
+// This is often done outside the main ROP chain, e.g., in the final presentation layer.
+try 
+{
+    string criticalValue = GetCriticalData().UnwrapBox(); 
+    Console.WriteLine($"Critical data: {criticalValue}");
+} 
+catch (Exception ex) 
+{
+    // If GetCriticalData returned Failure, the exception is thrown here.
+    Console.WriteLine($"Failed to get critical data: {ex.Message}");
+    // Handle the thrown exception appropriately.
+}
+
+// You can also provide a function to UnwrapBox to transform the value on success:
+// int length = GetCriticalData().UnwrapBox(s => s.Length); // Throws if GetCriticalData failed.
+```
+*Warning:* `UnwrapBox` breaks the ROP flow by throwing exceptions on failure. Prefer `.Match()` for safely handling both outcomes within the flow.
+
+## Other Features
+
+`ResultBox` also includes more advanced features not detailed here, such as:
+*   Retry mechanisms (`ConveyorWithRetry`)
+*   Processing collections (`Scan`, `ScanEach`, `Reduce`)
+*   Converting to/from Tasks and DTOs (`ToTask`, `ToDto`)
+
 ## Key Benefits Summarized
 
 *   **Clarity:** Makes potential failures explicit in function signatures.
