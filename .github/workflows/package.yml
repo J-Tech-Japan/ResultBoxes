@@ -12,6 +12,7 @@ on:
 jobs:
   build:
 
+    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,4 +52,4 @@ jobs:
       env:
         NUGET_APIKEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
       run: |
-        dotnet nuget push "src/ResultBoxes/ResultBoxes/bin/Release/ResultBoxes.${PACKAGE_VERSION}.nupkg" --api-key "$NUGET_APIKEY" --source https://api.nuget.org/v3/index.json
+        dotnet nuget push "src/ResultBoxes/ResultBoxes/bin/Release/ResultBoxes.${PACKAGE_VERSION}.nupkg" --api-key "$NUGET_APIKEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
