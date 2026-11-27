@@ -3,11 +3,22 @@ name: nuget package release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Package version to push (must match PackageVersion in ResultBoxes.csproj)
+        required: true
 
 jobs:
   build:
 
+    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      PACKAGE_VERSION: ${{ github.event.release.tag_name || inputs.version }}
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -26,7 +37,19 @@ jobs:
       run: |
         pushd ./src/ResultBoxes
         dotnet build ResultBoxes.sln -c Release
-    - name: Pack ResultBoxes
+    - name: Test
       run: |
-        dotnet nuget push "src/ResultBoxes/ResultBoxes/bin/Release/ResultBoxes.${{ github.event.release.tag_name }}.nupkg" --api-key ${{secrets.NUGET_APIKEY}}  --source https://api.nuget.org/v3/index.json
-  
+        pushd ./src/ResultBoxes
+        dotnet test ResultBoxes.sln -c Release --no-build
+    - name: Check package exists for version
+      run: test -f "src/ResultBoxes/ResultBoxes/bin/Release/ResultBoxes.${PACKAGE_VERSION}.nupkg"
+    - name: Mint short-lived NuGet key (Trusted Publishing)
+      id: nuget-login
+      uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841
+      with:
+        user: ${{ secrets.NUGET_USER }}
+    - name: Push ResultBoxes
+      env:
+        NUGET_APIKEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+      run: |
+        dotnet nuget push "src/ResultBoxes/ResultBoxes/bin/Release/ResultBoxes.${PACKAGE_VERSION}.nupkg" --api-key "$NUGET_APIKEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
