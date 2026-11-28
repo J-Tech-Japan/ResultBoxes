@@ -47,7 +47,7 @@ jobs:
       id: nuget-login
       uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841
       with:
-        user: ${{ secrets.NUGET_USER }}
+        user: J-Tech-Japan
     - name: Push ResultBoxes
       env:
         NUGET_APIKEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
